@@ -2,7 +2,7 @@
 # ide files
 .idea/
 
-huaqi/settings.py
+optionindexer/settings.py
 
 data
 
@@ -35,7 +35,7 @@ algorithm/__pycache__/
 algorithm/data/
 algorithm/interval/__pycache__/
 algorithm/interval/logs/
-huaqi/__pycache__/
+optionindexer/__pycache__/
 option/__pycache__/
 option/migrations/__pycache__/
 =======

@@ -1,10 +1,10 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-import huaqi.views as views
+import optionindexer.views as views
 
 urlpatterns = [
     # Examples:
-    # url(r'^$', 'huaqi.views.home', name='home'),
+    # url(r'^$', 'optionindexer.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', views.index),
