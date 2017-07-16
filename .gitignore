@@ -1,0 +1,47 @@
+# Created by .ignore support plugin (hsz.mobi)
+# ide files
+.idea/
+
+huaqi/settings.py
+
+data
+
+# binary files
+*.pyc
+*.py~
+
+# data files
+/*.json
+
+.DS_Store
+
+
+frontend/node_modules/
+
+frontend/dist/
+
+
+
+# Editor directories and files
+
+
+npm-debug.log
+
+static/
+templates/*
+<<<<<<< HEAD
+/algorithm/data/
+algorithm/__pycache__/
+algorithm/data/
+algorithm/interval/__pycache__/
+algorithm/interval/logs/
+huaqi/__pycache__/
+option/__pycache__/
+option/migrations/__pycache__/
+=======
+!templates/doc.html
+>>>>>>> master
+/logs/
+/net_save/
+/algorithm/interval/net_save/
+/algorithm/interval/nothing/
