@@ -1,13 +1,21 @@
 from algorithm.interval.net_graph_build import *
+import algorithm.interval.data as data
 
 
-def get_interval(code1, code2):
+def get_interval(code1, code2, options=None):
+    if options is None:
+        r1 = dl.get_option_rate_list(code1)
+        r2 = dl.get_option_rate_list(code2)
 
-    r1 = dl.get_option_rate_list(code1)
-    r2 = dl.get_option_rate_list(code2)
-
-    p1 = dl.get_option_price_list(code1)
-    p2 = dl.get_option_price_list(code2)
+        p1 = dl.get_option_price_list(code1)
+        p2 = dl.get_option_price_list(code2)
+    elif options is data.CombineOptionsDataProvider:
+        r1 = options.get_option_rate_list(code1)
+        r2 = options.get_option_rate_list(code2)
+        p1 = options.get_option_price_list(code1)
+        p2 = options.get_option_price_list(code2)
+    else:
+        raise data.UnSupportDataFormatError()
 
     sample_size = len(r1)
 
@@ -37,6 +45,7 @@ def get_interval(code1, code2):
                 writer.add_summary(rs, i)
                 writer.flush()
                 bene_y.append(results[1])
+
 
 
         # import matplotlib.pyplot as plt
