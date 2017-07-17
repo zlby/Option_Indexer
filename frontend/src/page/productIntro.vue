@@ -1,50 +1,38 @@
 <template>
   <div class="manage_page fillcontain">
-  <headSecond></headSecond>
+    <headSecond></headSecond>
     <el-row style="height: 100%;">
       <el-col :span="4"  style="min-height: 100%; background-color: #324057;">
-      <el-menu theme="dark" style="min-height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
+        <el-menu theme="dark" style="min-height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
-        <el-menu-item index="productIntro"><i class="el-icon-menu"></i>首页</el-menu-item>
+          <el-menu-item index="productIntro"><i class="el-icon-menu"></i>首页</el-menu-item>
 
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-document"></i>全部</template>
             <el-menu-item-group>
-              <template slot="title">金融</template>
               <el-menu-item index="/option1">
                 图表1                
                 <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i>
                 </el-button>
               </el-menu-item>
               <el-menu-item index="/option1">
-              图表2
-              <el-button type="danger" size="mini" @click="toggle($event)"><i class="el-icon-minus "></i>
-              </el-button>
+                图表2
+                <el-button type="danger" size="mini" @click="toggle($event)"><i class="el-icon-minus "></i>
+                </el-button>
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>金融</template>
-            <el-submenu index="2-1">
-              <template slot="title">期货一号</template>
-              <el-menu-item index="/option1">
-                期权1号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
-              </el-menu-item>
-              <el-menu-item >期权2号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
-              </el-menu-item>
-              <el-menu-item >期权3号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button></el-menu-item>
-            </el-submenu>
-            <el-submenu index="3-1">
-              <template slot="title">期货三号</template>
+            <el-submenu :index="index" v-for="(value,key,index) in items">
+              <template slot="title">{{key}}</template>
 
-              <el-menu-item >期权1号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
-              </el-menu-item>
-              <el-menu-item >期权2号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
-              </el-button>
+              <el-menu-item index="/option1" v-for="ite in value">
+                {{ite}}<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
 
               </el-menu-item>
-              <el-menu-item >期权3号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button></el-menu-item>
+
             </el-submenu>
           </el-submenu>
         </el-menu>
@@ -60,11 +48,26 @@
 </template>
 
 <script>
-import { hasClass, removeClass, addClass } from "../util.js"
-import headSecond from '../components/headSecond'
-import Bus from '../bus'
+  import { hasClass, removeClass, addClass } from "../util.js"
+  import headSecond from '../components/headSecond'
+  import Bus from '../bus'
 
-	export default{
+  export default{
+    // created:function(){
+    //   Bus.$on("getData", data){
+    //     this.items=data
+    //   }
+    // }
+    data:function(){
+
+      return{
+        items:{
+          item1:["item1-1","item1-2"],
+          item2:["item2-1","item2-2"]
+        }
+      }
+    },
+
 
     components:{
       headSecond
@@ -91,16 +94,16 @@ import Bus from '../bus'
       } 
     }
 
-}
+  }
 
 
 </script>
 
 <style lang="less" scoped>
 
-@import '../style/common';
+  @import '../style/common';
 
-.el-button {
+  .el-button {
   //float: right;
   //margin-top: 10px;
 }

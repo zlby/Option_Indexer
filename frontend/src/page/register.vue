@@ -77,8 +77,8 @@ methods: {
 
 
 	dj: function() {
-			var obj = JSON.stringify(this.form)
-			axios.post('/client/register/', obj)
+			// var obj = JSON.stringify(this.form)
+			axios.post('/client/register/', this.form)
 			.then(function(res){
 				res = res.data
 				if (res.status.code == '0') { // 注册成功，自动登录
@@ -89,7 +89,7 @@ methods: {
 				
 			})
 			.catch(function(err){
-				console.log(err)
+				alert('用户名已存在！')
 			}); 
 		}
 

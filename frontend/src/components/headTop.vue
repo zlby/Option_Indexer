@@ -10,31 +10,17 @@
 			<el-menu-item index="/productIntro" >产品介绍</el-menu-item>
 			<el-menu-item index="/use">信息资源</el-menu-item>
 		</el-col>	
-		<el-col :span="4" offset="1">
+
+		<el-col :span="4" offset="1" v-if="loggedin!=200">
 			<el-menu-item index= "/login" >登陆</el-menu-item>
-
-<!-- 			<el-dialog :visible.sync="dialogFormVisible" :modal-append-to-body="false" :modal="false">
-				<el-form :model="form">
-
-					<el-form-item>
-						<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
-					</el-form-item>
-
-					<el-form-item>
-						<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
-					</el-form-item>
-
-				</el-form>
-				<div slot="footer" class="dialog-footer">
-					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-				</div>
-			</el-dialog> -->
-
-
 			<el-menu-item index="/register">注册</el-menu-item>	
 		</el-col>
-<!-- 			<el-menu-item index="9"><img src="../assets/附件切图/云.png" class="touxiang1"></el-menu-item>	
-			<el-menu-item index="8"><img src="../assets/附件切图/搜索.png" class="touxiang1"></el-menu-item>	 -->		
+		<el-col :span="4" offset="1" v-else>
+			<el-menu-item index= "/login" >垃圾尧</el-menu-item>
+			<el-menu-item index="/register">注册</el-menu-item>	
+		</el-col>
+
+
 		</el-menu>
 	</el-row>
 	</div>

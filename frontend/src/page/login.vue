@@ -8,7 +8,8 @@
 				</el-col>
 				<el-col :span="6" :offset="9">
 					<el-card class="box-card" style="margin-top:40px">
-						<el-form ref="form" :model="form" action="" role="form">
+						<el-form ref="form" :model="form" action="" role="form" 
+						:rules="rules2" class="demo-ruleForm">
 							<el-col :span="24" >
 								<el-form-item>
 									<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
@@ -17,7 +18,7 @@
 
 							<el-col >
 								<el-form-item>
-									<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
+									<el-input  type="password" v-model="form.password" id= "password" placeholder="Password" auto-complete="off"></el-input>
 								</el-form-item>
 							</el-col>
 
@@ -47,38 +48,40 @@
 <script>
 import axios from 'axios'
 import router from '../router'
-
+  import { mapActions } from 'vuex'
 export default {
 
  data (){
+
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } 
+      };
   return {
    form: {
     userName: '',
     password: ''
   },
+  rules2: {
+          password: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+      },
   checked: 'true'
+
 };
 },
 
 computed: {
+      ...mapActions({
+        UserLogin: 'UserLogin',
+      })
 },
 
 methods: {
 	dj: function() {
-			var obj = JSON.stringify(this.form)
-			axios.post('/client/login/', obj)
-			.then(function(res){
-				res = res.data
-				if (res.status.code == '0') { // 注册成功，自动登录
-					router.push({path:'/productIntro'})
-				} else { // 注册失败
-					alert('登录失败！')
-				}
-				
-			})
-			.catch(function(err){
-				console.log(err)
-			}); 
+		this.$store.dispatch('UserLogin', this.form);
 		}
 }
 
