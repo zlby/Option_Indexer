@@ -46,8 +46,8 @@ const routes = [
 		children: [
 		{
 			path: '',
-			component: homepageSecond,
-			name: 'homepageSecond'
+			component: option1,
+			name: 'option1'
 		},
 		{
 			path: '/option1',

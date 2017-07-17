@@ -20,7 +20,7 @@
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpg">
+					<img src= "../assets/pexels-photo-306519.jpeg">
 				</el-carousel-item>
 				<el-carousel-item>
 					<div class="inner">
@@ -30,7 +30,7 @@
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpg">
+					<img src= "../assets/pexels-photo-373367.jpeg">
 				</el-carousel-item>
 				<el-carousel-item>
 					<div class="inner">
@@ -40,7 +40,7 @@
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpg">
+					<img src= "../assets/pexels-photo-439379.jpeg">
 				</el-carousel-item>
 
 			</el-carousel>

@@ -18,9 +18,8 @@
               </el-menu-item>
               <el-menu-item index="/option1">
               图表2
-              <el-button type="danger" size="mini"><i class="el-icon-minus "></i>
+              <el-button type="danger" size="mini" @click="toggle($event)"><i class="el-icon-minus "></i>
               </el-button>
-
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
@@ -30,23 +29,22 @@
             <el-submenu index="2-1">
               <template slot="title">期货一号</template>
               <el-menu-item index="/option1">
-                期权1号
-                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
+                期权1号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
               </el-menu-item>
-              <el-menu-item index="2-1-2">期权2号</el-menu-item>
-              <el-menu-item index="2-1-3">期权3号</el-menu-item>
+              <el-menu-item >期权2号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
+              </el-menu-item>
+              <el-menu-item >期权3号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button></el-menu-item>
             </el-submenu>
             <el-submenu index="3-1">
               <template slot="title">期货三号</template>
 
-              <el-menu-item >期权1号</el-menu-item>
-              <el-menu-item >期权2号
-
-              <el-button type="primary" size="large">
+              <el-menu-item >期权1号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
+              </el-menu-item>
+              <el-menu-item >期权2号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
               </el-button>
 
               </el-menu-item>
-              <el-menu-item index="3-1-3">期权3号</el-menu-item>
+              <el-menu-item >期权3号<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button></el-menu-item>
             </el-submenu>
           </el-submenu>
         </el-menu>
@@ -83,7 +81,7 @@ import Bus from '../bus'
           var future = btn.parentNode.parentNode.parentNode.children[0].innerText.trim();
           var option = btn.parentNode.innerText.trim();
           var optionObj = {'future': future, 'option': option};
-          Bus.$emit('addNewOption', optionObj);
+          //Bus.$emit('addNewOption', optionObj);
         } else {
           removeClass(btn, 'el-button--danger');
           addClass(btn, 'el-button--primary');
