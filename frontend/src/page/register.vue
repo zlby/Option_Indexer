@@ -37,7 +37,7 @@
 
 					<el-col>
 					<el-form-item :span="6">
-						<el-button type="primary" size="large" v-on:click="dj" class="denglubtn">注册</el-button>
+						<el-button type="primary" size="large" @click="dj" class="denglubtn">注册</el-button>
 					</el-form-item>
 					</el-col>
 				</el-form>
@@ -51,23 +51,7 @@
 
 <script>
 
-// 	export default{
-//     data() {
-//       return {
-//         form: {
-//           username: '',
-//           password: '',
-//           email: '',
-//           phone: ''
-//         }
-//       }
-//     },
-//     methods: {
-//       onSubmit() {
-//         console.log('submit!');
-//       }
-//   }
-// }
+
 
 import axios from 'axios'
 import router from '../router'
@@ -77,7 +61,7 @@ export default {
  data (){
   return {
    form: {
-    phone: '',
+    username: '',
     password: '',
     email: '',
     phone: ''
@@ -88,14 +72,7 @@ export default {
 
 computed: {
 },
-// <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
-// <script type="text/javascript">
-// 	$.post("/client/login/", 
-// 		'{"password":"123","username":"bb"}', 
-// 		function(data) {
-// 		  alert(data.status.code)
-// 		});
-// </script>
+
 methods: {
 
 

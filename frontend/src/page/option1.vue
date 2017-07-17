@@ -1,53 +1,11 @@
 <template>
   <div id="charts">
 
-    <h1 style="font-size:40px; margin-top:30px; margin-left:55px">功能预览</h1>
 
-    <el-row :gutter="20" style=" margin-top:30px">
-<!-- <el-col :span="11" :offset="1">
-<el-card class="box-card" :span="12">
-  <div slot="header" class="clearfix">
-    <span style="line-height: 36px;">卡片名称</span>
-    <el-button style="float: right;" type="primary">X</el-button>
-  </div> -->
-  <div id="main"  :style="{width:'1500px',height:'1300px'}"></div>
-<!-- </el-card>
-</el-col> -->
-
-<!-- <el-col :span="11">
-<el-card class="box-card">
-  <div slot="header" class="clearfix">
-    <span style="line-height: 36px;">卡片名称</span>
-    <el-button style="float: right;" type="primary">X</el-button>
-  </div>
-<div id="main1"  :style="{width:'600px',height:'400px'}"></div>
-</el-card>
-</el-col>
-</el-row>
-
-
-<el-row :gutter="20" style=" margin-top:30px">
-<el-col :span="11" :offset="1">
-<el-card class="box-card" :span="12">
-  <div slot="header" class="clearfix">
-    <span style="line-height: 36px;">卡片名称</span>
-    <el-button style="float: right;" type="primary">X</el-button>
-  </div>
-  <div id="main2"  :style="{width:'600px',height:'400px'}"></div>
-</el-card>
-</el-col>
-
-<el-col :span="11">
-<el-card class="box-card">
-  <div slot="header" class="clearfix">
-    <span style="line-height: 36px;">卡片名称</span>
-    <el-button style="float: right;" type="primary">X</el-button>
-  </div>
-<div id="main3"  :style="{width:'600px',height:'400px'}"></div>
-</el-card>
-</el-col> -->
-
-
+    <el-row :gutter="20" style=" margin-top:10px">
+    <el-col :span="16" offset="1">
+  <div id="main" style="width:120%;height:600px;"></div>
+  </el-col>
 </el-row>
 
 
@@ -61,17 +19,16 @@
 <script>
   import echarts from 'echarts'
   import Bus from '../bus'
-  export default{
 
-
-    created: function(){
+    export default{
+    created:function(){
         Bus.$on('addNewOption', optionObj=>{
             this.removeFuture();
             this.addFuture(optionObj.future)
             this.addOption(optionObj.future, optionObj.option)
         })
     },
-    mounted :function(){
+    mounted:function(){
         
 
     this.myChart=echarts.init(document.getElementById('main'));
@@ -418,8 +375,7 @@
         animation:true,
         series: []
     };
-      data = [];
-      this.createMapData()
+    this.createRandomFuture();
     //initFuture();
     this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);

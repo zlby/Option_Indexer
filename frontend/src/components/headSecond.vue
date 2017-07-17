@@ -81,6 +81,7 @@
    		    email: '',
    		    phone: ''
         },
+
       };
     },
     methods:{
