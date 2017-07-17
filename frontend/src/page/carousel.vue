@@ -4,43 +4,43 @@
 			<el-carousel height="730px">
 				<el-carousel-item>
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">option</p>
 						<br><br><br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<img src= "../assets/pexels-photo-374018.jpg">
 				</el-carousel-item>
 				<el-carousel-item>
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">option</p>
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<img src= "../assets/pexels-photo-374018.jpg">
 				</el-carousel-item>
 				<el-carousel-item>
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">option</p>
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<img src= "../assets/pexels-photo-374018.jpg">
 				</el-carousel-item>
 				<el-carousel-item>
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">option</p>
 						<br><br>						<br><br>
 						<el-button class="button1">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<img src= "../assets/pexels-photo-374018.jpg">
 				</el-carousel-item>
 
 			</el-carousel>
@@ -51,48 +51,48 @@
 
 		<div class="news">
 			<el-row>
-				<p class="p1">新闻资讯</p>
+				<p class="p1" style="margin-top:80px">NEWS</p>
 				<br><br>
-				<p class="p2">英文说明</p>
-
+				<p class="p2">option</p>
+				<br><br><br>
 				<el-carousel :interval="4000" type="card" height="625px">
 					<el-carousel-item>
 						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
+							<img src= "../assets/pexels-photo-159888.jpeg">
 							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
+								<span>全国金融工作会议传递中国金融发展三大信号</span>
+								<p>今年以来，中国高层在不同场合多次谈及金融议题。决策层提出“金融活，经济活”，将其摆在经济工作突出位置。此次会议进一步强调，金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。</p>
+								<el-button class="newsbtn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 							</div>
 						</el-card>
 					</el-carousel-item>
 					<el-carousel-item>
 						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
+							<img src= "../assets/pexels-photo-210574.jpeg">
 							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
+								<span>外汇局就《关于金融机构报送银行卡境外交易信息的通知》发布政策问答</span>
+								<p>日前，国家外汇管理局发布《关于金融机构报送银行卡境外交易信息的通知》政策问答，就金融机构银行卡境外交易信息报送的时间、金额、数据、方式等相关问题予以解答。</p>
+								<el-button class="newsbtn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 							</div>
 						</el-card>
 					</el-carousel-item>
 					<el-carousel-item>
 						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
+							<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
 							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
+								<span>上半年全国财政收入较快增长 增收结构呈现积极变化</span>
+								<p>“上半年，我国经济运行保持在合理区间，稳中向好态势明显。在此基础上，全国财政收入实现较快增长。”财政部国库司巡视员娄洪在7月14日召开的新闻发布会上表示，上半年，一般公共预算收入同比增长9.8%，财政增收结构呈现积极变化，中高端制造业、新兴服务业税收增长平稳较快。</p>
+								<el-button class="newsbtn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 							</div>
 						</el-card>
 					</el-carousel-item>
 					<el-carousel-item>
 						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
+							<img src= "../assets/pexels-photo-286442.jpeg">
 							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
+								<span>监管趋严下银行理财规范发展</span>
+								<p>自2004年第一只银行理财产品在我国出现以来，13年间，银行理财业务获得快速发展。数据显示，截至2016年末，银行理财产品余额达到29.05万亿元，同比增长23.63%。不过，近年来，银行理财业务风险也在不断暴露，监管逐步趋严。规范创新发展，成为新时期理财业务的主旋律。</p>
+								<el-button class="newsbtn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 							</div>
 						</el-card>
 					</el-carousel-item>
@@ -106,8 +106,8 @@
 			<el-row>
 				<el-col :span="24">
 					<el-card>
-						<img src="../assets/first4.jpg" class="pic1">
-						<p><h1>星期五早晨</h1>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。 一颗流星在蓝幽幽的天空中划过一道神奇的弧线，像织女抛出的梭子，转瞬即逝。星空真蓝啊，蓝的发黑，蓝的发黑，蓝的清澈，蓝的纯洁，像磨的一常光滑的蓝宝石。一丝丝凉风刮过，呼呼的直往人怀里钻，让人感觉既凉爽 ，又惬意 。星星，还眨着眼睛。月亮，还是那么皎洁。早晨的天空，依然是那么美。
+						<img src="../assets/pexels-photo-210574.jpeg" class="pic1">
+						<p><h1>监管趋严下银行理财规范发展</h1>自2004年第一只银行理财产品在我国出现以来，13年间，银行理财业务获得快速发展。数据显示，截至2016年末，银行理财产品余额达到29.05万亿元，同比增长23.63%。不过，近年来，银行理财业务风险也在不断暴露，监管逐步趋严。规范创新发展，成为新时期理财业务的主旋律。
 						</p>
 					</el-card>
 				</el-col>
@@ -118,8 +118,8 @@
 			<el-row>
 				<el-col :span="24">
 					<el-card>
-						<img src="../assets/first4.jpg" class="pic2">
-						<p><h1>星期五早晨</h1>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。 一颗流星在蓝幽幽的天空中划过一道神奇的弧线，像织女抛出的梭子，转瞬即逝。星空真蓝啊，蓝的发黑，蓝的发黑，蓝的清澈，蓝的纯洁，像磨的一常光滑的蓝宝石。一丝丝凉风刮过，呼呼的直往人怀里钻，让人感觉既凉爽 ，又惬意 。星星，还眨着眼睛。月亮，还是那么皎洁。早晨的天空，依然是那么美。
+						<img src="../assets/pexels-photo-286442.jpeg" class="pic2">
+						<p><h1>上半年全国财政收入较快增长 增收结构呈现积极变化</h1>“上半年，我国经济运行保持在合理区间，稳中向好态势明显。在此基础上，全国财政收入实现较快增长。”财政部国库司巡视员娄洪在7月14日召开的新闻发布会上表示，上半年，一般公共预算收入同比增长9.8%，财政增收结构呈现积极变化，中高端制造业、新兴服务业税收增长平稳较快。
 						</p>
 					</el-card>
 				</el-col>
@@ -127,17 +127,17 @@
 		</div>
 		
 		<div class="about">
-			<p class="p1">关于我们</p>
+			<p class="p1">About</p>
 			<br>
-			<p class="p2">英文说明</p>
+			<p class="p2">option</p>
 			<br><br><br><br>
 		</div>
 		
 		<div class="promotion">
 			<br>
-			<p class="p2">你们的宣传语blabla</p>
+			<p class="p2">INDEXER</p>
 			<br><br><br><br><br><br><br><br><br><br><br>
-			<p class="p2">宣传语blabla</p>
+			<p class="p2">INDEXER</p>
 			<br><br><br><br>
 			<p class="p2">@官方微博</p>
 			<br><br><br><br><br>
@@ -145,7 +145,7 @@
 
 
 	<div class="contact">
-		<p class="p1">联系我们</p>
+		<p class="p1">Contact</p>
 		<br><br><br><br><br><br><br>
 		<el-form ref="form" :model="form" label-width="80px">
 			<el-row  :gutter="20"> 
@@ -170,7 +170,7 @@
 			<el-row :gutter="20">
 			<el-col :span="12" :offset="10">
 			<el-form-item>
-				<el-button type="primary" size="large" @click="onSubmit">send message</el-button>
+				<el-button type="primary" size="large">send message</el-button>
 			</el-form-item>
 			</el-col>
 			</el-row>
@@ -182,10 +182,10 @@
 
 			<div class="promotion">
 			<br>
-			<p class="p2">超链接</p>
+			<p class="p2">super</p>
 			<br><br><br><br><br><br><br><br><br><br><br>
 			<br><br><br><br>
-			<p class="p2">超链接</p>
+			<p class="p2">super</p>
 			<br><br><br><br><br>
 		</div>
 
@@ -286,6 +286,9 @@
 	float: right;
 }
 
-
+.newsbtn{
+	margin-right: 200px;
+	text-align: center;
+}
 
 </style>

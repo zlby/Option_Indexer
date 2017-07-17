@@ -1,21 +1,37 @@
 <template>
 	<div class = "navigate">
-	<el-row :gutter="20">
-		<el-menu :default-active="activeIndex" class="el-menu-demo1" mode="horizontal" @select="handleSelect" router>
+	<el-row>
+		<el-menu class="el-menu-demo1" mode="horizontal" router>
 		<el-col :span = "4" :offset ="3">
 			<el-menu-item index="/"><img src="../assets/bigtouxiang1.png" class="touxiang"></el-menu-item>	
 		</el-col>
-		<el-col :span = "5" :offset = "7">
+		<el-col :span="6" :offset="6">
 			<el-menu-item index="/">首页</el-menu-item>		
 			<el-menu-item index="/productIntro" >产品介绍</el-menu-item>
 			<el-menu-item index="/use">信息资源</el-menu-item>
 		</el-col>	
-		<el-col :span = "5">
-			<el-menu-item >登陆</el-menu-item>
+		<el-col :span="4" offset="1">
+			<el-menu-item index= "/login" >登陆</el-menu-item>
+
+<!-- 			<el-dialog :visible.sync="dialogFormVisible" :modal-append-to-body="false" :modal="false">
+				<el-form :model="form">
+
+					<el-form-item>
+						<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
+					</el-form-item>
+
+					<el-form-item>
+						<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
+					</el-form-item>
+
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+				</div>
+			</el-dialog> -->
 
 
-
-			<el-menu-item index="/login">注册</el-menu-item>	
+			<el-menu-item index="/register">注册</el-menu-item>	
 		</el-col>
 <!-- 			<el-menu-item index="9"><img src="../assets/附件切图/云.png" class="touxiang1"></el-menu-item>	
 			<el-menu-item index="8"><img src="../assets/附件切图/搜索.png" class="touxiang1"></el-menu-item>	 -->		
@@ -29,7 +45,16 @@
 
 <script>
   export default {
-
+  	data() {
+      return {
+        dialogFormVisible: false,
+        form: {
+    userName: '',
+    password: ''
+        },
+        formLabelWidth: '120px'
+      };
+    }
 }
 </script>
 
@@ -65,6 +90,15 @@ background-size:100% 100%;
 .touxiang1{
 	color:white;
 	-webkit-filter: drop-shadow(#FFFFFF 0px 0);filter: drop-shadow(#FFFFFF 0px 0);   
+}
+
+
+#username{
+	opacity:0.90;
+}
+
+#password{
+	opacity: 0.90;
 }
 
 </style>

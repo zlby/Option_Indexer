@@ -1,91 +1,71 @@
 <template>
-	<div>
+	<div class="login">
 		<section>
 		  <div><br><br><br><br></div>
 			<el-row  :gutter="20">
-				<el-form ref="form" :model="form" label-width="80px" method="post" @submit.prevent="reg()">
-					<el-col :span="8" :offset="8">
-					<el-form-item label="昵称">
-						<el-input v-model="form.username" id= "username" placeholder="请输入昵称"></el-input>
-					</el-form-item>
-					</el-col>
-					<el-col :span="8" :offset="8">
-					<el-form-item label="密码">
-						<el-input v-model="form.password" id= "password" placeholder="请输入密码"></el-input>
-					</el-form-item>
-					</el-col>
-
-					<el-col :span="8" :offset="8">
-					<el-form-item label="邮箱">
-						<el-input v-model="form.email" id="email" placeholder="请输入邮箱" ></el-input>
-					</el-form-item>
-					</el-col>
-
-					<el-col :span="8" :offset="8">
-					<el-form-item label="手机号码">
-						<el-input v-model="form.phone" id="phone" placeholder="请输入手机号码"></el-input>
-					</el-form-item>
-					</el-col>
+				<el-col :span="8" :offset="11">
+				<img src="../assets/bigtouxiang.png">
+				</el-col>
+				<el-col :span="6" :offset="9">
+				<el-card class="box-card" style="margin-top:40px">
+				<el-form ref="form" :model="form" action="" role="form">
 
 
-					<el-col :span="8" :offset="8">
+					<el-col>
 					<el-form-item>
-                    <p>
-                        可通过该手机号码快速找到密码<br>
-                        中国大陆地区以外手机号码<a href="#">  点击这里</a>
-                    </p>
+						<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
 					</el-form-item>
 					</el-col>
-					<el-col :span="8" :offset="8">
+
+					<el-col >
 					<el-form-item>
-						<el-button type="primary" size="large" @click="submitForm">立即注册</el-button>
-            <router-link to="/" class="btn btn-default">返回</router-link>
+						<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
+					</el-form-item>
+					</el-col>
+					
+					<el-col >
+					<el-form-item>
+						<el-checkbox v-model="checked" style="color: #FFFFFF;">记住我</el-checkbox>
+						<router-link to="/register" style="margin-left: 240px;" class="zhucebtn">注册</router-link>
+
+					</el-form-item>
+					</el-col>
+
+
+					<el-col>
+					<el-form-item>
+						<el-button type="primary" size="large" class="denglubtn">登陆</el-button>
 					</el-form-item>
 					</el-col>
 				</el-form>
+				</el-card>
+				</el-col>
 			</el-row>
 		</section>
+
 	</div>
 </template>
 
 <script>
-// 	export default{
-//     data() {
-//       return {
-//         form: {
-//           username: '',
-//           password: '',
-//           email: '',
-//           phone: ''
-//         }
-//       }
-//     },
-//     methods: {
-//       onSubmit() {
-//         console.log('submit!');
-//       }
-//   }
-// }
 
 export default {
+// import axios from 'axios';
 
  data (){
   return {
    form: {
     userName: '',
-    password: '',
-    email: '',
-    phone: ''
-  }
-}
+    password: ''
+  },
+  checked: 'true'
+};
 },
+
 computed: {
 },
 
 methods: {
-  reg(){
-    this.$store.dispatch('UserReg',this.user);
-  }
+
 }
 
 }
@@ -93,5 +73,24 @@ methods: {
 
 </script>
 
-<style>
+<style lang="less">
+
+.login{
+	background-image: url("../assets/1.jpg");
+	background-repeat:no-repeat;
+	height: 100%;
+	width: 100%;
+}
+
+.box-card{
+	background: transparent;
+	// text-align: center;
+}
+.denglubtn{
+	width: 400px;
+}
+
+.zhucebtn{
+	color:#FFFFFF;
+}
 </style>
