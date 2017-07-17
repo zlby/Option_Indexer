@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login as set_session_as_logged, logout as detach_logged_status
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -41,7 +42,7 @@ def login(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         username = request_data.get('username')
         password = request_data.get('password')
         if password and username:
@@ -79,7 +80,7 @@ def new_client(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         username = request_data.get('username')
         password = request_data.get('password')
         email = request_data.get('email')
@@ -92,7 +93,7 @@ def new_client(request):
             else:
                 new_user = User.objects.create_user(username=username, password=password)
                 Client.objects.create(user=new_user, email=email, phone=phone)
-                set_session_as_logged(result, authenticate(username=username, password=password))
+                set_session_as_logged(request, authenticate(username=username, password=password))
                 status['message'] = 'register success'
                 return JsonResponse(result, status=200)
         else:
@@ -134,7 +135,7 @@ def set_new_password(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         old_password = request_data.get('old_password')
         new_password = request_data.get('new_password')
         if old_password and new_password:
@@ -165,7 +166,7 @@ def set_new_email_phone(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         new_email = request_data.get('email')
         new_phone = request_data.get('phone')
         if new_email or new_phone:
@@ -196,7 +197,7 @@ def new_combo(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         positive_option = request_data.get('positive_option')
         negative_option = request_data.get('negative_option')
         if positive_option and negative_option:
@@ -226,7 +227,7 @@ def delete_combo(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         combo_id = request_data.get('id')
         if combo_id:
             if request.user.client.delete_combo(combo_id):

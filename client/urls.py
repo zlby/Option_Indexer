@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import include, url
 import client.views as views
 
