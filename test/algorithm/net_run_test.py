@@ -3,6 +3,8 @@ import algorithm.interval.net_run as net
 import csv
 import os
 
+from algorithm.interval.net_graph_build import SubGraph
+
 
 class CsvDataProvider(CombineOptionsDataProvider):
 
@@ -34,7 +36,7 @@ if __name__ == '__main__':
 
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
 
-    print(net.get_interval("m1709c2500", "m1709c2600", options=optioncomb))
+    print(net.get_interval("m1709c2500", "m1709c2600", graph=SubGraph(), options=optioncomb))
 # print(os.listdir("."))
 #
 #

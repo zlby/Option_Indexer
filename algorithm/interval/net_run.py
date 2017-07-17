@@ -2,7 +2,7 @@ from algorithm.interval.net_graph_build import *
 import algorithm.interval.data as data
 
 
-def get_interval(code1, code2, options=None):
+def get_interval(code1, code2, graph, options=None):
     if options is None:
         pass
         # r1 = dl.get_option_rate_list(code1)
@@ -23,27 +23,27 @@ def get_interval(code1, code2, options=None):
 
     def train_sim_normal_distribution_args(sess, loop_count):
         for i in range(loop_count):
-            sess.run(train_step, feed_dict={inputs: [r1, r2, p1, p2]})
+            sess.run(graph.train_step, feed_dict={graph.inputs: [r1, r2, p1, p2]})
 
-    with tf.Session(graph=g) as sess:
+    with tf.Session(graph=graph.g) as sess:
         merged = tf.summary.merge_all()
         writer = tf.summary.FileWriter("./logs", sess.graph)
-        sess.run(init)
+        sess.run(graph.init)
         train_sim_normal_distribution_args(sess, 500)
 
         for i in range(500):
-            sess.run(train_step, feed_dict={inputs: [r1, r2, p1, p2]})
+            sess.run(graph.train_step, feed_dict={graph.inputs: [r1, r2, p1, p2]})
             if i % 2 == 0:
-                rs = sess.run(merged, feed_dict={inputs: [r1, r2, p1, p2]})
+                rs = sess.run(merged, feed_dict={graph.inputs: [r1, r2, p1, p2]})
                 writer.add_summary(rs, i)
                 writer.flush()
 
         bene_y = []
 
         for i in range(500):
-            results = sess.run([trd_train, bene], feed_dict={inputs: [r1, r2, p1, p2]})
+            results = sess.run([graph.trd_train, graph.bene], feed_dict={graph.inputs: [r1, r2, p1, p2]})
             if i % 2 == 0:
-                rs = sess.run(merged, feed_dict={inputs: [r1, r2, p1, p2]})
+                rs = sess.run(merged, feed_dict={graph.inputs: [r1, r2, p1, p2]})
                 writer.add_summary(rs, i)
                 writer.flush()
                 bene_y.append(results[1])
@@ -54,7 +54,7 @@ def get_interval(code1, code2, options=None):
         # plt.scatter([index for index,_ in enumerate(bene_y)], bene_y, linewidths=0.2)
         # plt.show()
 
-        res = sess.run([interval_nm, interval_hg, interval_err, trd_err, scl], feed_dict={inputs: [r1, r2, p1, p2]})
+        res = sess.run([graph.interval_nm, graph.interval_hg, graph.interval_err, graph.trd_err, graph.scl], feed_dict={graph.inputs: [r1, r2, p1, p2]})
         return res[:3]
 
 # print(get_interval('m1708-c-2500', 'm1708-c-2600'))
