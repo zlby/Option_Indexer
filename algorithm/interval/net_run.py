@@ -9,6 +9,7 @@ def get_interval(code1, code2):
     p1 = dl.get_option_price_list(code1)
     p2 = dl.get_option_price_list(code2)
 
+
     sample_size = len(r1)
 
     def train_sim_normal_distribution_args(sess, loop_count):
@@ -38,10 +39,11 @@ def get_interval(code1, code2):
                 writer.flush()
                 bene_y.append(results[1])
 
-
+        # writer.close()
         # import matplotlib.pyplot as plt
         # plt.scatter([index for index,_ in enumerate(bene_y)], bene_y, linewidths=0.2)
         # plt.show()
+        # temp = sess.run([out_hg, out_nm, dr_prob, max_raw_p, bene, trd_hg, trd_nm], feed_dict={inputs: [r1, r2, p1, p2]})
 
         res = sess.run([interval_nm, interval_hg, interval_err, trd_err, scl], feed_dict={inputs: [r1, r2, p1, p2]})
         return res[:3]

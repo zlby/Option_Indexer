@@ -2,6 +2,9 @@ import datetime
 import numpy as np
 import algorithm.database_link as dl
 import time
+# from datetime import datetime
+from option.models import *
+import threading
 
 
 def operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interval_c_lt, interval_c_rt, option_code_1,
@@ -9,6 +12,9 @@ def operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interv
     # return: benefit_end, the benefit after the operation
     #         flag_out
     current_time = datetime.datetime.now()
+    # 去掉秒
+    current_time = datetime.datetime(current_time.year, current_time.month, current_time.day,
+                                     current_time.hour, current_time.minute, second=0)
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=1)
     closing_time_yesterday = datetime.datetime(year=yesterday.year, month=yesterday.month, day=yesterday.day, hour=15,
@@ -17,8 +23,8 @@ def operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interv
     # print(current_time)
     # print(closing_time_yesterday)
     # 取出数据库中当前隐含波动率
-    vol1 = dl.getvol(option_code_1, current_time)
-    vol2 = dl.getvol(option_code_2, current_time)
+    vol1 = dl.get_option_vol(option_code_1, current_time)
+    vol2 = dl.get_option_vol(option_code_2, current_time)
     diff = vol1 - vol2
     signal = np.sign(diff)
     flag_out = flag_in
@@ -85,22 +91,36 @@ def operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interv
 
 # operation(1, 1, 1, 1, 1, 1, 1, 1)
 
-def remind_customer(option_code_1, option_code_2, interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt,
-                    interval_c_lt, interval_c_rt):
-    # benefit = 0
-    flag = False
-    while (True):
+# def remind_customer(option_code_1, option_code_2, interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt,
+#                     interval_c_lt, interval_c_rt):
+#     # benefit = 0
+#     flag = False
+#     while (True):
+#         time_start = datetime.datetime.now()
+#         # flag = operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interval_c_lt,
+#         #                  interval_c_rt, option_code_1, option_code_2, flag)
+#         # print(option_code_1)
+#         time_end = datetime.datetime.now()
+#         time_period = time_end - time_start
+#         time_seconds = time_period.seconds
+#         time.sleep(5 - time_seconds)
+
+
+def start_remind():
+    query_set = Intervals.objects.all()
+    flag = []
+    for _ in query_set:
+        flag.append(False)
+    while True:
         time_start = datetime.datetime.now()
-        flag = operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interval_c_lt,
-                         interval_c_rt, option_code_1, option_code_2, flag)
-        # print('function end')
+        for i in range(len(query_set)):
+            item = query_set[i]
+            flag[i] = operation(item.lower_bound_a, item.upper_bound_a, item.lower_bound_b, item.upper_bound_b,
+                                item.lower_bound_c,
+                                item.upper_bound_c, item.positive_option_id, item.negative_option_id, flag[i])
+
         time_end = datetime.datetime.now()
         time_period = time_end - time_start
         time_seconds = time_period.seconds
         time.sleep(60 - time_seconds)
-
-
-# if __name__ == '__main__':
-    # remind_customer(1, 1, 1, 1, 1, 1, 1, 1)
-
 

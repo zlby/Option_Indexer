@@ -1,5 +1,6 @@
 # import data
 import algorithm.database_link as dl
+# import algorithm.interval.data
 import tensorflow as tf
 import tensorflow.contrib.distributions as dst
 import numpy as np
