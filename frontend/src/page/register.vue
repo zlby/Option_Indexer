@@ -74,23 +74,7 @@ methods: {
 
 
 	dj: function() {
-<<<<<<< HEAD
-			// var obj = JSON.stringify(this.form)
-=======
->>>>>>> 300b56639c74bfe7e922d8b2eb64be4d96fbc59d
-			axios.post('/client/register/', this.form)
-			.then(function(res){
-				res = res.data
-				if (res.status.code == '0') { // 注册成功，自动登录
-					router.push('/productIntro')
-				} else { // 注册失败
-					alert('用户名已存在！')
-				}
-				
-			})
-			.catch(function(err){
-				alert('用户名已存在！')
-			}); 
+			this.$store.dispatch('UserRegister', this.form);
 		}
 
 

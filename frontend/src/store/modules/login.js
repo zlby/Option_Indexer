@@ -1,4 +1,3 @@
-
 var isLoggedIn = function() {
   var token = localStorage.getItem('user');
   if (token) {
@@ -12,24 +11,21 @@ var isLoggedIn = function() {
 };
 
 const state = {
-  token: isLoggedIn() || null
+  loggedin: false,
+  username: '名字'
 };
 
-// const mutations = {
-//   [](state, user) {
-//     localStorage.setItem('user',JSON.stringify(user));
-//     state.token = user
-//   },
-//   [USER_SIGNOUT](state) {
-//     localStorage.removeItem('user');
-//     state.token = null;
-//   },
-//   [USER_REG](state, user) {
-//     localStorage.setItem('user',JSON.stringify(user));
-//     state.token = user
-//   }
-// }
+const mutations = {
+  login (state, obj) {
+    state.loggedin = true;
+    state.username = obj.username;
+  },
+  logout (state) {
+    state.loggedin = false;
+  }
+};
 
 export default {
-  state
+  state,
+  mutations
 }
