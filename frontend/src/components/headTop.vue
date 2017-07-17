@@ -10,6 +10,29 @@
 			<el-menu-item index="/productIntro" >产品介绍</el-menu-item>
 			<el-menu-item index="/use">信息资源</el-menu-item>
 		</el-col>	
+<<<<<<< HEAD
+=======
+		<el-col :span="4" :offset="1">
+			<el-menu-item index= "/login" >登陆</el-menu-item>
+
+<!-- 			<el-dialog :visible.sync="dialogFormVisible" :modal-append-to-body="false" :modal="false">
+				<el-form :model="form">
+
+					<el-form-item>
+						<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
+					</el-form-item>
+
+					<el-form-item>
+						<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
+					</el-form-item>
+
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+				</div>
+			</el-dialog> -->
+
+>>>>>>> 300b56639c74bfe7e922d8b2eb64be4d96fbc59d
 
 		<el-col :span="4" offset="1" v-if="loggedin!=200">
 			<el-menu-item index= "/login" >登陆</el-menu-item>

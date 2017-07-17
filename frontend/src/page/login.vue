@@ -60,7 +60,7 @@ export default {
       };
   return {
    form: {
-    userName: '',
+    username: '',
     password: ''
   },
   rules2: {
@@ -81,7 +81,23 @@ computed: {
 
 methods: {
 	dj: function() {
+<<<<<<< HEAD
 		this.$store.dispatch('UserLogin', this.form);
+=======
+			axios.post('/client/login/', this.form)
+			.then(function(res){
+				res = res.data
+				if (res.status.code == '0') { // 注册成功，自动登录
+					router.push({path:'/productIntro'})
+				} else { // 注册失败
+					alert('登录失败！')
+				}
+				
+			})
+			.catch(function(err){
+				console.log(err)
+			}); 
+>>>>>>> 300b56639c74bfe7e922d8b2eb64be4d96fbc59d
 		}
 }
 

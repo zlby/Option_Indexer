@@ -37,7 +37,7 @@
 
 					<el-col>
 					<el-form-item :span="6">
-						<el-button type="primary" size="large" @click="dj" class="denglubtn">注册</el-button>
+						<el-button type="primary" size="large" v-on:click="dj" class="denglubtn">注册</el-button>
 					</el-form-item>
 					</el-col>
 				</el-form>
@@ -51,8 +51,6 @@
 
 <script>
 
-
-
 import axios from 'axios'
 import router from '../router'
 
@@ -60,24 +58,26 @@ export default {
 
  data (){
   return {
-   form: {
-    username: '',
-    password: '',
-    email: '',
-    phone: ''
-  },
-  active: 0
-};
+	   form: {
+	    phone: '',
+	    password: '',
+	    email: '',
+	    username: ''
+	  },
+	  active: 0
+	};
 },
 
 computed: {
 },
-
 methods: {
 
 
 	dj: function() {
+<<<<<<< HEAD
 			// var obj = JSON.stringify(this.form)
+=======
+>>>>>>> 300b56639c74bfe7e922d8b2eb64be4d96fbc59d
 			axios.post('/client/register/', this.form)
 			.then(function(res){
 				res = res.data
