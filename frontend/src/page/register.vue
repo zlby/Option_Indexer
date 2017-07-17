@@ -70,6 +70,7 @@
 // }
 
 import axios from 'axios'
+import router from '../router'
 
 export default {
 
@@ -87,28 +88,31 @@ export default {
 
 computed: {
 },
-
+// <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+// <script type="text/javascript">
+// 	$.post("/client/login/", 
+// 		'{"password":"123","username":"bb"}', 
+// 		function(data) {
+// 		  alert(data.status.code)
+// 		});
+// </script>
 methods: {
 
 
 	dj: function() {
-			// console.log(this.form)      ////返回的是一个包含很多内容东西的对象 里边还有不想要的东西
-			
-			// console.log(obj)
-			// instance.post('/client/register/',obj)
-			// .then(function() {
-			// 	console.log(response);
-			// })
-			// .catch(function(error) {
-			// 	console.log(error);
-			// });
-			var obj = JSON.stringify(this.form);
+			var obj = JSON.stringify(this.form)
 			axios.post('/client/register/', obj)
 			.then(function(res){
-				console.log(res);
+				res = res.data
+				if (res.status.code == '0') { // 注册成功，自动登录
+					router.push('/productIntro')
+				} else { // 注册失败
+					alert('用户名已存在！')
+				}
+				
 			})
 			.catch(function(err){
-				console.log(err);
+				console.log(err)
 			}); 
 		}
 

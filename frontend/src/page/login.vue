@@ -26,7 +26,7 @@
 					<el-col >
 					<el-form-item>
 						<el-checkbox v-model="checked" style="color: #FFFFFF;">记住我</el-checkbox>
-						<router-link to="/register" style="margin-left: 240px;" class="zhucebtn">注册</router-link>
+						<router-link to="/register" class="zhucebtn">注册</router-link>
 
 					</el-form-item>
 					</el-col>
@@ -34,7 +34,7 @@
 
 					<el-col>
 					<el-form-item>
-						<el-button type="primary" size="large" class="denglubtn">登陆</el-button>
+						<el-button type="primary" size="large" class="denglubtn" @click="dj">登陆</el-button>
 					</el-form-item>
 					</el-col>
 				</el-form>
@@ -47,9 +47,10 @@
 </template>
 
 <script>
+import axios from 'axios'
+import router from '../router'
 
 export default {
-// import axios from 'axios';
 
  data (){
   return {
@@ -65,7 +66,22 @@ computed: {
 },
 
 methods: {
-
+	dj: function() {
+			var obj = JSON.stringify(this.form)
+			axios.post('/client/login/', obj)
+			.then(function(res){
+				res = res.data
+				if (res.status.code == '0') { // 注册成功，自动登录
+					router.push({path:'/productIntro'})
+				} else { // 注册失败
+					alert('登录失败！')
+				}
+				
+			})
+			.catch(function(err){
+				console.log(err)
+			}); 
+		}
 }
 
 }
