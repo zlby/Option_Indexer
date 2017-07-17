@@ -1,14 +1,21 @@
 from algorithm.interval.net_graph_build import *
+import algorithm.interval.data as data
 
 
-def get_interval(code1, code2):
+def get_interval(code1, code2, options=None):
+    if options is None:
+        r1 = dl.get_option_rate_list(code1)
+        r2 = dl.get_option_rate_list(code2)
 
-    r1 = dl.get_option_rate_list(code1)
-    r2 = dl.get_option_rate_list(code2)
-
-    p1 = dl.get_option_price_list(code1)
-    p2 = dl.get_option_price_list(code2)
-
+        p1 = dl.get_option_price_list(code1)
+        p2 = dl.get_option_price_list(code2)
+    elif options is data.CombineOptionsDataProvider:
+        r1 = options.get_option_rate_list(code1)
+        r2 = options.get_option_rate_list(code2)
+        p1 = options.get_option_price_list(code1)
+        p2 = options.get_option_price_list(code2)
+    else:
+        raise data.UnSupportDataFormatError()
 
     sample_size = len(r1)
 
@@ -39,11 +46,11 @@ def get_interval(code1, code2):
                 writer.flush()
                 bene_y.append(results[1])
 
-        # writer.close()
+
+
         # import matplotlib.pyplot as plt
         # plt.scatter([index for index,_ in enumerate(bene_y)], bene_y, linewidths=0.2)
         # plt.show()
-        # temp = sess.run([out_hg, out_nm, dr_prob, max_raw_p, bene, trd_hg, trd_nm], feed_dict={inputs: [r1, r2, p1, p2]})
 
         res = sess.run([interval_nm, interval_hg, interval_err, trd_err, scl], feed_dict={inputs: [r1, r2, p1, p2]})
         return res[:3]
