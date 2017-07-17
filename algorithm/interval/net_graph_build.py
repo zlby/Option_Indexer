@@ -1,5 +1,5 @@
 # import data
-import algorithm.database_link as dl
+# import algorithm.database_link as dl
 # import algorithm.interval.data
 import tensorflow as tf
 import tensorflow.contrib.distributions as dst
@@ -26,14 +26,14 @@ def find_interval(value, avg, scale):
 
 with tf.Graph().as_default() as g:
     with tf.name_scope('Input'):
-        inputs = tf.placeholder(tf.float32, shape=[4, 2000], name='inputs')
+        inputs = tf.placeholder(tf.float32, shape=[4, 8640], name='inputs')
         # nm_args = tf.Variable(tf.zeros([2], tf.float32, name="normal arguments"))
         dr = tf.subtract(inputs[1], inputs[0], name="dr")
         # former_dr = ([0]+dr)[0:sample_size]  # TODO change
 
         dp = tf.subtract(inputs[3], inputs[2], name="dp")
         with tf.name_scope('frequency'):
-            dr_sorted = tf.cast(tf.nn.top_k(dr, 2000).values, tf.float32, name="dr_sorted")
+            dr_sorted = tf.cast(tf.nn.top_k(dr, 8640).values, tf.float32, name="dr_sorted")
             dr_frq = tf.div(
                 tf.convert_to_tensor([x for x in range(dr_sorted.shape[0], 0, -1)], dtype=tf.float32, name="counts"),
                 dr_sorted.shape[0].value,

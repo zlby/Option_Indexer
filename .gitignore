@@ -45,3 +45,4 @@ option/migrations/__pycache__/
 /net_save/
 /algorithm/interval/net_save/
 /algorithm/interval/nothing/
+/test/algorithm/logs/
