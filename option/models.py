@@ -38,10 +38,10 @@ class OptionTreadingData(TreadingDataBase):
 class Intervals(models.Model):
     positive_option = models.ForeignKey(to=Option, verbose_name='正向期权', related_name='positive_intervals')
     negative_option = models.ForeignKey(to=Option, verbose_name='反向期权', related_name='negative_intervals')
-    lower_bound_a = models.FloatField(verbose_name='a区间下限')
-    upper_bound_a = models.FloatField(verbose_name='a区间上限')
-    lower_bound_b = models.FloatField(verbose_name='b区间下限')
-    upper_bound_b = models.FloatField(verbose_name='b区间上限')
-    lower_bound_c = models.FloatField(verbose_name='c区间下限')
-    upper_bound_c = models.FloatField(verbose_name='c区间上限')
+    lower_bound_a = models.FloatField(verbose_name='a区间下限', null=True)
+    upper_bound_a = models.FloatField(verbose_name='a区间上限', null=True)
+    lower_bound_b = models.FloatField(verbose_name='b区间下限', null=True)
+    upper_bound_b = models.FloatField(verbose_name='b区间上限', null=True)
+    lower_bound_c = models.FloatField(verbose_name='c区间下限', null=True)
+    upper_bound_c = models.FloatField(verbose_name='c区间上限', null=True)
 
