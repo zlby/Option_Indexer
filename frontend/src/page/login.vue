@@ -97,7 +97,8 @@ methods: {
 }
 
 .box-card{
-	background: #666;
+	
+	background: transparent;
 	// opacity: 0.7;
 	// text-align: center;
 }
