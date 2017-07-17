@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login as set_session_as_logged, logout as detach_logged_status
 from django.contrib.auth.models import User
 from django.http import JsonResponse
