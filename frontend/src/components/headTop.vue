@@ -10,7 +10,7 @@
 			<el-menu-item index="/productIntro" >产品介绍</el-menu-item>
 			<el-menu-item index="/use">信息资源</el-menu-item>
 		</el-col>	
-		<el-col :span="4" offset="1">
+		<el-col :span="4" :offset="1">
 			<el-menu-item index= "/login" >登陆</el-menu-item>
 
 <!-- 			<el-dialog :visible.sync="dialogFormVisible" :modal-append-to-body="false" :modal="false">

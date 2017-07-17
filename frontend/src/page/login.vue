@@ -55,7 +55,7 @@ export default {
  data (){
   return {
    form: {
-    userName: '',
+    username: '',
     password: ''
   },
   checked: 'true'
@@ -67,8 +67,7 @@ computed: {
 
 methods: {
 	dj: function() {
-			var obj = JSON.stringify(this.form)
-			axios.post('/client/login/', obj)
+			axios.post('/client/login/', this.form)
 			.then(function(res){
 				res = res.data
 				if (res.status.code == '0') { // 注册成功，自动登录

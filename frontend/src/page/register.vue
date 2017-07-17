@@ -51,24 +51,6 @@
 
 <script>
 
-// 	export default{
-//     data() {
-//       return {
-//         form: {
-//           username: '',
-//           password: '',
-//           email: '',
-//           phone: ''
-//         }
-//       }
-//     },
-//     methods: {
-//       onSubmit() {
-//         console.log('submit!');
-//       }
-//   }
-// }
-
 import axios from 'axios'
 import router from '../router'
 
@@ -76,32 +58,23 @@ export default {
 
  data (){
   return {
-   form: {
-    phone: '',
-    password: '',
-    email: '',
-    phone: ''
-  },
-  active: 0
-};
+	   form: {
+	    phone: '',
+	    password: '',
+	    email: '',
+	    username: ''
+	  },
+	  active: 0
+	};
 },
 
 computed: {
 },
-// <script src="http://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
-// <script type="text/javascript">
-// 	$.post("/client/login/", 
-// 		'{"password":"123","username":"bb"}', 
-// 		function(data) {
-// 		  alert(data.status.code)
-// 		});
-// </script>
 methods: {
 
 
 	dj: function() {
-			var obj = JSON.stringify(this.form)
-			axios.post('/client/register/', obj)
+			axios.post('/client/register/', this.form)
 			.then(function(res){
 				res = res.data
 				if (res.status.code == '0') { // 注册成功，自动登录
