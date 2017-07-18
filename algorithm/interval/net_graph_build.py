@@ -1,71 +1,78 @@
-# import data
-# import algorithm.database_link as dl
-# import algorithm.interval.data
 import tensorflow as tf
 import tensorflow.contrib.distributions as dst
 import numpy as np
 
 
-# r1 = data.get_first_rate_list()
-# r2 = data.get_second_rate_list()
-#
-# p1 = data.get_first_price_list()
-# p2 = data.get_second_price_list()
-
-# sample_size = len(r1)
-
-# CREATE MODEL STRUCTURE START #
-
-# Create normal predicate layer
-
-
 def find_interval(value, avg, scale):
-    return (avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale,
-            avg + tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale)
+    with tf.name_scope("find_interval_with_raw_value"):
+        min_of_interval = avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
+        max_of_interval = avg + tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
+    return min_of_interval, max_of_interval
 
 
 # move graph building in a function
 class SubGraph(object):
-    def __init__(self):
-        self.build_graph()
 
-    def build_graph(self):
+    def __preprocessing_inputs(self, sample_size: int):
+        with tf.name_scope('Input'):
+
+            self.inputs = tf.placeholder(tf.float32, shape=[4, sample_size], name='Inputs')
+
+            self.difference_vol = tf.subtract(self.inputs[1], self.inputs[0], name="Difference of vol")
+
+            self.difference_price = tf.subtract(self.inputs[3], self.inputs[2], name="Difference of price")
+            with tf.name_scope('Frequency'):
+                difference_vol_sorted = tf.cast(tf.nn.top_k(self.difference_vol, sample_size).values,
+                                                tf.float32,
+                                                name="difference_vol_sorted")
+                dr_frq = tf.div(
+                    tf.convert_to_tensor([x for x in range(difference_vol_sorted.shape[0], 0, -1)],
+                                         dtype=tf.float32,
+                                         name="counts"),
+                    difference_vol_sorted.shape[0].value,
+                    name="Frequency"
+                )
+                tf.summary.histogram("sample_frequency", dr_frq)
+        return difference_vol_sorted, dr_frq
+
+    # fixme : assert tuple likes (Tensor, Tensor)
+    def simulate_regular_normal_distribution_arguments(self, sample: tuple):
+        with tf.name_scope("reg_norm_prediction"):
+            avg = tf.reduce_mean(self.difference_vol)
+            scl = tf.Variable(np.random.rand(), dtype=tf.float32)
+            tf.summary.scalar("scl", self.scl)
+            pdt_nm_dst = dst.Normal(loc=self.avg, scale=self.scl)
+
+            # Evaluate dr , return the predicate frequency 1-D tensor
+            pdt_frq = pdt_nm_dst.cdf(sample[0])
+
+            with tf.name_scope("loss"):
+                loss = tf.reduce_mean(tf.square((pdt_frq - sample[1]), name="error"), name="loss")
+                tf.summary.scalar("loss", loss)
+
+            with tf.name_scope("train"):
+                self.train_step = tf.train.AdamOptimizer(0.001).minimize(loss)
+
+    def build_graph(self, sample_size):
         with tf.Graph().as_default() as self.g:
-            with tf.name_scope('Input'):
-                # fixme : resolve sample_size
-                self.inputs = tf.placeholder(tf.float32, shape=[4, 8640], name='inputs')
-                # nm_args = tf.Variable(tf.zeros([2], tf.float32, name="normal arguments"))
-                self.dr = tf.subtract(self.inputs[1], self.inputs[0], name="dr")
-                # former_dr = ([0]+dr)[0:sample_size]  # TODO change
-
-                self.dp = tf.subtract(self.inputs[3], self.inputs[2], name="dp")
-                with tf.name_scope('frequency'):
-                    self.dr_sorted = tf.cast(tf.nn.top_k(self.dr, 8640).values, tf.float32, name="dr_sorted")
-                    self.dr_frq = tf.div(
-                        tf.convert_to_tensor([x for x in range(self.dr_sorted.shape[0], 0, -1)], dtype=tf.float32, name="counts"),
-                        self.dr_sorted.shape[0].value,
-                        name="frequency"
-                    )
-                    tf.summary.histogram("dr_frq", self.dr_frq)
+            sample_values, sample_frq = self.__preprocessing_inputs(sample_size)
 
             with tf.name_scope("reg_norm_prediction"):
-                self.avg = tf.reduce_mean(self.dr)
+                self.avg = tf.reduce_mean(self.difference_vol)
                 self.scl = tf.Variable(np.random.rand(), dtype=tf.float32)
                 tf.summary.scalar("scl", self.scl)
                 pdt_nm_dst = dst.Normal(loc=self.avg, scale=self.scl)
 
                 # Evaluate dr , return the predicate frequency 1-D tensor
-                self.pdt_frq = pdt_nm_dst.cdf(self.dr_sorted)
+                pdt_frq = pdt_nm_dst.cdf(sample_values)
 
                 with tf.name_scope("loss"):
-                    self.loss = tf.reduce_mean(tf.square((self.pdt_frq - self.dr_frq), name="error"), name="loss")
-                    tf.summary.scalar("loss", self.loss)
+                    loss = tf.reduce_mean(tf.square((pdt_frq - sample_frq), name="error"), name="loss")
+                    tf.summary.scalar("loss", loss)
 
                 with tf.name_scope("train"):
-                    self.train_step = tf.train.AdamOptimizer(0.001).minimize(self.loss)
+                    self.train_step = tf.train.AdamOptimizer(0.001).minimize(loss)
 
-            # 3rd layer to find out the thresholds to make benefit function most
-            # done: complete this
             with tf.name_scope("thresholds"):
                 with tf.name_scope("init"):
                     # the thresholds to position or liquidate
@@ -80,8 +87,8 @@ class SubGraph(object):
                     # Fixed: want to return the value of the PDFunction when key equals avg, maybe wrong?
 
                     self.max_raw_p = pdt_nm_dst.prob(self.avg)
-                    self.dr_raw_p = pdt_nm_dst.prob(self.dr)
-                    self.dr_prob = pdt_nm_dst.prob(self.dr, name="dr_prob")
+                    self.dr_raw_p = pdt_nm_dst.prob(self.difference_vol)
+                    self.dr_prob = pdt_nm_dst.prob(self.difference_vol, name="dr_prob")
                     # former_dr_prob = pdt_nm_dst.prob(former_dr)
 
                     # Get _thresholds latest snapshot values
@@ -104,14 +111,14 @@ class SubGraph(object):
                 #     dr_sgn=
 
                 with tf.name_scope("line_Layer_hg"):
-                    self.dr_sgn = self._logistic_sgn.cdf(self.dr) * 2. - 1.
-                    self.out_hg = (1 - self._logistic_cvt.cdf(self.dr_prob)) * (self.dp * self.dr_sgn
-                              *100-20)\
+                    self.dr_sgn = self._logistic_sgn.cdf(self.difference_vol) * 2. - 1.
+                    self.out_hg = (1 - self._logistic_cvt.cdf(self.dr_prob)) * (self.difference_price * self.dr_sgn
+                                                                                * 100 - 20)\
                              # * _logistic_diff.cdf(tf.multiply(_logistic_cvt.cdf(former_dr_prob), _logistic_cvt.cdf(dr_prob)))
 
                 with tf.name_scope("line_Layer_nm"):
-                    self.out_nm = (-self._logistic_cvt.cdf(self.dr_prob)) *(self.dp * self.dr_sgn
-                              *100-20)
+                    self.out_nm = (-self._logistic_cvt.cdf(self.dr_prob)) *(self.difference_price * self.dr_sgn
+                                                                            * 100 - 20)
                              # * _logistic_diff.cdf(tf.multiply(_logistic_cvt.cdf(former_dr_prob), _logistic_cvt.cdf(dr_prob)))
 
                 with tf.name_scope("threshold_summary"):
@@ -122,4 +129,4 @@ class SubGraph(object):
             self.init = tf.global_variables_initializer()
 
             # CREATE MODEL STRUCTURE SEND #
-
+        return self

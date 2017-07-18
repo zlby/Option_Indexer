@@ -36,7 +36,8 @@ if __name__ == '__main__':
 
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
 
-    print(net.get_interval("m1709c2500", "m1709c2600", graph=SubGraph(), options=optioncomb))
+
+    print(net.get_interval("m1709c2500", "m1709c2600", graph=SubGraph().build_graph(8640), options=optioncomb))
 # print(os.listdir("."))
 #
 #
