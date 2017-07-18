@@ -1,7 +1,7 @@
 from algorithm.interval.data import *
 import algorithm.interval.net_run as net
 import csv
-import os
+# import os
 
 from algorithm.interval.net_graph_build import SubGraph
 
