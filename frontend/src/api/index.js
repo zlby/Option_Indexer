@@ -11,5 +11,12 @@ export default {
   },
   localRegister: function (data) {
   	return axios.post('/client/register/',data)
-  }
+  },
+  localNewpassword: function (data){
+  	return axios.post('/client/set_new_password/',data)
+  },
+  localChange: function (data){
+    return axios.post('/client/logout/')
+  },
+
 }

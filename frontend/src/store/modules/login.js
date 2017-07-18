@@ -12,7 +12,7 @@ var isLoggedIn = function() {
 
 const state = {
   loggedin: false,
-  username: '名字'
+  username: '名字',
 };
 
 const mutations = {
@@ -21,6 +21,13 @@ const mutations = {
     state.username = obj.username;
   },
   logout (state) {
+    state.loggedin = false;
+  },
+  new_password (state, obj){
+    // state.old_password = 
+    state.new_password = obj.new_password;
+  },
+  change(state) {
     state.loggedin = false;
   }
 };
