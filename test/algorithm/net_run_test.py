@@ -1,7 +1,7 @@
 from algorithm.interval.data import *
 import algorithm.interval.net_run as net
 import csv
-import os
+# import os
 
 
 class CsvDataProvider(CombineOptionsDataProvider):

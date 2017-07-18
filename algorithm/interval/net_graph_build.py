@@ -6,6 +6,7 @@ import tensorflow.contrib.distributions as dst
 import numpy as np
 
 
+
 # r1 = data.get_first_rate_list()
 # r2 = data.get_second_rate_list()
 #
@@ -22,6 +23,7 @@ import numpy as np
 def find_interval(value, avg, scale):
     return (avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale,
             avg + tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale)
+
 
 
 with tf.Graph().as_default() as g:
