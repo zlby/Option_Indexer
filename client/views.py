@@ -139,8 +139,10 @@ def set_new_password(request):
         old_password = request_data.get('old_password')
         new_password = request_data.get('new_password')
         if old_password and new_password:
-            if request.user.check_password(old_password):
-                request.user.set_password(new_password)
+            user = request.user
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
                 status['message'] = 'change password success'
                 return JsonResponse(result, status=200)
             else:
