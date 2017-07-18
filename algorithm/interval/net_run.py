@@ -1,5 +1,4 @@
 from algorithm.interval.net_graph_build import *
-import algorithm.interval.data as data
 
 
 def get_interval(code1, code2, graph, options=None):
@@ -12,10 +11,10 @@ def get_interval(code1, code2, graph, options=None):
         # p2 = dl.get_option_price_list(code2)
     # elif options is data.CombineOptionsDataProvider:
     else:
-        r1 = options.get_option_rate_list(code1)
-        r2 = options.get_option_rate_list(code2)
-        p1 = options.get_option_price_list(code1)
-        p2 = options.get_option_price_list(code2)
+        r1 = options(code=code1, attribute="vol")
+        r2 = options(code=code2, attribute="vol")
+        p1 = options(code=code1, attribute="price")
+        p2 = options(code=code2, attribute="price")
     # else:
     #     raise data.UnSupportDataFormatError()
 
