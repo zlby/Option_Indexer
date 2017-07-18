@@ -1,50 +1,38 @@
 <template>
   <div class="manage_page fillcontain">
-  <headSecond></headSecond>
+    <headSecond></headSecond>
     <el-row style="height: 100%;">
       <el-col :span="4"  style="min-height: 100%; background-color: #324057;">
-      <el-menu theme="dark" style="min-height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
+        <el-menu theme="dark" style="min-height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
-        <el-menu-item index="productIntro"><i class="el-icon-menu"></i>首页</el-menu-item>
+          <el-menu-item index="productIntro"><i class="el-icon-menu"></i>首页</el-menu-item>
 
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-document"></i>全部</template>
             <el-menu-item-group>
-              <template slot="title">金融</template>
               <el-menu-item index="/option1">
-                选项1                 
-              <el-button type="primary" size="mini"><i class="el-icon-plus" style="margin-left : 10px"></i>
-              </el-button>
+                图表1                
+                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i>
+                </el-button>
               </el-menu-item>
               <el-menu-item index="/option1">
-              选项2
-              <el-button type="danger" size="mini"><i class="el-icon-minus " style="margin-left : 10px"></i>
-              </el-button>
-
+                图表2
+                <el-button type="danger" size="mini" @click="toggle($event)"><i class="el-icon-minus "></i>
+                </el-button>
               </el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
           </el-submenu>
 
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>金融</template>
-            <el-submenu index="2-1">
-              <template slot="title">期货一号</template>
-              <el-menu-item index="">期权1号</el-menu-item>
-              <el-menu-item index="2-1-2">期权2号</el-menu-item>
-              <el-menu-item index="2-1-3">期权3号</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3-1">
-              <template slot="title">期货三号</template>
-              <el-menu-item index="3-1-1">期权1号</el-menu-item>
-              <el-menu-item index="3-1-2">期权2号</el-menu-item>
-              <el-menu-item index="3-1-3">期权3号</el-menu-item>
+            <el-submenu :index="index" v-for="(value,key,index) in items">
+              <template slot="title">{{key}}</template>
+
+              <el-menu-item index="/option1" v-for="ite in value">
+                {{ite}}<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
+
+              </el-menu-item>
+
             </el-submenu>
           </el-submenu>
         </el-menu>
@@ -60,30 +48,68 @@
 </template>
 
 <script>
-
+  import { hasClass, removeClass, addClass } from "../util.js"
   import headSecond from '../components/headSecond'
-	export default{
+  import Bus from '../bus'
+
+  export default{
+    // created:function(){
+    //   Bus.$on("getData", data){
+    //     this.items=data
+    //   }
+    // }
+    data:function(){
+
+      return{
+        items:{
+          item1:["item1-1","item1-2"],
+          item2:["item2-1","item2-2"]
+        }
+      }
+    },
+
 
     components:{
       headSecond
     },
 
-		data(){
-			return{
-		}
+    methods:{
+      toggle: function(e) {
+        var btn = e.currentTarget;
+        if (hasClass(btn, 'el-button--primary')) { // 添加，加号变减号
+          removeClass(btn, 'el-button--primary');
+          addClass(btn, 'el-button--danger');
+          removeClass(btn.children[0].children[0], 'el-icon-plus');
+          addClass(btn.children[0].children[0], 'el-icon-minus');
+          var future = btn.parentNode.parentNode.parentNode.children[0].innerText.trim();
+          var option = btn.parentNode.innerText.trim();
+          var optionObj = {'future': future, 'option': option};
+          //Bus.$emit('addNewOption', optionObj);
+        } else {
+          removeClass(btn, 'el-button--danger');
+          addClass(btn, 'el-button--primary');
+          removeClass(btn.children[0].children[0], 'el-icon-minus');
+          addClass(btn.children[0].children[0], 'el-icon-plus');
+        } 
+      } 
+    }
 
-	}
-}
+  }
+
 
 </script>
 
 <style lang="less" scoped>
 
-@import '../style/common';
+  @import '../style/common';
 
-.el-button {
-  margin-left:120px;
+  .el-button {
+  //float: right;
+  //margin-top: 10px;
 }
 
+button span i {
+  margin-left: 10px
+}
 
 </style>
