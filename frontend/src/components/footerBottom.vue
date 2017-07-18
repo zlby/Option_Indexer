@@ -35,7 +35,7 @@
 .el-menu-demo{
 	width: 100%;
 	bottom: 0px;
-	position: fixed;
+	position: relative;
     background-color:#404040;
     color:#FFF;
 
