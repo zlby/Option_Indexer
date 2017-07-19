@@ -1,6 +1,6 @@
 <template>
     <el-col :span="20">
-    <div id="main" style="width:100%;height:600px;"></div>
+        <div id="main" style="width:100%;height:600px;"></div>
     </el-col>
 </template>
 
@@ -8,36 +8,39 @@
   import echarts from 'echarts'
   import Bus from '../bus'
 
-    export default{
+  export default{
     created:function(){
         Bus.$on('addNewOption', optionObj=>{
             this.removeFuture();
             this.addFuture(optionObj.future)
             this.addOption(optionObj.future, optionObj.option)
         })
+        Bus.$on('removeOption', optionObj=>{
+            this.popOption(optionObj.option)
+        })
     },
     mounted:function(){
-        
 
-    this.myChart=echarts.init(document.getElementById('main'));
 
-    this.future={
-    }
-    this.template={
+        this.myChart=echarts.init(document.getElementById('main'));
 
-        "optionK":{
-            name: null,
-            type: 'candlestick',
-            step:false,
-            smooth:false,
-            data:null,
-            markPoints:{
-                label:{
-                    formatter:function(param){
-                        return param!=null?Math.floor(param.value):"";
-                    }
-                },
-                data:[
+        this.future={
+        }
+        this.template={
+
+            "optionK":{
+                name: null,
+                type: 'candlestick',
+                step:false,
+                smooth:false,
+                data:null,
+                markPoints:{
+                    label:{
+                        formatter:function(param){
+                            return param!=null?Math.floor(param.value):"";
+                        }
+                    },
+                    data:[
                     {
                         name: 'highest value',
                         type: 'max',
@@ -53,11 +56,11 @@
                         type: 'average',
                         valueDim: 'close'
                     }
-                ]
-            },
-            markLine: {
-                symbol: ['none', 'arrow'],
-                data: [
+                    ]
+                },
+                markLine: {
+                    symbol: ['none', 'arrow'],
+                    data: [
                     {
                         name: 'min line on close',
                         type: 'min',
@@ -68,44 +71,44 @@
                         type: 'max',
                         valueDim: 'close'
                     }
-                ]
+                    ]
+                },
+                gridIndex:null,
             },
-            gridIndex:null,
-        },
-        "optionIV":{
-            name:null,
-            type:"line",
-            data:null,
-            xAxisIndex:1,
-            yAxisIndex:1,
-            tooltip:{
-                trigger:"axis",
+            "optionIV":{
+                name:null,
+                type:"line",
+                data:null,
+                xAxisIndex:1,
+                yAxisIndex:1,
+                tooltip:{
+                    trigger:"axis",
+                },
+                itemStyle:{
+                    normal:{
+                        color:null,
+                        borderWidth:1
+                    }
+                },
+                gridIndex:null,
             },
-            itemStyle:{
-                normal:{
-                    color:null,
-                    borderWidth:1
-                }
-            },
-            gridIndex:null,
-        },
-        "IVD":{
-            name:"隐含波动率之差",
-            type:"line",
-            data:null,
-            xAxisIndex:3,
-            yAxisIndex:3,
-            tooltip:{
-                trigger:"axis",
-            },
-            itemStyle:{
-                normal:{
-                    color:"#000000",
-                    borderWidth:1
+            "IVD":{
+                name:"隐含波动率之差",
+                type:"line",
+                data:null,
+                xAxisIndex:3,
+                yAxisIndex:3,
+                tooltip:{
+                    trigger:"axis",
+                },
+                itemStyle:{
+                    normal:{
+                        color:"#000000",
+                        borderWidth:1
+                    }
                 }
             }
         }
-    }
 
 
     // var dataK=[];
@@ -114,30 +117,30 @@
     // }
     this.option= {
         title:[
-            {
-                text: '期货数据',
-                subtext:"",
-                left:"5%",
-                top:"0%"
-            },
-            {
-                text: '期权数据',
-                subtext:"",
-                left:"5%",
-                top:"45%"
-            },
-            {
-                text: '期权隐含波动率',
-                subtext:"",
-                left:"55%",
-                top:"0%"
-            },
-            {
-                text: '隐含波动率之差',
-                subtext:"",
-                left:"55%",
-                top:"45%"
-            }
+        {
+            text: '期货数据',
+            subtext:"",
+            left:"5%",
+            top:"0%"
+        },
+        {
+            text: '期权数据',
+            subtext:"",
+            left:"5%",
+            top:"45%"
+        },
+        {
+            text: '期权隐含波动率',
+            subtext:"",
+            left:"55%",
+            top:"0%"
+        },
+        {
+            text: '隐含波动率之差',
+            subtext:"",
+            left:"55%",
+            top:"45%"
+        }
         ],
         tooltip: {
             trigger: "axis",
@@ -172,30 +175,30 @@
             link: {xAxisIndex: 'all'}
         },
         legend: [
-            {
-                data:null,
-                bottom: "6%",
-                left: "5%",
-                icon: "roundRect",
-                gridIndex:1,
-            }
+        {
+            data:[],
+            bottom: "6%",
+            left: "5%",
+            icon: "roundRect",
+            gridIndex:1,
+        }
         ],
         dataZoom: [
-            {
-                type: "inside",
-                start: 50,
-                end: 100,
-                xAxisIndex: [0, 1,2,3]
-            },
-            {
-                type: "slider",
-                show: true,
-                start: 50,
-                end: 100,
-                xAxisIndex: [0, 1,2,3],
-                bottom: "0",
-                left:"center"
-            }
+        {
+            type: "inside",
+            start: 50,
+            end: 100,
+            xAxisIndex: [0, 1,2,3]
+        },
+        {
+            type: "slider",
+            show: true,
+            start: 50,
+            end: 100,
+            xAxisIndex: [0, 1,2,3],
+            bottom: "0",
+            left:"center"
+        }
         ],
         visualMap:[
         ],
@@ -225,8 +228,8 @@
                 height: '30%',
                 width: "40%"
             }
-        ],
-        xAxis: [
+            ],
+            xAxis: [
             {
                 type: "category",
                 data: null,
@@ -298,8 +301,8 @@
                     }
                 }
             }
-        ],
-        yAxis: [
+            ],
+            yAxis: [
             {
                 scale: true,
                 splitArea: {
@@ -355,41 +358,42 @@
                     }
                 }
             }
-        ],
-        animationThreshold: 1000,
-        animationDelay: function (idx) {
-            return idx * 10;
-        },
-        animation:true,
-        series: []
-    };
-    this.createRandomFuture();
+            ],
+            animationThreshold: 1000,
+            animationDelay: function (idx) {
+                return idx * 10;
+            },
+            animation:true,
+            series: []
+        };
+        // this.createRandomFuture();
+        Bus.$emit("getData", this.createMapData());
     //initFuture();
-    this.loadFuture(this.future["name"][0]);
+    // this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);
     var saveThis=this;
     // 自定义事件
-this.myChart.on("legendselectchanged",function(params){
-    
-    saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
-    if(saveThis.checkSelection(params)==2){
-        saveThis.showIVDifference(params.selected);
-    }else{
-        saveThis.popSeries("隐含波动率之差");
-        saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
-    }
-    var selectName=saveThis.getSelectedName(params.selected);
-    if(selectName.length!=0){
-        saveThis.option.title[1].subtext=selectName.join(",");
-        saveThis.option.title[2].subtext=selectName.join(",");
-    }
-    saveThis.myChart.setOption(saveThis.option,true);
-})
+    this.myChart.on("legendselectchanged",function(params){
+
+        saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
+        if(saveThis.checkSelection(params)==2){
+            saveThis.showIVDifference(params.selected);
+        }else{
+            saveThis.popSeries("隐含波动率之差");
+            saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
+        }
+        var selectName=saveThis.getSelectedName(params.selected);
+        if(selectName.length!=0){
+            saveThis.option.title[1].subtext=selectName.join(",");
+            saveThis.option.title[2].subtext=selectName.join(",");
+        }
+        saveThis.myChart.setOption(saveThis.option,true);
+    })
 
 
-  },
+},
 
-  methods: {
+methods: {
 
 //启动函数
 //启动函数
@@ -412,19 +416,19 @@ this.myChart.on("legendselectchanged",function(params){
 //     this.option.series.push(series);
 //     this.myChart.setOption(this.option);
 //   }
-  
 
 
 
-    randomGenWebSafeColor:function(){
+
+randomGenWebSafeColor:function(){
   var base=["00","33","66","99","cc","ff"];
   var color="#"
   for(var i=0;i<3;i++){
     color+=base[Math.floor(Math.random()*6)];
-  }
-  return color;
+}
+return color;
 },
-  createRandomFuture:function(){
+createRandomFuture:function(){
     var futureNames=[]
     for(var i=0;i<5;i++){
       var name="期货"+Math.floor(Math.random()*1000+1000);
@@ -436,30 +440,30 @@ this.myChart.on("legendselectchanged",function(params){
         var data=this.createRandomSeries();
         names.push(data.series.name);
         datas.push(data);
-      
-      this.future[name]={
-        names:names,
-        datas:datas,
-        dataK:futureK,
-      };
-      futureK.series.xAxisIndex=0;
-      futureK.series.yAxisIndex=0;
-      futureK.series.name=name;
+
+        this.future[name]={
+            names:names,
+            datas:datas,
+            dataK:futureK,
+        };
+        futureK.series.xAxisIndex=0;
+        futureK.series.yAxisIndex=0;
+        futureK.series.name=name;
     }
     this.future["name"]=futureNames;
-  }
+}
 },
 
-  createVisualMap:function(){
+createVisualMap:function(){
     this.option.visualMap[0].pieces=this.createRandomArea();
     this.option.visualMap[0].seriesIndex=this.option.series.length-1;
     this.option.visualMap[0].outOfRange={
       color: '#999'
-    }
-    this.option.visualMap[0].precision=4;
-  },
+  }
+  this.option.visualMap[0].precision=4;
+},
 
-  createRandomSeries:function(){
+createRandomSeries:function(){
     var data = this.splitData();
     data.name = "M"+(Math.random()*1000+1000).toFixed(0);
     var series = this.deepClone(this.
@@ -479,11 +483,11 @@ this.myChart.on("legendselectchanged",function(params){
       series:series,
       IVSeries:IVSeries,
       xAxis:data.categoryData
-    }
+  }
 
-  },
+},
 
-  createRandomArea:function(){
+createRandomArea:function(){
     var pieces=[];
     var base=Math.random()*0.2;
     for(var i=0;i<3;i++){
@@ -491,11 +495,11 @@ this.myChart.on("legendselectchanged",function(params){
         gt:base,
         lte:(base+=Math.random()*0.2),
         color:"green"
-      })
-    }
-    console.log(pieces);
-    return pieces;
-  },
+    })
+  }
+  console.log(pieces);
+  return pieces;
+},
 //自定义的操作
 getSeriesIndex:function(seriesName) {
   for(var i=0;i<this.option.series.length;i++){
@@ -503,30 +507,31 @@ getSeriesIndex:function(seriesName) {
     var index=series.name.indexOf(seriesName)
     if(index!=-1){
       return index
-    }
   }
+}
 },
 
 popSeries:function(seriesName){
   for(var i=0;i<this.option.series.length;i++){
     var series=this.option.series[i];
     if(series.name.indexOf(seriesName)!=-1){
-      this.option.series.splice(i,1)
-    }
+      this.option.series.splice(i,1);
+      i--;
   }
+}
 },
 
 getSelectedName:function(selected){
   if(!selected){
     selected=this.option.legend[0].selected;
-  }
-  var selectName=[]
-  for(var name in selected){
+}
+var selectName=[]
+for(var name in selected){
     if(selected[name]){
       selectName.push(name);
-    }
   }
-  return selectName
+}
+return selectName
 },
 
 checkSelection:function(params){
@@ -534,9 +539,9 @@ checkSelection:function(params){
   for(var x in params.selected){
     if(params.selected[x]==true){
       totalSelected++;
-    }
   }
-  return totalSelected;
+}
+return totalSelected;
 },
 
 deepClone:function(obj){
@@ -545,18 +550,18 @@ deepClone:function(obj){
       var newarr = [];
       for (var i = 0; i < obj.length; i++) {
         newarr.push(obj[i]);
-      }
-      return newarr;
-    } else {
-      var newobj = {};
-      for (var key in obj) {
-        newobj[key] = this.deepClone(obj[key]);
-      }
-      return newobj
     }
-  }else{
+    return newarr;
+} else {
+  var newobj = {};
+  for (var key in obj) {
+    newobj[key] = this.deepClone(obj[key]);
+}
+return newobj
+}
+}else{
     return obj
-  }
+}
 },
 //
 //期货切换的函数
@@ -570,12 +575,12 @@ clearLastFuture:function(){
     for(var name in selectedName){
       if(name==currentFuture.names[i]){
         continue;
-      }
-      this.popSeries(currentFuture.names[i])
     }
-  }
-  this.popSeries("隐含波动率之差");
-  console.log(this.option.series);
+    this.popSeries(currentFuture.names[i])
+}
+}
+this.popSeries("隐含波动率之差");
+console.log(this.option.series);
 },
 //载入下一个期货
 loadFuture:function(futureName){
@@ -589,25 +594,25 @@ loadFuture:function(futureName){
   for(var i=0;i<currentFuture["names"].length;i++){
     this.option.series.push(currentFuture["datas"][i].IVSeries);
     this.option.series.push(currentFuture["datas"][i].series);
-  }
-  this.option.legend[0].data=currentFuture["names"];
-  var selected={};
-  for(var i=0;i<this.future[futureName]["names"].length;i++){
+}
+this.option.legend[0].data=currentFuture["names"];
+var selected={};
+for(var i=0;i<this.future[futureName]["names"].length;i++){
     if(i<2){
       selected[this.future[futureName]["names"][i]]=true;
-    }else{
+  }else{
       selected[this.future[futureName]["names"][i]]=false;
-    }
   }
-  this.option.legend[0].selected=selected;
-  this.showIVDifference(selected);
-  this.option.title[0].subtext=futureName;
-  var selectName=this.getSelectedName(selected);
-  if(selectName.length!=0){
+}
+this.option.legend[0].selected=selected;
+this.showIVDifference(selected);
+this.option.title[0].subtext=futureName;
+var selectName=this.getSelectedName(selected);
+if(selectName.length!=0){
     this.option.title[1].subtext=selectName.join(",");
     this.option.title[2].subtext=selectName.join(",");
-  }
-  this.myChart.setOption(this.option);
+}
+this.myChart.setOption(this.option);
 },
 //计算期权隐含波动率之差
 showIVDifference:function(selected){
@@ -621,22 +626,22 @@ showIVDifference:function(selected){
     for(var name in selectName){
       if((series.name==selectName[name])&&(series.type=="line")){
         calcDataSet.push(series.data);
-      }
     }
-  }
-  if(calcDataSet.length==2){
+}
+}
+if(calcDataSet.length==2){
     IVDSeries.data=this.calcIVDifference(calcDataSet[0],calcDataSet[1]);
     this.option.series.push(IVDSeries);
-  }
+}
 },
 calcIVDifference:function(data1,data2){
   return data1.map(function(value,index) {
     if(data2[index]!=undefined){
       return (value - data2[index]).toFixed(2);
-    }else{
+  }else{
       return value;
-    }
-  })
+  }
+})
 },
 
 
@@ -651,13 +656,13 @@ splitData:function() {
     categoryData.push(rawData[i].splice(0, 1)[0]);
     IVData.push(rawData[i].splice(rawData[i].length-1,rawData[i].length)[0]);
     values.push(rawData[i])
-  }
-  return {
+}
+return {
     name:rawData[0],
     categoryData: categoryData,
     IVData:IVData,
     values: values
-  };
+};
 },
 //
 //随机数据生成
@@ -678,34 +683,34 @@ randomDataGenK:function(){
         minimum=beforeClose-parseFloat((Math.random()*50))
         beforeClose+=parseFloat((Math.random()*50));
         maximum=beforeClose+parseFloat((Math.random()*50))
-      }
-      else{
+    }
+    else{
         maximum=beforeClose+parseFloat((Math.random()*50))
         beforeClose-=parseFloat((Math.random()*50));
         minimum=beforeClose-parseFloat((Math.random()*50));
-      }
-      if(beforeClose<0){
+    }
+    if(beforeClose<0){
         beforeClose=0.0;
         minimum=0.0;
-      }
-      singleData.push(beforeClose.toFixed(1));
-      singleData.push(maximum.toFixed(1));
-      singleData.push(minimum.toFixed(1));
-      if(Math.random()<0.5){
-        beforeRate-=parseFloat((Math.random()/5));
-      }else{
-        beforeRate+=parseFloat((Math.random()/5));
-      }
-      if(beforeRate<0){
-        beforeRate=0.0;
-      }
-      singleData.push(beforeRate.toFixed(2));
-      date.setTime(date.getTime()+3600000);
-      data.push(singleData)
     }
-    date.setTime(date.getTime()+64800000);
-  }
-  return data
+    singleData.push(beforeClose.toFixed(1));
+    singleData.push(maximum.toFixed(1));
+    singleData.push(minimum.toFixed(1));
+    if(Math.random()<0.5){
+        beforeRate-=parseFloat((Math.random()/5));
+    }else{
+        beforeRate+=parseFloat((Math.random()/5));
+    }
+    if(beforeRate<0){
+        beforeRate=0.0;
+    }
+    singleData.push(beforeRate.toFixed(2));
+    date.setTime(date.getTime()+3600000);
+    data.push(singleData)
+}
+date.setTime(date.getTime()+64800000);
+}
+return data
 },
 
 //期货切换的函数
@@ -715,7 +720,7 @@ addFuture: function(futureName){
     this.option.xAxis[1].data=this.future[futureName].dataK.xAxis;
     this.option.xAxis[2].data=this.future[futureName].dataK.xAxis;
     this.option.xAxis[3].data=this.future[futureName].dataK.xAxis;
-    this.option.series.push(this.future[futureName].dataK.series);
+    this.option.series.push(this.deepClone(this.future[futureName].dataK.series));
     this.option.title[0].subtext=futureName;
     this.myChart.setOption(this.option,true);
 },
@@ -725,7 +730,7 @@ removeFuture: function(){
     this.myChart.setOption(this.option,true);
 },
 addOption: function(futureName,optionName){
-    var currentFuture=this.future[futureName];
+    var currentFuture=this.deepClone(this.future[futureName]);
     var index=currentFuture.names.indexOf(optionName);
     var series=currentFuture.datas[index].series;
     var IVSeries=currentFuture.datas[index].IVSeries;
@@ -742,13 +747,23 @@ popOption: function(optionName){
 createMapData: function() {
     this.createRandomFuture();
     var mapData={};
-    for(var i=0;i<future.name.length;i++){
-        var name=future.name[i];
-        mapData[name]=future[name].names;
+    for(var i=0;i<this.future.name.length;i++){
+        var name=this.future.name[i];
+        mapData[name]=this.future[name].names;
     }
     return mapData;
     //"qihuo1":["qiquan1,qiquan2,qiquan3"]
 },
+popLegend: function(optionName){
+    for(var i=0 ;i<this.option.legend[0].data.length;i++){
+        var name=this.option.legend[0].data[i]
+        if(name==optionName){
+            this.option.legend[0].data.splice(i,1);
+            i--;
+        }
+    }
+    console.log(optionName);
+}
 
 
 }

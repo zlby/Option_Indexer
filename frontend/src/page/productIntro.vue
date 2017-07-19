@@ -3,7 +3,7 @@
     <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
       <el-col :span="4"  style="min-height: 100%; background-color: #324057;min-width:200px">
-        <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
+        <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo">
 
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
 
@@ -25,10 +25,10 @@
 
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>金融</template>
-            <el-submenu :index="index" v-for="(value,key,index) in items">
+            <el-submenu :index="key" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
-              <el-menu-item index="/option1" v-for="ite in value" >
+              <el-menu-item :index="ite" v-for="(ite, index2) in value" >
                 {{ite}}
                 <div class="add-btn">
                 <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
@@ -54,18 +54,15 @@
   import Bus from '../bus'
 
   export default{
-    // created:function(){
-    //   Bus.$on("getData", data){
-    //     this.items=data
-    //   }
-    // }
+    created:function(){
+      Bus.$on("getData", data => {
+        this.items=data
+      })
+    },
     data:function(){
 
       return{
-        items:{
-          item1:["item1-1","item1-2"],
-          item2:["item2-1","item2-2"]
-        }
+        items:{}
       }
     },
 
@@ -77,22 +74,30 @@
     methods:{
       toggle: function(e) {
         var btn = e.currentTarget;
+        var future = btn.parentNode.parentNode.parentNode.parentNode.children[0].innerText.trim();
+        var option = btn.parentNode.parentNode.innerText.trim();
+        var optionObj = {'future': future, 'option': option};
+          
         if (hasClass(btn, 'el-button--primary')) { // 添加，加号变减号
           removeClass(btn, 'el-button--primary');
           addClass(btn, 'el-button--danger');
           removeClass(btn.children[0].children[0], 'el-icon-plus');
           addClass(btn.children[0].children[0], 'el-icon-minus');
-          var future = btn.parentNode.parentNode.parentNode.children[0].innerText.trim();
-          var option = btn.parentNode.innerText.trim();
-          var optionObj = {'future': future, 'option': option};
-          //Bus.$emit('addNewOption', optionObj);
+          Bus.$emit('addNewOption', optionObj);
+          console.log(optionObj);
         } else {
           removeClass(btn, 'el-button--danger');
           addClass(btn, 'el-button--primary');
           removeClass(btn.children[0].children[0], 'el-icon-minus');
           addClass(btn.children[0].children[0], 'el-icon-plus');
-        } 
-      } 
+          Bus.$emit('removeOption', optionObj);
+        }
+        e.stopPropagation();
+      },
+      prevent: function(e) {
+        e.stopPropagation();
+        return false;
+      }
     }
 
   }

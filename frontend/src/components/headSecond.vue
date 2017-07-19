@@ -8,13 +8,14 @@
 		</el-col>
 
 		<el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6">
-			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8"><i class="el-icon-menu"></i></el-menu-item>
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/login"><i class="el-icon-menu"></i></el-menu-item>
 			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/productIntro" >中文</el-menu-item>
 			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/use"><i class="el-icon-search"></i></el-menu-item>
 		</el-col>
 
 		<el-col :span="4" :offset="10" :xs="{span:4 , offset:2}" :md="{span:4 , offset:2}" :lg="{span:4 , offset:10}" :sm="{span:4 , offset:2}">
-		<el-menu-item class="el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">
+		<el-menu-item class="el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24"
+		index="/login">
 			<el-dropdown>
 				<span class="el-dropdown-link el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">
 				 推送消息
