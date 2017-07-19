@@ -16,20 +16,38 @@ class Future(models.Model):
             result.append(future.code)
         return result
 
+    def get_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if not end_time:
+            time_filter &= models.Q(time_lte=end_time)
+        result = {
+            'future': {
+                'code': self.code,
+                'data': list(treading.get_detail() for treading in
+                             FutureTreadingData.objects.filter(time_filter & models.Q(future=self)))
+            },
+            'options': []
+        }
+        for option in Option.objects.filter(asset=self):
+            option_detail = {
+                'code': option.code,
+                'data': list(treading.get_detail() for treading in
+                             OptionTreadingData.objects.filter(time_filter & models.Q(option=option)))
+            }
+            result['options'].append(option_detail)
+        return result
+
 
 class Option(models.Model):
     code = models.CharField(verbose_name=u'期权代码', max_length=20, primary_key=True)
     asset = models.ForeignKey(verbose_name=u'标的期货', to=Future)
 
     @staticmethod
-    def get_option_list(future_code):
+    def get_option_list(future):
         result = []
-        if Future.objects.filter(code=future_code).exists():
-            for option in Option.objects.filter(asset_id=future_code):
-                result.append(option.code)
-                return result
-        else:
-            return []
+        for option in Option.objects.filter(asset=future):
+            result.append(option.code)
+            return result
 
 
 class TreadingDataBase(models.Model):
@@ -42,15 +60,39 @@ class TreadingDataBase(models.Model):
     class Meta:
         abstract = True
 
+    def get_detail(self):
+        result = {
+            'time': self.time.strftime('%Y-%m-%d %H:%M:%S'),
+            'open_price': self.open_price,
+            'max_price': self.max_price,
+            'min_price': self.min_price,
+            'close_price': self.close_price,
+        }
+        return result
+
 
 class FutureTreadingData(TreadingDataBase):
     future = models.ForeignKey(verbose_name=u'对应期货', to=Future)
+
+    class Meta:
+        ordering = ['-time']
 
 
 class OptionTreadingData(TreadingDataBase):
     option = models.ForeignKey(verbose_name=u'对应期权', to=Option)
     volatility = models.FloatField(verbose_name=u'隐含波动率', null=True)
     volume = models.FloatField(verbose_name=u'成交量', default=0)
+
+    class Meta:
+        ordering = ['-time']
+
+    def get_detail(self):
+        result = {
+            'volatility': self.volatility,
+            'volume': self.volume,
+        }
+        result.update(super().get_detail())
+        return result
 
 
 class Intervals(models.Model):
