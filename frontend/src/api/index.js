@@ -1,19 +1,15 @@
 import Vue from 'Vue'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
 
-Vue.use(VueAxios,axios);
-
-var instance = axios.create();
-
+Vue.use(axios);
 export default {
   localLogin: function (data) {
-    return Vue.axios.post('/api/login',data)
+    return axios.post('/client/login/',data)
   },
   localLogout: function (data) {
-    return instance.post('/api/logout',data)
+  	return axios.post('/client/logout/')
   },
-  localReg: function (data) {
-    return Vue.axios.post('/api/reg',data)
+  localRegister: function (data) {
+  	return axios.post('/client/register/',data)
   }
 }

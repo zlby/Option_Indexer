@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const homepage = r => require.ensure([], () => r(require('@/page/homepage')), 'homepage');
+const register = r => require.ensure([], () => r(require('@/page/register')), 'register');
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 const use = r => require.ensure([], () => r(require('@/page/use')), 'use');
 const carousel = r => require.ensure([], () => r(require('@/page/carousel')), 'carousel');
@@ -27,6 +28,10 @@ const routes = [
 		name: 'carousel'
 	},
 	{
+		path: '/register',
+		component: register,
+		name: 'register'
+	},{
 		path: '/login',
 		component: login,
 		name: 'login'
@@ -41,8 +46,8 @@ const routes = [
 		children: [
 		{
 			path: '',
-			component: homepageSecond,
-			name: 'homepageSecond'
+			component: option1,
+			name: 'option1'
 		},
 		{
 			path: '/option1',
