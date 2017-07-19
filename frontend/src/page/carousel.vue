@@ -61,7 +61,7 @@
 				<el-carousel>
 					<el-carousel-item>
 						<div class="news_container">
-							<el-row :gutter="20">
+							<el-row :gutter="40">
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
 									<el-card class="news-card">
 										<img src= "../assets/pexels-photo-159888.jpeg">

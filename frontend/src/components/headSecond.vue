@@ -1,71 +1,42 @@
 <template>
 <div class="second">
-		<el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
+		<el-row >
 		<el-menu class="el-menu-demo3" mode="horizontal" router>
-		<el-col :span= "4">
-			<el-menu-item index="/"><i class="el-icon-share"></i></el-menu-item>
-			<el-menu-item index="/">我的主页</el-menu-item>
+		<el-col :span= "4" :xs="4" :md="4" :lg="4" :sm="4"style="background-color: #FFCC66; min-width:200px">
+			<el-menu-item index="/" class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8"><i class="el-icon-share"></i></el-menu-item>
+			<el-menu-item index="/" class="el-col el-col-16 el-col-xs-16 el-col-md-16 el-col-sm-16 el-col-lg-16">我的主页</el-menu-item>
 		</el-col>
 
-		<el-col :span= "4">
-			<el-menu-item><i class="el-icon-menu"></i></el-menu-item>
-			<el-menu-item index="/productIntro" >中文</el-menu-item>
-			<el-menu-item index="/use"><i class="el-icon-search"></i></el-menu-item>
+		<el-col :span="9" :xs="6" :md="6" :lg="6" :sm="6">
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8"><i class="el-icon-menu"></i></el-menu-item>
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/productIntro" >中文</el-menu-item>
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/use"><i class="el-icon-search"></i></el-menu-item>
 		</el-col>
-	
-<!--         <el-col :span="7" :offset="9">
-            <el-menu-item  index="/login"><i class="el-icon-message"></i></el-menu-item>
-            <el-menu-item><img src="../assets/bigtouxiang.png"></el-menu-item>
-            <el-menu-item>
-                <el-dropdown>
-                    <span class="el-dropdown-link">
-                        周思尧<i class="el-icon-caret-bottom el-icon--right"></i>
-                    </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item><i class="el-icon-setting"></i>
-                            <el-button type="text" @click="dialogFormVisible = true">个人信息设置</el-button>
-                        </el-dropdown-item>
+
+		<el-col :span="4" :offset="7" :xs="4" :md="4" :lg="4" :sm="4">
+		<el-menu-item class="el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">
+			<el-dropdown>
+				<span class="el-dropdown-link el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">
+				 推送消息
+				</span>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item >
+					<div>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</div>
+					</el-dropdown-item>
+					<el-dropdown-item>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</el-dropdown-item>
+					<el-dropdown-item>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</el-menu-item>
+		</el-col>
 
 
-                        <el-dropdown-item><i class="el-icon-edit"></i>
-                        账号切换
-                        </el-dropdown-item>
-
-                        <el-dropdown-item><i class="el-icon-arrow-left"></i>
-                        注销
-                        </el-dropdown-item>
-
-                    </el-dropdown-menu>
-
-                    <el-dialog title="信息修改" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :before-close="handleClose">
-                        <el-form :model="form">
-                            <el-form-item>
-                                <el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-input v-model="form.newpassword" id= "newpassword" placeholder="newPassword"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-input v-model="form.email" id= "email" placeholder="Email"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-input v-model="form.phone" id= "phone" placeholder="Phone"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="dialogFormVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-                        </div>
-                    </el-dialog>
-
-                </el-dropdown>
-            </el-menu-item>
-        </el-col> -->
-
-	
 		</el-menu>
 		</el-row>
 </div>
@@ -125,12 +96,12 @@ background-size:100% 100%;
     background-color: #eef1f600;
     }
 	
-	.el-menu-demo3 .el-col:nth-child(1){
+	.yellow{
 		background-color: #FFCC66;
 	}
 
 	.second{
-				margin-right: 0px;
+		margin-right: 0px;
 		margin-left: 0px;
 	}
 

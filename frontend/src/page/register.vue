@@ -11,33 +11,33 @@
 				<el-form ref="form" :model="form" action="" role="form">
 
 
-					<el-col>
+					<el-col :span="20" :offset="2">
 					<el-form-item>
-						<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
+						<el-input v-model="form.username" style="margin-top:20px" id= "username" placeholder="Username"></el-input>
 					</el-form-item>
 					</el-col>
 
-					<el-col >
+					<el-col :span="20" :offset="2">
 					<el-form-item>
-						<el-input v-model="form.password" id= "password" placeholder="Password"></el-input>
+						<el-input v-model="form.password" type="password" id= "password" placeholder="Password"></el-input>
 					</el-form-item>
 					</el-col>
 					
-					<el-col >
+					<el-col :span="20" :offset="2">
 					<el-form-item>
 						<el-input v-model="form.email" id= "email" placeholder="Email"></el-input>
 					</el-form-item>
 					</el-col>
 
-					<el-col >
+					<el-col :span="20" :offset="2">
 					<el-form-item>
 						<el-input v-model="form.phone" id= "phone" placeholder="Phone"></el-input>
 					</el-form-item>
 					</el-col>
 
-					<el-col>
-					<el-form-item :span="6">
-						<el-button type="primary" size="large" v-on:click="dj" class="denglubtn">注册</el-button>
+					<el-col :span="20" :offset="2">
+					<el-form-item>
+						<el-button type="primary"  v-on:click="dj" class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">注册</el-button>
 					</el-form-item>
 					</el-col>
 				</el-form>
@@ -89,7 +89,7 @@ methods: {
 <style lang="less">
 	@import '../style/common';
 .register{
-	background-image: url("../assets/1.jpg");
+	background-image: url("../assets/背景.jpg");
 	background-repeat:no-repeat;
 	height: 100%;
 	width: 100%;

@@ -53,6 +53,11 @@ const routes = [
 			path: '/option1',
 			component: option1,
 			name: 'option1'
+		},
+		{
+			path: '/homepageSecond',
+			component: homepageSecond,
+			name: 'homepageSecond'
 		}
 		]
 	}

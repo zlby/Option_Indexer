@@ -1,19 +1,7 @@
 <template>
-  <div id="charts">
-
-
-    <el-row :gutter="20" style=" margin-top:10px">
-    <el-col :span="16" offset="1">
-  <div id="main" style="width:120%;height:600px;"></div>
-  </el-col>
-</el-row>
-
-
-
-</div>
-
-
-
+    <el-col :span="20">
+    <div id="main" style="width:100%;height:600px;"></div>
+    </el-col>
 </template>
 
 <script>

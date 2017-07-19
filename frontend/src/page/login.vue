@@ -8,32 +8,22 @@
 				</el-col>
 				<el-col :span="6" :offset="9">
 					<el-card class="box-card" style="margin-top:40px">
-						<el-form ref="form" :model="form" action="" role="form" 
-						:rules="rules2" class="demo-ruleForm">
-							<el-col :span="24" >
+						<el-form ref="form" :model="form" action="" role="form" :rules="rules2" class="demo-ruleForm">
+							<el-col :span="20" :offset="2">
 								<el-form-item>
-									<el-input v-model="form.username" id= "username" placeholder="Username"></el-input>
+									<el-input v-model="form.username"  style="margin-top:20px" id= "username" placeholder="Username"></el-input>
 								</el-form-item>
 							</el-col>
 
-							<el-col >
+							<el-col :span="20" :offset="2">
 								<el-form-item>
 									<el-input  type="password" v-model="form.password" id= "password" placeholder="Password" auto-complete="off"></el-input>
 								</el-form-item>
 							</el-col>
 
-<!-- 							<el-col >
+							<el-col :span="20" :offset="2">
 								<el-form-item>
-									<el-checkbox v-model="checked" style="color: #FFFFFF;">记住我</el-checkbox>
-<! 									<router-link to="/register" class="zhucebtn">注册</router-link>
-
-								</el-form-item>
-							</el-col> -->
-
-
-							<el-col>
-								<el-form-item :span="12">
-									<el-button type="primary" size="large" class="denglubtn" @click="dj">登陆</el-button>
+									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"   @click="dj">登陆</el-button>
 								</el-form-item>
 							</el-col>
 						</el-form>
@@ -87,7 +77,7 @@ methods: {
 <style lang="less">
 
 .login{
-	background-image: url("../assets/1.jpg");
+	background-image: url("../assets/背景.jpg");
 	background-repeat:no-repeat;
 	height: 100%;
 	width: 100%;

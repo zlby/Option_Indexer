@@ -24,9 +24,11 @@ export const UserRegister = ({ commit }, data) => {
       if (res.status.code == '0') {
         router.push({path:'/productIntro'})
         commit('login', {username: data.username});
-      } else {
-        alert('登录失败！')
-      }
+      } else if(res.status.code == '-3'){
+        alert('用户名已经注册！')
+      } else{
+        alert('请输入完整的账号密码！')
+        }
     })
   .catch(function (error) {
     alert('登录失败！')
@@ -40,7 +42,7 @@ export const UserLogin = ({ commit }, data) => {
         router.push({path:'/productIntro'})
         commit('login', {username: data.username});
       } else {
-        alert('登录失败！')
+  alert('登录失败！')
       }
     })
   .catch(function (error) {

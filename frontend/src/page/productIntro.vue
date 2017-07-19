@@ -1,11 +1,11 @@
 <template>
   <div class="manage_page fillcontain">
     <headSecond></headSecond>
-    <el-row style="height: 100%;">
-      <el-col :span="4"  style="min-height: 100%; background-color: #324057;">
-        <el-menu theme="dark" style="min-height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
+    <el-row style="height: 100%; min-width:200px">
+      <el-col :span="4"  style="min-height: 100%; background-color: #324057;min-width:200px">
+        <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
-          <el-menu-item index="productIntro"><i class="el-icon-menu"></i>首页</el-menu-item>
+          <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
 
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-document"></i>全部</template>
@@ -28,8 +28,11 @@
             <el-submenu :index="index" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
-              <el-menu-item index="/option1" v-for="ite in value">
-                {{ite}}<el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i></el-button>
+              <el-menu-item index="/option1" v-for="ite in value" >
+                {{ite}}
+                <div class="add-btn">
+                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
+                </div>
 
               </el-menu-item>
 
@@ -38,10 +41,8 @@
         </el-menu>
       </el-col>
 
-      <el-col :span="20" style="height: 1500px;overflow-x: hidden;overflow-y: auto; ">
-        <transition name="slide">
-          <router-view></router-view>
-        </transition>
+      <el-col :span="20" style="height: 100%;overflow-x: hidden;overflow-y: auto; background-color: #E8E8E8;">
+          <router-view ></router-view>
       </el-col>
     </el-row>
   </div>
@@ -111,5 +112,16 @@
 button span i {
   margin-left: 10px
 }
-
+ .add-btn{
+  positon:relative;
+  // top:10px;
+  // right:0px;
+  float: right;
+  margin-right:20px;
+ }
+ .el-menu-item{
+  padding-right:0px;
+  position:relative;
+  white-space: normal;
+ }
 </style>
