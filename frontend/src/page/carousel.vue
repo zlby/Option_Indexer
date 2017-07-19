@@ -66,38 +66,38 @@
 									<el-card class="news-card">
 										<img src= "../assets/pexels-photo-159888.jpeg">
 										<div style="padding: 14px;">
-											<p class="H1">全国金融工作会议</p>
-											<div class="news-text" style="padding: 14px;">今年以来，中国高层在不同场合多次谈及金融议题。决策层提出“金融活，经济活”，将其摆在经济工作突出位置。此次会议进一步强调，金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。</div>
+											<p class="H1">{{title[0]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[0]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
 								</el-col>
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
 									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-159888.jpeg">
+										<img src= "../assets/pexels-photo-210574.jpeg">
 										<div style="padding: 14px;">
-											<p class="H1">全国金融工作会议</p>
-											<div class="news-text" style="padding: 14px;">今年以来，中国高层在不同场合多次谈及金融议题。决策层提出“金融活，经济活”，将其摆在经济工作突出位置。此次会议进一步强调，金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。</div>
+											<p class="H1">{{title[1]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[1]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
 								</el-col>
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
 									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-159888.jpeg">
+										<img src= "../assets/pexels-photo-286442.jpeg">
 										<div style="padding: 14px;">
-											<p class="H1">全国金融工作会议</p>
-											<div class="news-text" style="padding: 14px;">今年以来，中国高层在不同场合多次谈及金融议题。决策层提出“金融活，经济活”，将其摆在经济工作突出位置。此次会议进一步强调，金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。</div>
+											<p class="H1">{{title[2]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[2]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
 								</el-col>
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
 									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-159888.jpeg">
+										<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
 										<div style="padding: 14px;">
-											<p class="H1">全国金融工作会议</p>
-											<div class="news-text" style="padding: 14px;">今年以来，中国高层在不同场合多次谈及金融议题。决策层提出“金融活，经济活”，将其摆在经济工作突出位置。此次会议进一步强调，金融是国家重要的核心竞争力，金融安全是国家安全的重要组成部分，金融制度是经济社会发展中重要的基础性制度。</div>
+											<p class="H1">{{title[3]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[3]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
@@ -110,7 +110,7 @@
 
 			</div>
 		</div>
-			<footerBottom></footerBottom>
+		<footerBottom></footerBottom>
 	</div>
 </template>
 
@@ -131,6 +131,18 @@
 				}
 
 			}
+		},
+
+		computed: {
+			title (){
+				return this.$store.state.login.title;
+			},
+			context (){
+				return this.$store.state.login.context;
+			},
+		},
+		mounted:function() {
+			this.$store.dispatch('News',0);
 		}
 	}
 

@@ -18,5 +18,9 @@ export default {
   localChange: function (data){
     return axios.post('/client/logout/')
   },
+  localNews: function (data){
+    return axios.get('/market/news/',data)
+  }
+
 
 }

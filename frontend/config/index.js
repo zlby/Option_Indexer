@@ -31,7 +31,11 @@ module.exports = {
         '/client': {//这里是我配置的名字
             target: 'http://127.0.0.1:8000', //这个路径是我代理到本地tp框架里面
     　　　　 changeOrigin: true
-　　 } 
+　　 },
+    '/market': {
+        target: 'http://127.0.0.1:8000', //这个路径是我代理到本地tp框架里面
+    　　changeOrigin: true
+    }
   },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

@@ -1,27 +1,11 @@
 <template>
   <div class="manage_page fillcontain">
-    <headSecond></headSecond>
+      <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
       <el-col :span="4"  style="min-height: 100%; background-color: #324057;min-width:200px">
         <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo">
 
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
-
-          <el-submenu index="1">
-            <template slot="title"><i class="el-icon-document"></i>全部</template>
-            <el-menu-item-group>
-              <el-menu-item index="/option1">
-                图表1                
-                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus"></i>
-                </el-button>
-              </el-menu-item>
-              <el-menu-item index="/option1">
-                图表2
-                <el-button type="danger" size="mini" @click="toggle($event)"><i class="el-icon-minus "></i>
-                </el-button>
-              </el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
 
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-menu"></i>金融</template>
@@ -33,10 +17,10 @@
                 <div class="add-btn">
                 <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
                 </div>
-
               </el-menu-item>
-
+              
             </el-submenu>
+
           </el-submenu>
         </el-menu>
       </el-col>

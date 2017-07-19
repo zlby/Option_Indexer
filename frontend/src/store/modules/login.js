@@ -13,6 +13,9 @@ var isLoggedIn = function() {
 const state = {
   loggedin: false,
   username: '名字',
+  title: [],
+  time: [],
+  context: [],
 };
 
 const mutations = {
@@ -29,6 +32,17 @@ const mutations = {
   },
   change(state) {
     state.loggedin = false;
+  },
+  getNews(state,obj) {
+    state.title = obj.map(function(o){
+      return o.title
+    });
+    state.time = obj.map(function(o){
+      return o.time
+    });;
+    state.context = obj.map(function(o){
+      return o.context
+    });
   }
 };
 

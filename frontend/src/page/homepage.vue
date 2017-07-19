@@ -1,7 +1,6 @@
 <template>
 	<div class="homepage fillcontain">
 		<head-top></head-top>
-
 		<transition name="slide">
 		<router-view></router-view>
 		</transition>

@@ -76,3 +76,19 @@ export const UserChange = ({ commit }) => {
     alert('账号切换失败！')
   })
 };
+
+export const News = ({ commit }) => {
+  api.localNews().then(function (res){
+    res = res.data
+    if  (res.status.code == '0'){
+      commit('getNews', {title: data.title, context: data.context, time: data.time})
+      console.log('12112');
+    }else{
+      alert('获取新闻失败！')
+       console.log('12112');
+    }
+  }).catch(function (error){
+    alert('获取新闻失败！')
+     console.log('12112');
+  })
+};

@@ -1,4 +1,4 @@
-<template>
+<template style="min-width:800px">
     <el-col :span="20">
         <div id="main" style="width:100%;height:600px;"></div>
     </el-col>
@@ -773,4 +773,6 @@ popLegend: function(optionName){
 
 
 
-
+<style lang="less" scoped>
+  @import '../style/common';
+</style>
