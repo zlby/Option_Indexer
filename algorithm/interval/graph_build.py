@@ -7,7 +7,7 @@ import pandas as pd
 import tensorflow.contrib.distributions as dst
 
 
-def run_graph(scope_name: str, loop: int = 500, feed_dict:dict=None, graph: tf.ops.Graph = None):
+def run_graph(scope_name: str, loop: int = 500, feed_dict: dict = None, graph: tf.Graph = None):
     def deco(fn):
         @wraps(fn)
         def warp(*args, **kwargs):
@@ -65,16 +65,16 @@ class GraphBuilder(object):
         pass
 
     def get__spread_position_of_combined_options(self, positive_option_code: str, negative_option_code: str,
-                                                   number: int):
+                                                 number: int):
         """
 
         :param:
         :return:
         """
         positive_option_rate_list = self.__data(code=positive_option_code, attribute="option_volatility_list",
-                                                      number=number)
+                                                number=number)
         negative_option_rate_list = self.__data(code=negative_option_code, attribute="option_volatility_list",
-                                                      number=number)
+                                                number=number)
         # training_epoches = 1000
         #
         #
@@ -111,7 +111,7 @@ class GraphBuilder(object):
         #
         #     print("finish")
 
-            # print(sess.run(cost))
+        # print(sess.run(cost))
         # substract_list = []
         # for i in range(number):
         #     substract_list.append(positive_option_rate_list[i] - negative_option_rate_list[i])
@@ -145,7 +145,6 @@ class GraphBuilder(object):
         # print("Counter: %f" % counter)
         # print("adf1: %s, adf2: %s" % (format(p_value1, '.5e'), format(p_value2, '.5e')))
 
-
         while p_value1 > 0.05 and p_value2 > 0.05:
             counter += 1
 
@@ -172,11 +171,11 @@ class GraphBuilder(object):
             if counter > 10:
                 break
 
-        if co_integ == True:
+        if co_integ:
             a, p_value, b = coint(volatility1, volatility2)
             print(p_value)
             if p_value < 0.05:
-                return (a, b)
+                return a, b
 
         pass
 
@@ -195,4 +194,3 @@ class GraphBuilder(object):
 
     def __find_max_benefit_intervals(self):
         pass
-
