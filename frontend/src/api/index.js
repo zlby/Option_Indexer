@@ -18,8 +18,8 @@ export default {
   localChange: function (data){
     return axios.post('/client/logout/')
   },
-  localNews: function (data){
-    return axios.get('/market/news/',data)
+  localNews: function (paramObj){
+    return axios.get('/market/news/',{params: paramObj})
   }
 
 

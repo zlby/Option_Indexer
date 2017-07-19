@@ -1,5 +1,5 @@
 <template>
-  <div class="shade" :style="{'z-index': naviZ}">
+  <div class="shade">
    <div class = "navigate">
      <el-row>
       <el-menu class="el-menu-demo1" mode="horizontal" router>

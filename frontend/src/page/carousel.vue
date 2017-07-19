@@ -116,6 +116,7 @@
 
 <script>
 	import footerBottom from '../components/footerBottom'
+	import api from '../api'
 	export default{
 
 		components:{
@@ -142,7 +143,17 @@
 			},
 		},
 		mounted:function() {
-			this.$store.dispatch('News',0);
+			// this.$store.dispatch('News',0);
+			api.localNews({page_number: 1}).then(function (res){
+			    res = res.data
+			    if (res.status.code == '0'){
+			      console.log(res)
+			    }else{
+			      alert('获取新闻失败！')
+			    }
+			}).catch(function (error){
+			    alert('获取新闻失败！')
+			})
 		}
 	}
 

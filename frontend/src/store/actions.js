@@ -77,18 +77,19 @@ export const UserChange = ({ commit }) => {
   })
 };
 
-export const News = ({ commit }) => {
-  api.localNews().then(function (res){
+export const News = ({ commit }, obj) => {
+  api.localNews(obj).then(function (res){
     res = res.data
     if  (res.status.code == '0'){
+      console.log('成功1')
       commit('getNews', {title: data.title, context: data.context, time: data.time})
-      console.log('12112');
+      console.log('成功2');
     }else{
       alert('获取新闻失败！')
-       console.log('12112');
+       console.log('失败1');
     }
   }).catch(function (error){
     alert('获取新闻失败！')
-     console.log('12112');
+     console.log('失败2');
   })
 };
