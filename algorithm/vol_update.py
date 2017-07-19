@@ -81,6 +81,7 @@
 #         #     print(vol_value)
 
 from option.models import *
+from django.db.models import Q
 from algorithm.implied_volatility import *
 import datetime
 import algorithm.database_link as dl
@@ -103,7 +104,7 @@ def cal_vol(code, current_time, final_time):
 
 def update_vol():
     option_list=[]
-    query_set = Option.objects.filter(asset='m1708')
+    query_set = Option.objects.filter(Q(asset='m1803') | Q(asset='m1805'))
     for item in query_set:
         option_list.append(item.code)
     for option_code in option_list:
