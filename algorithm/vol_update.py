@@ -130,7 +130,7 @@ def update_vol():
                 tup = OptionTreadingData.objects.get(option=option_code, time=current_time)
                 if not tup.volatility:
                     print('break')
-                    break
+                    continue
                 vol = cal_vol(option_code, current_time, final_time)
                 tup.volatility = vol
                 tup.save()
