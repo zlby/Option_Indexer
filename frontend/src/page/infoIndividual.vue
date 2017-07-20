@@ -1,14 +1,37 @@
 <template>
   <div>
-    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" 
-    :show-file-list="false" 
-    :on-success="handleAvatarSuccess">
-    <img v-if="imageUrl" src="imageUrl" class="avatar">
-    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-    </el-upload>
-  </div>
+    <header class="admin_title"><i class="el-icon-edit"></i>      个人信息</header>
+    <div class="admin_set">
+    <el-col :span="18">
+      <el-form :model="form"  :rules="rules2" ref="form" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="昵称" class="input_form">
+          <el-input type="name" :value="name" :disabled="true" ></el-input>
+        </el-form-item>
 
-  
+        <el-form-item label="旧密码" prop="pass" class="input_form">
+          <el-input type="password" v-model="form.old_password" ></el-input>
+        </el-form-item>
+
+        <el-form-item label="新密码" prop="checkPass" class="input_form">
+          <el-input type="password" v-model="form.new_password"></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮箱" class="input_form">
+          <el-input v-model="form.email" ></el-input>
+<!--           <el-input type="name" :value="name" ></el-input> -->
+        </el-form-item>
+
+        <el-form-item label="手机号码" class="input_form">
+          <el-input v-model="form.phone" :value="phone"></el-input>
+        </el-form-item>
+
+        <el-form-item class="input_form">
+          <el-button type="primary" @click="dj">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -17,7 +40,23 @@
     data:function(){
 
       return{
-        imageUrl: ''
+        form: {
+          old_password: '',
+          new_password: '',
+          email: '',
+          phone: ''
+        }
+      }
+    },
+    computed: {
+      name () {
+        return this.$store.state.login.username;
+      },
+      email () {
+        return this.$store.state.login.new_email;
+      },
+      phone (){
+        return this.$store.state.login.new_phone;
       }
     },
 
@@ -26,9 +65,12 @@
     },
 
     methods:{
-      handleAvatarSuccess:function(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      }
+      dj: function(){
+        this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password,
+          new_password:this.form.new_password});
+        this.$store.dispatch('UserNewemailphone',{email:this.form.email,
+          phone:this.form.phone});
+      },
     }
 
   }
@@ -39,27 +81,25 @@
 <style lang="less" scoped>
 
   @import '../style/common';
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+
+  .explain_text{
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
+    color: #333;
   }
-  .avatar-uploader .el-upload:hover {
-    border-color: #20a0ff;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+  .admin_title{
+    margin-top: 20px;
     text-align: center;
   }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
+
+  .demo-ruleForm{
+
+      position: relative;
+      margin-left: 30%;
+  }
+
+  .input_form{
+    margin-top: 20px;
   }
 </style>

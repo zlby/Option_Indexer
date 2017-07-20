@@ -16,6 +16,8 @@ const state = {
   title: [],
   time: [],
   context: [],
+  new_email: '21',
+  new_phone: '121'
 };
 
 const mutations = {
@@ -43,6 +45,10 @@ const mutations = {
     state.context = obj.map(function(o){
       return o.context
     });
+  },
+  new_emai_or_phone(state, obj){
+    state.new_phone = obj.new_phone;
+    state.new_email = obj.new_email;
   }
 };
 

@@ -18,9 +18,10 @@ export default {
   localChange: function (data){
     return axios.post('/client/logout/')
   },
-  localNews: function (data){
-    return axios.get('/market/news/',data)
+  localNews: function (paramObj){
+    return axios.get('/market/news/',{params:{page_number:this.page_number}})
+  },
+  localnewphone_email: function (paramObj){
+    return axios.put('/client/set_new_email_or_phone/',{email:paramObj.email,phone:paramObj.phone})
   }
-
-
 }
