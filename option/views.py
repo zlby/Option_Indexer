@@ -44,11 +44,11 @@ def get_news(request):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
     if request.method == 'GET':
-        if not request.body:
-            request_data = {}
+        page_number = request.GET.get('page_number', '1')
+        if page_number.isdigit():
+            page_number = int(page_number)
         else:
-            request_data = json.loads(request.body.decode('utf-8'))
-        page_number = request_data.get('page_number', 1)
+            page_number = 1
         result['news'] = News.get_news(page_number)
         status['message'] = '获取成功'
         return JsonResponse(result, status=200)
@@ -63,13 +63,9 @@ def get_treading_data(request, future_code):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
     if request.method == 'GET':
-        if not request.body:
-            request_data = {}
-        else:
-            request_data = json.loads(request.body.decode('utf-8'))
         datetime_format = '%Y-%m-%d %H:%M'
-        start_time = request_data.get('start_time')
-        end_time = request_data.get('end_time')
+        start_time = request.GET.get('start_time')
+        end_time = request.GET.get('end_time')
         if start_time:
             try:
                 future = Future.objects.get(code=future_code)
