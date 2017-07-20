@@ -18,8 +18,8 @@ class Future(models.Model):
 
     def get_treading_data(self, start_time, end_time=None):
         time_filter = models.Q(time__gte=start_time)
-        if not end_time:
-            time_filter &= models.Q(time_lte=end_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
         result = {
             'future': {
                 'code': self.code,
@@ -59,6 +59,7 @@ class TreadingDataBase(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ['time']
 
     def get_detail(self):
         result = {
@@ -74,17 +75,11 @@ class TreadingDataBase(models.Model):
 class FutureTreadingData(TreadingDataBase):
     future = models.ForeignKey(verbose_name=u'对应期货', to=Future)
 
-    class Meta:
-        ordering = ['-time']
-
 
 class OptionTreadingData(TreadingDataBase):
     option = models.ForeignKey(verbose_name=u'对应期权', to=Option)
     volatility = models.FloatField(verbose_name=u'隐含波动率', null=True)
     volume = models.FloatField(verbose_name=u'成交量', default=0)
-
-    class Meta:
-        ordering = ['-time']
 
     def get_detail(self):
         result = {

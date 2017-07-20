@@ -169,6 +169,7 @@
 
 <script>
 	import footerBottom from '../components/footerBottom'
+	import api from '../api'
 	export default{
 
 		components:{
