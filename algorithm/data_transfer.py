@@ -3,6 +3,9 @@ import time
 import copy
 import os
 from option.models import FutureTreadingData, OptionTreadingData, Future, Option
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 class FutureTD:
@@ -34,37 +37,47 @@ class FutureTD:
 def data_transfer(rootdir):
     for parent, dirnames, filenames in os.walk(rootdir):
         for filename in filenames:
+    #         filename = "m1708.csv"
+            with open(rootdir + "/" + filename, 'r') as f:
+                data_list = f.read().split('\n')
+                data_list = data_list[1:-3]
+
+                try:
+                    data_time_list = [datetime.datetime(
+                        *(time.strptime(data.split(' ')[0], "%Y/%m/%d"))[:6]) for data in data_list]
+                except:
+                    data_time_list = [datetime.datetime(
+                        *(time.strptime(data.split(' ')[0], "%Y-%m-%d"))[:6]) for data in data_list]
+
+                # data_time_reduce_list = []
+                # for data_time in data_time_list:
+                #     if data_time not in data_time_reduce_list:
+                #         data_time_reduce_list += [data_time]
+                #
+                # print(data_time_reduce_list)
+
+                data_filted_list = []
+                iter_mark = 0
+
+                iter_date = data_time_list[0]
+                while iter_date != data_time_list[-1] + datetime.timedelta(days=1):
+                    if iter_date == data_time_list[iter_mark]:
+                        if 0 <= iter_date.weekday() < 5:
+                            data_filted_list.append(data_list[iter_mark])
+                        iter_mark += 1
+                        if iter_mark == len(data_time_list) or data_time_list[iter_mark-1] != data_time_list[iter_mark]:
+                            iter_date += datetime.timedelta(days=1)
+                        continue
+                    else:
+                        if 0 <= iter_date.weekday() < 5:
+                            data_filted_list.append(
+                                iter_date.strftime("%Y/%m/%d ") + data_list[iter_mark - 1].split(' ')[1])
+                    iter_date += datetime.timedelta(days=1)
+
+
             print(filename)
-            # filename = "m1708-c-2700.csv"
+
             if "-" not in filename:
-                with open(rootdir+"/"+filename, 'r') as f:
-                    data_list = f.read().split('\n')
-                    data_list = data_list[1:-3]
-
-                    try:
-                        data_time_list = [datetime.datetime(
-                            *(time.strptime(data.split(' ')[0], "%Y/%m/%d"))[:6]) for data in data_list]
-                    except:
-                        data_time_list = [datetime.datetime(
-                            *(time.strptime(data.split(' ')[0], "%Y-%m-%d"))[:6]) for data in data_list]
-
-                    data_filted_list = []
-                    iter_mark = 0
-
-                    iter_date = data_time_list[0]
-                    while iter_date != data_time_list[-1] + datetime.timedelta(days=1):
-                        if iter_date == data_time_list[iter_mark]:
-                            if 0 <= iter_date.weekday() < 5:
-                                data_filted_list.append(data_list[iter_mark])
-                                iter_mark += 1
-                            else:
-                                iter_mark += 1
-                        else:
-                            if 0 <= iter_date.weekday() < 5:
-                                data_filted_list.append(
-                                    iter_date.strftime("%Y/%m/%d ") + data_list[iter_mark - 1].split(' ')[1])
-                        iter_date += datetime.timedelta(days=1)
-
                     iterator = 0
 
                     first_row_data = data_filted_list[iterator].split(',')
@@ -94,12 +107,11 @@ def data_transfer(rootdir):
                         time3_start = begin_date + datetime.timedelta(hours=20, minutes=55)
                         time3_end = begin_date + datetime.timedelta(hours=23, minutes=35)
 
-                        if not (time1_start <= iterate_time <= time1_end or time2_start <= iterate_time <= time2_end or time3_start <= iterate_time <= time3_end):
-                            iterator += 1
+                        # if not (time1_start <= iterate_time <= time1_end or time2_start <= iterate_time <= time2_end or time3_start <= iterate_time <= time3_end):
+                        #     iterator += 1
 
                         if iterator != 0:
                             iterate_time = time1_start
-
 
                         while time1_start <= iterate_time <= time1_end or time2_start <= iterate_time <= time2_end or time3_start <= iterate_time <= time3_end:
                             while iterator == len(data_filted_list):
@@ -110,7 +122,7 @@ def data_transfer(rootdir):
                                 elif iterate_time == time3_end:
                                     break
                                 iterate_time += datetime.timedelta(minutes=1)
-                            if iterate_time == time3_end:
+                            if iterate_time == time3_end and iterator == len(data_filted_list):
                                 break
                             try:
                                 next_time = datetime.datetime(
@@ -155,38 +167,7 @@ def data_transfer(rootdir):
                     FutureTreadingData.objects.bulk_create(future_threading_groups[mid:])
 
             else:
-                with open(rootdir+"/"+filename, 'r') as f:
-                    data_list = f.read().split('\n')
-                    data_list = data_list[1:-3]
-                    
-                    try:
-                        data_time_list = [datetime.datetime(
-                            *(time.strptime(data.split(' ')[0], "%Y/%m/%d"))[:6]) for data in data_list]
-                    except:
-                        data_time_list = [datetime.datetime(
-                            *(time.strptime(data.split(' ')[0], "%Y-%m-%d"))[:6]) for data in data_list]
-
-                    data_filted_list = []
-                    iter_mark = 0
-
-                    iter_date = data_time_list[0]
-                    while iter_date != data_time_list[-1]+datetime.timedelta(days=1):
-                        if iter_date == data_time_list[iter_mark]:
-                            if 0 <= iter_date.weekday() < 5:
-                                data_filted_list.append(data_list[iter_mark])
-                                iter_mark += 1
-                            else:
-                                iter_mark += 1
-                        else:
-                            if 0 <= iter_date.weekday() < 5:
-                                data_filted_list.append(
-                                    iter_date.strftime("%Y/%m/%d ") + data_list[iter_mark - 1].split(' ')[1])
-                        iter_date += datetime.timedelta(days=1)
-                    
-
                     iterator = 0
-                    print(len(data_filted_list))
-                    print(iterator)
                     first_row_data = data_filted_list[iterator].split(',')
                     try:
                         first_row_time = datetime.datetime(*(time.strptime(first_row_data[0], "%Y/%m/%d %H:%M")[:6]))
@@ -216,8 +197,8 @@ def data_transfer(rootdir):
                         time3_start = begin_date + datetime.timedelta(hours=20, minutes=55)
                         time3_end = begin_date + datetime.timedelta(hours=23, minutes=35)
 
-                        if not (time1_start <= iterate_time <= time1_end or time2_start <= iterate_time <= time2_end or time3_start <= iterate_time <= time3_end):
-                            iterator += 1
+                        # if not (time1_start <= iterate_time <= time1_end or time2_start <= iterate_time <= time2_end or time3_start <= iterate_time <= time3_end):
+                        #     iterator += 1
 
                         if iterator != 0:
                             iterate_time = time1_start
@@ -231,7 +212,7 @@ def data_transfer(rootdir):
                                 elif iterate_time == time3_end:
                                     break
                                 iterate_time += datetime.timedelta(minutes=1)
-                            if iterate_time == time3_end:
+                            if iterate_time == time3_end and iterator == len(data_filted_list):
                                 break
                             # next_time = datetime.datetime.now()
                             try:
