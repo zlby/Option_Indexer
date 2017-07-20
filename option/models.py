@@ -18,8 +18,8 @@ class Future(models.Model):
 
     def get_treading_data(self, start_time, end_time=None):
         time_filter = models.Q(time__gte=start_time)
-        if not end_time:
-            time_filter &= models.Q(time_lte=end_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
         result = {
             'future': {
                 'code': self.code,
