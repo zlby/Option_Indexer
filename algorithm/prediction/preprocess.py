@@ -34,7 +34,21 @@ def data_preprocess(code: str, end_day: datetime.date, days: int):
         for piece in day_list:
             blurry_data = 0
             if piece < min_price:
-                piece = 0
+                blurry_data = 0
             elif min_price < piece < max_price:
-                piece = 0
+                blurry_data = 0
+            elif min_price < piece < avg_price:
+                blurry_data = (piece - min_price) / (avg_price - piece)
+            elif avg_price < piece < max_price:
+                blurry_data = (max_price - piece) / (max_price - avg_price)
+            elif piece > max_price:
+                blurry_data = 0
+            blurry_data_list_day.append(blurry_data)
+
+        max_data = 0
+        min_data = 100000
+        total_data = 0
+        avg_data = 0
+        for data in blurry_data_list_day:
+            max_data = data if data > max_data else max_data
 
