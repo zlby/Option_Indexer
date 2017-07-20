@@ -19,7 +19,9 @@ class DjangoDataProvider(AbstractDataProvider):
                 return self.__get_option_rate(kwargs["code"], kwargs["time"])
 
     def __init__(self):
+        # noinspection PyUnresolvedReferences
         self.query_set_future = FutureTreadingData.objects.all()
+        # noinspection PyUnresolvedReferences
         self.query_set_option = OptionTreadingData.objects.all()
 
     def __get_option_price_list(self, code, number):

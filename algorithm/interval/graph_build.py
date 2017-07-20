@@ -1,17 +1,64 @@
 import tensorflow as tf
+from functools import wraps
+import scipy.stats as scs
 import numpy as np
 from statsmodels.tsa.stattools import adfuller, coint
 import pandas as pd
+import tensorflow.contrib.distributions as dst
+
+
+def run_graph(scope_name: str, loop: int = 500, feed_dict: dict = None, graph: tf.Graph = None):
+    def deco(fn):
+        @wraps(fn)
+        def warp(*args, **kwargs):
+            if graph is None:
+                g = tf.Graph().as_default()
+            else:
+                g = graph.as_default()
+            with tf.name_scope(scope_name):
+                node_details = fn(args, kwargs)
+            if feed_dict is None:
+                return
+            sess = tf.Session(graph=g)
+            for x in range(loop):
+                sess.run(fetches=node_details["train_step"],
+                         feed_dict=feed_dict)
+            return sess.run(fetches=node_details["target"],
+                            feed_dict=feed_dict)
+
+        return warp
+
+    return deco
 
 
 class GraphBuilder(object):
+    """Helper Class to build a calculation graph.
+
+    :Fields
+
+    """
     from algorithm.data_provider.data import AbstractDataProvider
 
     def __init__(self, data_provider: AbstractDataProvider):
+        """Class initialization method.
+
+        :param data_provider: AbstractDataProvider
+            collect, format and convert data.
+        """
+
         self.__data = data_provider
+        # List of frequency of  less than specific difference of volatility.
+        self.__list_vol_frq = []
+        # List of difference of volatility
+        self.__list_vol = []
+        # Sorted list of difference volatility
+        self.__sorted_list_vol = []
+        # Mean of list of difference of volatility
+        self.mean_dif_vol = 0.
         pass
 
-    def __preprocessing_data(self):
+    def __preprocessing_data(self, code1: str, code2: str):
+        self.__data()
         pass
 
     def __check_co_integration_relationship(self, positive_option_code: str, negative_option_code: str,
@@ -63,7 +110,7 @@ class GraphBuilder(object):
         #
         #     print("finish")
 
-        # print(sess.run(cost))
+            # print(sess.run(cost))
         # substract_list = []
         # for i in range(number):
         #     substract_list.append(positive_option_rate_list[i] - negative_option_rate_list[i])
@@ -200,13 +247,25 @@ class GraphBuilder(object):
         #
         #
         # print(counter_positive)
-        
+
 
 
         pass
 
-    def __simulate_regular_normal_distribution_arguments(self):
-        pass
+    @staticmethod
+    def get_regular_normality(data_list: list):
+        return 100 * scs.normaltest(data_list)[1]
+
+    @staticmethod
+    def __get_variance(data_list):
+        data_tf_list = tf.cast(data_list, tf.float32)
+        mean = tf.reduce_mean(data_tf_list)
+        _sum = tf.pow(
+            tf.subtract(data_tf_list,
+                        mean),
+            2.
+        )
+        return tf.reduce_mean(_sum)
 
     def __find_max_benefit_intervals(self):
         pass

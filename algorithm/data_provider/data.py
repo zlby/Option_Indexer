@@ -8,8 +8,8 @@ class AbstractDataProvider(object):
 
     @abstractmethod
     def __call__(self, *args, **kwargs):
-        """
-        self call method
+        """Self call method
+
         :param args: None
         :param kwargs:
             Available keyword arguments:
