@@ -104,7 +104,7 @@ def cal_vol(code, current_time, final_time):
 
 def update_vol():
     option_list=[]
-    query_set = Option.objects.filter(Q(asset='m1803') | Q(asset='m1805'))
+    query_set = Option.objects.all()
     for item in query_set:
         option_list.append(item.code)
     for option_code in option_list:

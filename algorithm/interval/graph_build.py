@@ -18,16 +18,16 @@ class GraphBuilder(object):
         pass
 
     def get__spread_position_of_combined_options(self, positive_option_code: str, negative_option_code: str,
-                                                   number: int):
+                                                 number: int):
         """
         
         :param:
         :return: 
         """
         positive_option_rate_list = self.__data(code=positive_option_code, attribute="option_volatility_list",
-                                                      number=number)
+                                                number=number)
         negative_option_rate_list = self.__data(code=negative_option_code, attribute="option_volatility_list",
-                                                      number=number)
+                                                number=number)
         # training_epoches = 1000
         #
         #
@@ -64,7 +64,7 @@ class GraphBuilder(object):
         #
         #     print("finish")
 
-            # print(sess.run(cost))
+        # print(sess.run(cost))
         # substract_list = []
         # for i in range(number):
         #     substract_list.append(positive_option_rate_list[i] - negative_option_rate_list[i])
@@ -115,21 +115,21 @@ class GraphBuilder(object):
             # print("Counter: %f" % counter)
             # print("adf1: %s, adf2: %s" % (format(p_value1, '.5e'), format(p_value2, '.5e')))
 
-            if p_value1 < 0.05 and p_value2 > 0.05:
+            if p_value1 < 0.05 < p_value2:
                 co_integ = False
                 break
-            elif p_value1 < 0.05 and p_value2 > 0.05:
+            elif p_value1 < 0.05 < p_value2:
                 co_integ = False
                 break
 
             if counter > 10:
                 break
 
-        if co_integ == True:
+        if co_integ:
             a, p_value, b = coint(volatility1, volatility2)
             print(p_value)
             if p_value < 0.05:
-                return (a, b)
+                return a, b
 
         pass
 
