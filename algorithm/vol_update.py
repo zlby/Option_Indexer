@@ -110,7 +110,7 @@ def update_vol():
     for item in query_set:
         option_list.append(item.code)
     for option_code in option_list:
-        # print(option_code)
+        print(option_code)
         query_option_data = OptionTreadingData.objects.filter(option=option_code)
         current_time_list = []
         future_code = option_code.split("-")[0]
@@ -129,6 +129,7 @@ def update_vol():
             try:
                 tup = OptionTreadingData.objects.get(option=option_code, time=current_time)
                 if not tup.volatility:
+                    print('break')
                     break
                 vol = cal_vol(option_code, current_time, final_time)
                 tup.volatility = vol
