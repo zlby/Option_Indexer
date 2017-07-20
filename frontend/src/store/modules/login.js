@@ -25,6 +25,10 @@ const mutations = {
     state.loggedin = true;
     state.username = obj.username;
   },
+  updateUserInfo (state, obj) {
+    state.new_email = obj.email
+    state.new_phone = obj.phone
+  },
   logout (state) {
     state.loggedin = false;
   },

@@ -41,6 +41,7 @@ export const UserLogin = ({ commit }, data) => {
     res = res.data
     if (res.status.code == '0') {
       router.push({path:'/homepageIndividual'})
+      console.log()
       commit('login', {username: data.username});
     } else {
       alert('登录失败！')
@@ -48,6 +49,21 @@ export const UserLogin = ({ commit }, data) => {
   })
   .catch(function (error) {
     alert('登录失败！')
+  })
+};
+
+export const UpdateUserInfo = ({ commit }) => {
+  api.localUpdateUserInfo().then(function (res) {
+    res = res.data
+    if (res.status.code == '0') {
+      console.log(res)
+      commit('updateUserInfo', {username: res.username, email: res.email, phone: res.phone});
+    } else {
+      console.log('获取用户信息失败！')
+    }
+  })
+  .catch(function (error) {
+    console.log('获取用户信息失败！')
   })
 };
 

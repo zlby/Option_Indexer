@@ -22,7 +22,7 @@
         </el-form-item>
 
         <el-form-item label="手机号码" class="input_form">
-          <el-input v-model="form.phone" :value="phone"></el-input>
+          <el-input v-model="form.phone"></el-input>
         </el-form-item>
 
         <el-form-item class="input_form">
@@ -43,20 +43,14 @@
         form: {
           old_password: '',
           new_password: '',
-          email: '',
-          phone: ''
+          email: this.$store.state.login.new_email,
+          phone: this.$store.state.login.new_phone
         }
       }
     },
     computed: {
       name () {
         return this.$store.state.login.username;
-      },
-      email () {
-        return this.$store.state.login.new_email;
-      },
-      phone (){
-        return this.$store.state.login.new_phone;
       }
     },
 

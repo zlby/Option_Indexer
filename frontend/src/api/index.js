@@ -6,6 +6,9 @@ export default {
   localLogin: function (data) {
     return axios.post('/client/login/',data)
   },
+  localUpdateUserInfo: function () {
+    return axios.get('/client/')
+  },
   localLogout: function (data) {
   	return axios.post('/client/logout/')
   },
