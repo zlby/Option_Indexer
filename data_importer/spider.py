@@ -3,8 +3,8 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from option.models import *
-from algorithm.vol_update import *
+from option.models import Future, FutureTreadingData, Option, OptionTreadingData
+from algorithm.vol_update import cal_vol
 
 
 def clean_data(current_data, last_treading_data, attr='close_price'):
@@ -87,7 +87,7 @@ class OptionSpider(object):
 
                 # 计算隐含波动率
                 _final_time = Future.objects.get(code=future_code).delivery_day
-                _final_time = datetime.datetime.strptime(str(_final_time), '%Y-%m-%d')
+                _final_time = datetime.strptime(str(_final_time), '%Y-%m-%d')
                 _current_time = get_current_time_without_second()
                 _current_time = _current_time.replace(tzinfo=None)
                 treading_data.volatility = cal_vol(option_code, _current_time, _final_time)
