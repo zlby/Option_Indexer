@@ -1,6 +1,6 @@
 import tensorflow as tf
 from functools import wraps
-import numpy as np
+import scipy.stats as scs
 import numpy as np
 from statsmodels.tsa.stattools import adfuller, coint
 import pandas as pd
@@ -142,9 +142,6 @@ class GraphBuilder(object):
         adf_tuple2 = adfuller(negative_option_rate_list)
         p_value2 = adf_tuple2[1]
 
-        # print("Counter: %f" % counter)
-        # print("adf1: %s, adf2: %s" % (format(p_value1, '.5e'), format(p_value2, '.5e')))
-
         while p_value1 > 0.05 and p_value2 > 0.05:
             counter += 1
 
@@ -179,18 +176,20 @@ class GraphBuilder(object):
 
         pass
 
-    @run_graph("simulate regular")
-    def __simulate_regular_normal_distribution_arguments(self):
-        self.scale = tf.Variable(initial_value=np.random.rand())
-        # The regression regular normal distribution
-        dst_nm = dst.Normal(loc=self.mean_dif_vol, scale=self.scale)
-        pdt_prb_dv = dst_nm.cdf(self.__sorted_list_vol,
-                                name="predict probability less than specific difference volatility")
+    @staticmethod
+    def get_regular_normality(data_list: list):
+        return 100 * scs.normaltest(data_list)[1]
 
-        loss = tf.reduce_mean((pdt_prb_dv - self.__list_vol_frq) ** 2, name="regression loss")
-
-        return {"train_step": tf.train.AdamOptimizer(0.001).minimize(loss),
-                "target": self.scale}
+    @staticmethod
+    def __get_variance(data_list):
+        data_tf_list = tf.cast(data_list, tf.float32)
+        mean = tf.reduce_mean(data_tf_list)
+        _sum = tf.pow(
+            tf.subtract(data_tf_list,
+                        mean),
+            2.
+        )
+        return tf.reduce_mean(_sum)
 
     def __find_max_benefit_intervals(self):
         pass

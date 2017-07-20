@@ -1,5 +1,4 @@
 import csv
-
 import algorithm.interval.net_run as net
 from algorithm.data_provider.data import *
 from algorithm.interval.graph_build import GraphBuilder
@@ -12,6 +11,7 @@ class CsvDataProvider(AbstractDataProvider):
 
     def __init__(self, code1, code2):
         root = "./"
+
         self.option_codes = (str(code1), str(code2))
         self.option_datas = {}
         with open(root + str(code1) + ".csv") as f_1:
@@ -24,16 +24,27 @@ class CsvDataProvider(AbstractDataProvider):
     def __call__(self, *args, **kwargs):
         if kwargs["attribute"] == "option_volatility_list":
             return [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+        elif kwargs["attribute"] == "option_price_list":
+            return [float(x["close"]) for x in self.option_datas[kwargs["code"]]]
 
-if __name__ == '__main__':
+
+def __get_regular_normality_test():
 
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
 
     cb = GraphBuilder(optioncomb)
 
-    print(cb.get__spread_position_of_combined_options("m1709c2500", "m1709c2600", 10000))
+    r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
+    r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
+    import numpy as np
+    dr = np.subtract(r2, r1)
 
-# print(os.listdir("."))
-#
-#
-# print()
+    a_list = [10. * (x % 2) for x in range(8000)]
+
+    import scipy.stats as scs
+    b_list = scs.norm.pdf([x for x in range(8000)], loc=40, scale = 5)
+
+    if (cb.get_regular_normality(dr) < 0.1) &\
+        (cb.get_regular_normality(a_list) > 50 )&\
+        (cb.get_regular_normality(b_list) < 0.05):
+        print("__get_regular_normality_test passed")
