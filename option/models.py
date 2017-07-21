@@ -122,10 +122,13 @@ class News(models.Model):
     def get_news(page_number=1):
         if page_number <= 0:
             page_number = 1
-        result = []
+        total_page = int((News.objects.all().count() - 1) / News.items_per_page) + 1
+        if page_number > total_page:
+            page_number = total_page
+        newses = []
         for news in News.objects.all()[News.items_per_page*(page_number-1): News.items_per_page*page_number]:
-            result.append(news.get_detail())
-        return result
+            newses.append(news.get_detail())
+        return newses, total_page
 
 
 

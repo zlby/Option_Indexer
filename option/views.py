@@ -49,7 +49,7 @@ def get_news(request):
             page_number = int(page_number)
         else:
             page_number = 1
-        result['news'] = News.get_news(page_number)
+        result['news'], result['total_page'] = News.get_news(page_number)
         status['message'] = '获取成功'
         return JsonResponse(result, status=200)
     else:
