@@ -1,91 +1,72 @@
 <template>
-	<div>
-		<section>
+	<div class="login">
 		  <div><br><br><br><br></div>
 			<el-row  :gutter="20">
-				<el-form ref="form" :model="form" label-width="80px" method="post" @submit.prevent="reg()">
-					<el-col :span="8" :offset="8">
-					<el-form-item label="昵称">
-						<el-input v-model="form.username" id= "username" placeholder="请输入昵称"></el-input>
-					</el-form-item>
-					</el-col>
-					<el-col :span="8" :offset="8">
-					<el-form-item label="密码">
-						<el-input v-model="form.password" id= "password" placeholder="请输入密码"></el-input>
-					</el-form-item>
-					</el-col>
+				<div class="login_pic">
+				<img src="../assets/login_icon.png">
+				</div>
+				<el-col :span="6" :offset="9"   :xs="6" :md="6" :lg="6" :sm="6">
+					<el-card class="box-card" style="margin-top:40px">
+						<el-form ref="form" :model="form" action="" role="form" :rules="rules2" class="demo-ruleForm">
+							<el-col :span="24" :xs="24" :md="24" :lg="24" :sm="24">
+								<el-form-item>
+									<el-input v-model="form.username" class="input_op" style="margin-top:20px" placeholder="Username"></el-input>
+								</el-form-item>
+							</el-col>
 
-					<el-col :span="8" :offset="8">
-					<el-form-item label="邮箱">
-						<el-input v-model="form.email" id="email" placeholder="请输入邮箱" ></el-input>
-					</el-form-item>
-					</el-col>
+							<el-col :span="24" :xs="24" :md="24" :lg="24" :sm="24">
+								<el-form-item>
+									<el-input  type="password" class="input_op" v-model="form.password" placeholder="Password" auto-complete="off"></el-input>
+								</el-form-item>
+							</el-col>
 
-					<el-col :span="8" :offset="8">
-					<el-form-item label="手机号码">
-						<el-input v-model="form.phone" id="phone" placeholder="请输入手机号码"></el-input>
-					</el-form-item>
-					</el-col>
-
-
-					<el-col :span="8" :offset="8">
-					<el-form-item>
-                    <p>
-                        可通过该手机号码快速找到密码<br>
-                        中国大陆地区以外手机号码<a href="#">  点击这里</a>
-                    </p>
-					</el-form-item>
-					</el-col>
-					<el-col :span="8" :offset="8">
-					<el-form-item>
-						<el-button type="primary" size="large" @click="submitForm">立即注册</el-button>
-            <router-link to="/" class="btn btn-default">返回</router-link>
-					</el-form-item>
-					</el-col>
-				</el-form>
+							<el-col :span="24"  :xs="24" :md="24" :lg="24" :sm="24">
+								<el-form-item>
+									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"   @click="dj">登陆</el-button>
+								</el-form-item>
+							</el-col>
+						</el-form>
+					</el-card>
+				</el-col>
 			</el-row>
-		</section>
 	</div>
 </template>
 
 <script>
-// 	export default{
-//     data() {
-//       return {
-//         form: {
-//           username: '',
-//           password: '',
-//           email: '',
-//           phone: ''
-//         }
-//       }
-//     },
-//     methods: {
-//       onSubmit() {
-//         console.log('submit!');
-//       }
-//   }
-// }
-
+import axios from 'axios'
+import router from '../router'
+  import { mapActions } from 'vuex'
 export default {
 
  data (){
+
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } 
+      };
   return {
    form: {
-    userName: '',
-    password: '',
-    email: '',
-    phone: ''
-  }
-}
-},
-computed: {
+    username: '',
+    password: ''
+  },
+  rules2: {
+          password: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+      },
+  checked: 'true'
+
+};
 },
 
 methods: {
-  reg(){
-    this.$store.dispatch('UserReg',this.user);
-  }
+	dj: function() {
+			this.$store.dispatch('UserLogin', this.form)
+			.then(() => {
+				this.$store.dispatch('UpdateUserInfo')
+			})
+		}
 }
 
 }
@@ -93,5 +74,45 @@ methods: {
 
 </script>
 
-<style>
+<style lang="less">
+
+.login_pic{
+	margin: auto;
+	position: relative;
+	width: 100px;
+}
+
+.login{
+	background-image: url("../assets/背景.jpg");
+	background-repeat:no-repeat;
+	height: 100%;
+	width: 100%;
+	// margin: auto;
+	// position: relative;
+}
+
+.box-card{
+	background-color: rgba(255,255,255,0.1);
+}
+
+
+
+.input_op{
+	// background-color: white;
+	 opacity: 0.82;
+	// position:relative;
+background-color: rgb(256,256,256);
+	position: relative;
+	color:white;
+	border-radius: 10px;
+
+	border:0px;
+}
+.el-input__inner{
+
+}
+
+.zhucebtn{
+	color:#FFFFFF;
+}
 </style>

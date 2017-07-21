@@ -3,44 +3,6 @@ import csv
 from option.models import *
 
 
-# with open('./nothing/m1709c2500.csv') as f_1:
-#     data_1 = csv.DictReader(f_1)
-# with open('./nothing/m1709c2600.csv') as f_2:
-#     data_2 = csv.DictReader(f_2)
-
-
-# def get_first_rate_list():
-#     with open('./nothing/m1709c2500.csv') as f_1:
-#         data_1 = csv.DictReader(f_1, delimiter=";")
-#         return [float(x["vol"]) for x in data_1]
-#
-#
-# def get_second_rate_list():
-#     with open('./nothing/m1709c2600.csv') as f_2:
-#         data_2 = csv.DictReader(f_2, delimiter=";")
-#         return [float(x["vol"]) for x in data_2]
-#
-#
-# def get_first_price_list():
-#     with open('./nothing/m1709c2500.csv') as f_1:
-#         data_1 = csv.DictReader(f_1, delimiter=";")
-#         return [float(x["close"]) for x in data_1]
-#
-#
-# def get_second_price_list():
-#     with open('./nothing/m1709c2600.csv') as f_2:
-#         data_2 = csv.DictReader(f_2, delimiter=";")
-#         return [float(x["close"]) for x in data_2]
-#
-#
-# def get_data_list(time_start, time_end, code):
-#     pass
-#
-#
-# def get_rate_list(time_start, time_end, code):
-#     pass
-
-
 def calc_cash_deposit(closing_price_yesterday_of_future, closing_price_yesterday_of_option, contracts_for_option,
                       exercise_price, is_call_option=True):
     contracts_for_future = 10 * contracts_for_option
@@ -71,12 +33,10 @@ def get_option_vol(code, time):
         return res_tuple.volatility
     except:
         return None
-    # if res_tuple is not None:
-    #     return res_tuple.volatility
-    # else:
-    #     return None
-
-
+        # if res_tuple is not None:
+        #     return res_tuple.volatility
+        # else:
+        #     return None
 
 
 def get_option_price(code, time):
@@ -87,6 +47,7 @@ def get_option_price(code, time):
     except:
         return None
 
+
 def get_future_price(code, time):
     # get price of an future
     try:
@@ -96,38 +57,39 @@ def get_future_price(code, time):
         return None
 
 
-    # if __name__ == '__main__':
-    #     import os
-    #
-    #     os.environ['DJANGO_SETTINGS_MODULE'] = 'huaqi.settings'
-    #     print(getvol())
+        # if __name__ == '__main__':
+        #     import os
+        #
+        #     os.environ['DJANGO_SETTINGS_MODULE'] = 'huaqi.settings'
+        #     print(getvol())
+
+
 # def db_insert():
 
 def get_option_rate_list(code):
     try:
-        temp_list=[]
-        res_list=[]
+        temp_list = []
+        res_list = []
         res_tuples = OptionTreadingData.objects.filter(option=code).order_by('-time')[:2000]
         for i in range(len(res_tuples)):
             temp_list.append(res_tuples[i].volatility)
             # print(res_tuples[i].volatility)
         for i in range(len(temp_list)):
-            res_list.append(temp_list[len(temp_list)-i-1])
+            res_list.append(temp_list[len(temp_list) - i - 1])
         return res_list
     except:
         return None
 
+
 def get_option_price_list(code):
     try:
-        temp_list=[]
-        res_list=[]
+        temp_list = []
+        res_list = []
         res_tuples = OptionTreadingData.objects.filter(option=code).order_by('-time')[:2000]
         for i in range(len(res_tuples)):
             temp_list.append(res_tuples[i].close_price)
         for i in range(len(temp_list)):
-            res_list.append(temp_list[len(temp_list)-i-1])
+            res_list.append(temp_list[len(temp_list) - i - 1])
         return res_list
     except:
         return None
-
-

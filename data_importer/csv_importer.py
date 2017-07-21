@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 import re
 import os
-import csv
 
 
 class CSVImporter:

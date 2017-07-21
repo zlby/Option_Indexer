@@ -1,14 +1,17 @@
 <template>
-	<div class = "navigate2">
+	<div class = "footer">
 
-		<el-menu :default-active="activeIndex2" class="el-menu-demo" mode="horizontal" @select="handleSelect" fixed="true">
-			<el-row>
-			<el-col :span="8"><el-menu-item index="1">链接网址</el-menu-item></el-col>
-			<el-col :span="8"><el-menu-item index="2">各种网站</el-menu-item></el-col>
-			<el-col :span="8"><el-menu-item index="3">附属网址</el-menu-item></el-col>
+		<div class="footer-wraper">
+			<div class="follow">关注我们</div>
+			<div class="follow-btn-group">
+				<img src="../assets/weixin.png" class="follow-btn">
+				<img src="../assets/wechat.png" class="follow-btn">
+			</div>
+			<div class="copyright">Copyright © 2017-2047 OPTIONINDEXER.COM All Rights Reserved</div>
+		</div>
+		
 
-			</el-row>
-		</el-menu>
+
 	</div>
 
 
@@ -19,29 +22,55 @@
 	export default {
 		data() {
 			return {
-				activeIndex: '1',
-				activeIndex2: '1'
 			};
-		},
-		methods: {
-			handleSelect(key, keyPath) {
-				console.log(key, keyPath);
-			}
 		}
 	}
 </script>
 
 <style>
-.el-menu-demo{
-	width: 100%;
-	bottom: 0px;
-	position: fixed;
-    background-color:#404040;
-    color:#FFF;
 
+.footer{
+	background-image: url("../assets/map.png");
+	background-color: #5c5766;
+	background-position:600px 0%;
+	background-repeat: no-repeat;
+	background-image-opacity:0;
+	height:500px;
 }
-*{
-	margin:0px;
+
+.footer-wraper{
+	position: relative;
+	top:30%;
+}
+
+
+.follow{
+	min-width:300px;
+	width:100%;
+	margin:auto;	
+	font-size: 40px;
+	text-align: center;
+	padding-bottom: 40px;
+	color: white;
+}
+.follow-btn{
+	width:64px;
+	margin:0px 10px;
+}
+.follow-btn-group{
+	width:200px;
+	margin:auto;
+	text-align: center;
+	padding-bottom: 40px;
+}
+.copyright{
+	color:white;
+	border-top:5px solid white;
+	font-size:25px;
+	width:55%;
+	margin:auto;
+	text-align: center;
+	padding-top: 20px;
 }
 
 

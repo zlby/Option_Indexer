@@ -1,19 +1,30 @@
-import Vue from 'Vue'
+import Vue from 'vue'
 import axios from 'axios'
-import VueAxios from 'vue-axios'
 
-Vue.use(VueAxios,axios);
-
-var instance = axios.create();
-
+Vue.use(axios);
 export default {
   localLogin: function (data) {
-    return Vue.axios.post('/api/login',data)
+    return axios.post('/client/login/',data)
+  },
+  localUpdateUserInfo: function () {
+    return axios.get('/client/')
   },
   localLogout: function (data) {
-    return instance.post('/api/logout',data)
+  	return axios.post('/client/logout/')
   },
-  localReg: function (data) {
-    return Vue.axios.post('/api/reg',data)
+  localRegister: function (data) {
+  	return axios.post('/client/register/',data)
+  },
+  localNewpassword: function (data){
+  	return axios.post('/client/set_new_password/',data)
+  },
+  localChange: function (data){
+    return axios.post('/client/logout/')
+  },
+  localNews: function (paramObj){
+    return axios.get('/market/news/',{params:{page_number:this.page_number}})
+  },
+  localnewphone_email: function (paramObj){
+    return axios.put('/client/set_new_email_or_phone/',{email:paramObj.email,phone:paramObj.phone})
   }
 }

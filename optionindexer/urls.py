@@ -8,7 +8,8 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^$', views.index),
-    url(r'^doc$', views.doc),
+    # url(r'^doc$', views.doc),
     url(r'^client/', include('client.urls')),
+    url(r'^market/', include('option.urls')),
     url(r'^admin/', include(admin.site.urls)),
 ]

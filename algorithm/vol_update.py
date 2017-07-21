@@ -81,11 +81,14 @@
 #         #     print(vol_value)
 
 from option.models import *
+from django.db.models import Q
 from algorithm.implied_volatility import *
-import datetime
+from datetime import datetime
 import algorithm.database_link as dl
 import warnings
+
 warnings.filterwarnings("ignore")
+
 
 def cal_vol(code, current_time, final_time):
     future_code = code.split('-')[0]
@@ -95,25 +98,35 @@ def cal_vol(code, current_time, final_time):
     # print(t)
     future_price = dl.get_future_price(code=future_code, time=current_time)
     option_price = dl.get_option_price(code=code, time=current_time)
-    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t/252, k=agreement_price)
+    # v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price) # 修改
+    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
     result = v.get_result()
     # print(agreement_price)
     return result
 
 
+def cal_vol_direct(option_code, option_price, future_price, delivery_day):
+    agreement_price = int(option_code.split('-')[-1])
+    current_day = datetime.today()
+    days = (delivery_day - current_day).days
+    t = days / 252
+    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
+    return v.get_result()
+
+
 def update_vol():
-    option_list=[]
-    query_set = Option.objects.filter(asset='m1708')
+    option_list = []
+    query_set = Option.objects.filter(Q(asset='m1712') | Q(asset='m1801') | Q(asset='m1803') | Q(asset='m1805'))
     for item in query_set:
         option_list.append(item.code)
     for option_code in option_list:
-        # print(option_code)
+        print(option_code)
         query_option_data = OptionTreadingData.objects.filter(option=option_code)
-        current_time_list=[]
+        current_time_list = []
         future_code = option_code.split("-")[0]
         final_time = Future.objects.get(code=future_code).delivery_day
         # final_time = datetime.datetime()
-        final_time = datetime.datetime.strptime(str(final_time), '%Y-%m-%d')
+        final_time = datetime.strptime(str(final_time), '%Y-%m-%d')
         # print(final_time)
         # final_time = final_time.replace(tzinfo=None)
         for ite in query_option_data:
@@ -124,8 +137,10 @@ def update_vol():
             # print(current_time)
             current_time = current_time.replace(tzinfo=None)
             try:
-                vol = cal_vol(option_code, current_time, final_time)
                 tup = OptionTreadingData.objects.get(option=option_code, time=current_time)
+                if tup.volatility is not None:
+                    continue
+                vol = cal_vol(option_code, current_time, final_time)
                 tup.volatility = vol
                 tup.save()
             except:
@@ -135,9 +150,9 @@ def update_vol():
 
     print("complete")
 
-#
-#
-# if __name__ == '__main__':
-#     t1 = datetime.datetime(2017, 5, 16, 10, 10, 00)
-#     t2 = datetime.datetime(2017, 9, 14)
-#     cal_vol('m1708-c-2500', t1, t2)
+    #
+    #
+    # if __name__ == '__main__':
+    #     t1 = datetime.datetime(2017, 5, 16, 10, 10, 00)
+    #     t2 = datetime.datetime(2017, 9, 14)
+    #     cal_vol('m1708-c-2500', t1, t2)
