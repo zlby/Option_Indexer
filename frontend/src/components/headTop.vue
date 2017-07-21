@@ -34,9 +34,9 @@
             <el-dropdown-item><i class="el-icon-document"></i>
               <el-button type="text" @click="homepageIndividual">个人主页</el-button>
             </el-dropdown-item>
-            <el-dropdown-item><i class="el-icon-setting"></i>
+  <!--           <el-dropdown-item><i class="el-icon-setting"></i>
               <el-button type="text" @click="dialogFormVisible = true">个人信息设置</el-button>
-            </el-dropdown-item>
+            </el-dropdown-item> -->
             <el-dropdown-item><i class="el-icon-edit"></i>
               <el-button type="text" @click="change">切换账号</el-button>
             </el-dropdown-item>
@@ -46,7 +46,7 @@
           </el-dropdown-menu>
 
 
-          <el-dialog class="tanchu" title="信息修改" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :before-close="handleClose" style="z-index:999;">
+<!--           <el-dialog class="tanchu" title="信息修改" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :before-close="handleClose" style="z-index:999;">
 
 
             <el-form :model="form">
@@ -56,12 +56,14 @@
               <el-form-item>
                 <el-input v-model="form.new_password" type="password" id= "new_password" placeholder="newPassword"></el-input>
               </el-form-item>
-              <el-form-item>
-                <el-input v-model="form.email" id= "email" placeholder="Email"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-input v-model="form.phone" id= "phone" placeholder="Phone"></el-input>
-              </el-form-item>
+        <el-form-item prop="email" class="input_form">
+          <div class="el-col el-col-12 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12">{{email}}</div>
+          <input v-model="form.email" class="el-input__inner" :value="email" type="email" placeholder="newEmail"></input>
+        </el-form-item>
+        <el-form-item prop="phone" class="input_form">
+          <div class="el-col el-col-12 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12">{{phone}}</div>
+          <input v-model="form.phone" :value="phone" type="phone" class="el-input__inner" placeholder="newPhone"></input>
+        </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -69,7 +71,7 @@
             </div>
 
 
-          </el-dialog>
+          </el-dialog> -->
         </el-dropdown>
       </el-menu-item>
     </el-col>
@@ -91,7 +93,9 @@
       form: {
               // username: '',
               old_password: '',
-              new_password: ''
+              new_password: '',
+              email: '',
+              phone: ''
             },
             formLabelWidth: '120px'
           };
@@ -109,7 +113,10 @@
         this.$store.dispatch('UserLogout');
       },
       dj: function(){
-        this.$store.dispatch('UserNewpassword', this.form);
+        this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password,
+          new_password:this.form.new_password});
+        this.$store.dispatch('UserNewemailphone',{email:this.form.email,
+          phone:this.form.phone});
       },
       change: function(){
         this.$store.dispatch('UserChange');

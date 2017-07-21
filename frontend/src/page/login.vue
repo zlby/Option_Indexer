@@ -62,7 +62,10 @@ export default {
 
 methods: {
 	dj: function() {
-			this.$store.dispatch('UserLogin', this.form);
+			this.$store.dispatch('UserLogin', this.form)
+			.then(() => {
+				this.$store.dispatch('UpdateUserInfo')
+			})
 		}
 }
 

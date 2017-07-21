@@ -58,7 +58,7 @@
 					<br><br><br>
 				</div>
 
-				<el-carousel>
+				<el-carousel @change="carouselChange(index)">
 					<el-carousel-item>
 						<div class="news_container">
 							<el-row :gutter="40">
@@ -67,9 +67,10 @@
 										<img src= "../assets/pexels-photo-159888.jpeg">
 										<div style="padding: 14px;">
 											<p class="H1">{{title[0]}}</p>
+											<p class="H1">{{time[0]}}</p>
 											<div class="news-text" style="padding: 14px;">{{context[0]}}</div>
 										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+										<el-button  @click="dialogVisible = true" class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
 								</el-col>
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
@@ -77,6 +78,7 @@
 										<img src= "../assets/pexels-photo-210574.jpeg">
 										<div style="padding: 14px;">
 											<p class="H1">{{title[1]}}</p>
+											<p class="H1">{{time[1]}}</p>
 											<div class="news-text" style="padding: 14px;">{{context[1]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
@@ -87,6 +89,7 @@
 										<img src= "../assets/pexels-photo-286442.jpeg">
 										<div style="padding: 14px;">
 											<p class="H1">{{title[2]}}</p>
+											<p class="H1">{{time[2]}}</p>
 											<div class="news-text" style="padding: 14px;">{{context[2]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
@@ -97,21 +100,71 @@
 										<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
 										<div style="padding: 14px;">
 											<p class="H1">{{title[3]}}</p>
+											<p class="H1">{{time[3]}}</p>
 											<div class="news-text" style="padding: 14px;">{{context[3]}}</div>
 										</div>
 										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
 									</el-card>
-
 								</el-col>
-							</el-row>
-						</div>
-					</el-carousel-item>
-				</el-carousel>
+						</el-row>
+					</div>
+				</el-carousel-item>
+									<el-carousel-item>
+						<div class="news_container">
+							<el-row :gutter="40">
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
+									<el-card class="news-card">
+										<img src= "../assets/pexels-photo-159888.jpeg">
+										<div style="padding: 14px;">
+											<p class="H1">{{title[0]}}</p>
+											<p class="H1">{{time[0]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[0]}}</div>
+										</div>
+										<el-button  @click="dialogVisible = true" class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+									</el-card>
+								</el-col>
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
+									<el-card class="news-card">
+										<img src= "../assets/pexels-photo-210574.jpeg">
+										<div style="padding: 14px;">
+											<p class="H1">{{title[1]}}</p>
+											<p class="H1">{{time[1]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[1]}}</div>
+										</div>
+										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+									</el-card>
+								</el-col>
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
+									<el-card class="news-card">
+										<img src= "../assets/pexels-photo-286442.jpeg">
+										<div style="padding: 14px;">
+											<p class="H1">{{title[2]}}</p>
+											<p class="H1">{{time[2]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[2]}}</div>
+										</div>
+										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+									</el-card>
+								</el-col>
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
+									<el-card class="news-card">
+										<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
+										<div style="padding: 14px;">
+											<p class="H1">{{title[3]}}</p>
+											<p class="H1">{{time[3]}}</p>
+											<div class="news-text" style="padding: 14px;">{{context[3]}}</div>
+										</div>
+										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+									</el-card>
+								</el-col>
+						</el-row>
+					</div>
+				</el-carousel-item>
+			</el-carousel>
 
-			</div>
 		</div>
-		<footerBottom></footerBottom>
 	</div>
+	<footerBottom></footerBottom>
+</div>
 </template>
 
 <script>
@@ -129,8 +182,9 @@
 					name: '',
 					email: '',
 					desc: ''
-				}
-
+				},
+				index:'0',
+				dialogVisible: false
 			}
 		},
 
@@ -141,19 +195,19 @@
 			context (){
 				return this.$store.state.login.context;
 			},
+			time (){
+				return this.$store.state.login.time;
+			}
 		},
+
 		mounted:function() {
-			// this.$store.dispatch('News',0);
-			api.localNews({page_number: 1}).then(function (res){
-			    res = res.data
-			    if (res.status.code == '0'){
-			      console.log(res)
-			    }else{
-			      alert('获取新闻失败！')
-			    }
-			}).catch(function (error){
-			    alert('获取新闻失败！')
-			})
+			this.$store.dispatch('News',0);
+			this.$store.dispatch('News',1);
+		},
+		methods:{
+			carouselChange:function(index){
+
+			}
 		}
 	}
 
@@ -229,7 +283,7 @@
 	}
 	.H1{
 		text-align: center;
-		font-size: 30px;	
+		font-size: 20px;	
 	}
 
 	.el-card__body{

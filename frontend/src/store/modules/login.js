@@ -16,12 +16,18 @@ const state = {
   title: [],
   time: [],
   context: [],
+  new_email: '21',
+  new_phone: '121'
 };
 
 const mutations = {
   login (state, obj) {
     state.loggedin = true;
     state.username = obj.username;
+  },
+  updateUserInfo (state, obj) {
+    state.new_email = obj.email
+    state.new_phone = obj.phone
   },
   logout (state) {
     state.loggedin = false;
@@ -43,6 +49,10 @@ const mutations = {
     state.context = obj.map(function(o){
       return o.context
     });
+  },
+  new_emai_or_phone(state, obj){
+    state.new_phone = obj.new_phone;
+    state.new_email = obj.new_email;
   }
 };
 

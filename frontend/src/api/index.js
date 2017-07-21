@@ -6,6 +6,9 @@ export default {
   localLogin: function (data) {
     return axios.post('/client/login/',data)
   },
+  localUpdateUserInfo: function () {
+    return axios.get('/client/')
+  },
   localLogout: function (data) {
   	return axios.post('/client/logout/')
   },
@@ -19,8 +22,9 @@ export default {
     return axios.post('/client/logout/')
   },
   localNews: function (paramObj){
-    return axios.get('/market/news/',{params: paramObj})
+    return axios.get('/market/news/',{params:{page_number:this.page_number}})
+  },
+  localnewphone_email: function (paramObj){
+    return axios.put('/client/set_new_email_or_phone/',{email:paramObj.email,phone:paramObj.phone})
   }
-
-
 }
