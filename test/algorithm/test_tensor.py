@@ -21,6 +21,7 @@ optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(loss*
 # sess.run(tf.variables_initializer([optimizer]))
 for i in range(10000):
     sess.run(optimizer)
+    print(a.eval())
 
 print(loss.eval())
 

@@ -1,5 +1,8 @@
 from option.models import *
 import datetime as dt
+import warnings
+
+warnings.filterwarnings('ignore')
 
 
 def save_data_transfered(time_begin, time_end, timedelta, shift_timedelta):
@@ -11,8 +14,12 @@ def save_data_transfered(time_begin, time_end, timedelta, shift_timedelta):
         time_iter = time_begin
         while time_iter < time_end:
             data_list = OptionTreadingData.objects.filter(time__range=(time_iter, time_iter + timedelta),
-                                                          option=item.code)
+                                                          option=item.code).order_by('time')
+            # print(time_iter)
+            # print(time_iter + timedelta)
+
             if data_list.count() > 0:
+                # print(data_list.count())
                 new_open_price = data_list[0].open_price
                 new_close_price = data_list[len(data_list) - 1].close_price
                 new_volatility = data_list[len(data_list) - 1].volatility
@@ -24,11 +31,12 @@ def save_data_transfered(time_begin, time_end, timedelta, shift_timedelta):
                     new_min_price = data.close_price if data.min_price < new_min_price else new_min_price
                     new_volume += data.volume
                 data_object_list.append(
-                    DayOptionTreadingData(time=time_iter + shift_timedelta, open_price=new_open_price,
+                    HourOptionTreadingData(time=time_iter + shift_timedelta, open_price=new_open_price,
                                           close_price=new_close_price, max_price=new_max_price,
-                                          min_price=new_min_price, volatility=new_volatility, option=Option(code=item.code),
-                                          volume=new_volume))
+                                          min_price=new_min_price, volatility=new_volatility, volume=new_volume,
+                                          option=Option(code=item.code)))
 
             time_iter += timedelta
+            # print(len(data_object_list))
 
-        DayOptionTreadingData.objects.bulk_create(data_object_list)
+    HourOptionTreadingData.objects.bulk_create(data_object_list)
