@@ -16,7 +16,7 @@ class Future(models.Model):
             result.append(future.code)
         return result
 
-    def get_treading_data(self, start_time, end_time=None):
+    def get_minute_treading_data(self, start_time, end_time=None):
         time_filter = models.Q(time__gte=start_time)
         if end_time:
             time_filter &= models.Q(time__lte=end_time)
@@ -33,6 +33,27 @@ class Future(models.Model):
                 'code': option.code,
                 'data': list(treading.get_detail() for treading in
                              OptionTreadingData.objects.filter(time_filter & models.Q(option=option)))
+            }
+            result['options'].append(option_detail)
+        return result
+
+    def get_hour_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
+        result = {
+            'future': {
+                'code': self.code,
+                'data': list(treading.get_detail() for treading in
+                             HourFutureTreadingData.objects.filter(time_filter & models.Q(future=self)))
+            },
+            'options': []
+        }
+        for option in Option.objects.filter(asset=self):
+            option_detail = {
+                'code': option.code,
+                'data': list(treading.get_detail() for treading in
+                             HourOptionTreadingData.objects.filter(time_filter & models.Q(option=option)))
             }
             result['options'].append(option_detail)
         return result

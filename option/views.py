@@ -81,7 +81,7 @@ def get_treading_data(request, future_code):
                 status['code'] = -12
                 status['message'] = 'time_format_not_right'
                 return JsonResponse(result, status=400)
-            status['data'] = future.get_treading_data(start_time=start_time, end_time=end_time)
+            status['data'] = future.get_hour_treading_data(start_time=start_time, end_time=end_time)
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
         else:
