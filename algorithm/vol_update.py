@@ -83,7 +83,7 @@
 from option.models import *
 from django.db.models import Q
 from algorithm.implied_volatility import *
-import datetime
+from datetime import datetime
 import algorithm.database_link as dl
 import warnings
 
@@ -102,6 +102,15 @@ def cal_vol(code, current_time, final_time):
     result = v.get_result()
     # print(agreement_price)
     return result
+
+
+def cal_vol_direct(option_code, option_price, future_price, delivery_day):
+    agreement_price = int(option_code.split('-')[-1])
+    current_day = datetime.today()
+    days = (delivery_day - current_day).days
+    t = days / 252
+    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t / 252, k=agreement_price)
+    pass
 
 
 def update_vol():

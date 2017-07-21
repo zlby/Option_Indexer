@@ -247,6 +247,25 @@ class GraphBuilder(object):
         #
         #
         # print(counter_positive)
+        sample_size = number
+        with tf.name_scope('Input'):
+            x = tf.constant(positive_option_rate_list, tf.float32, [1, sample_size])
+            y = tf.constant(negative_option_rate_list, tf.float32, [1, sample_size])
+
+            ratio = tf.Variable(np.random.rand())
+
+            # res = y = ratio * x
+            # loss = tf.placeholder(tf.float32, 0, "loss")
+            # res_tensor = tf.subtract(tf.matmul(ratio, x), y)
+            # train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
+            # init = tf.global_variables_initializer()
+            #
+            # with tf.Session() as sess:
+            #     sess.run(init)
+            #     ls = 2
+            #     for i in range(500):
+            #         rs = sess.run([train_step,res], feed_dict={loss: ls})
+            #         ls = self.get_regular_normality(rs[1])
 
 
 
