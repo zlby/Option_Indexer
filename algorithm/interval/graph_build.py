@@ -177,11 +177,89 @@ class GraphBuilder(object):
         pass
 
     @staticmethod
-    def get_regular_normality(data_list: list):
-        return 100 * scs.normaltest(data_list)[1]
+    def get_regular_normality(data_list: tf.Tensor):
+
+        def skew(a):
+            with tf.name_scope("skew"):
+                mean = tf.reduce_mean(a)
+                result = tf.div(
+                    tf.reduce_mean(
+                        tf.pow(
+                            tf.subtract(
+                                a,
+                                mean
+                            ),
+                            3.
+                        )
+                    ),
+                    tf.pow(
+                        tf.reduce_mean(
+                            tf.square(
+                                tf.subtract(
+                                    a,
+                                    mean
+                                )
+                            )
+                        ),
+                        1.5
+                    )
+                )
+                a = result.eval()
+
+            return result
+
+        def kurtosis(a):
+            with tf.name_scope("kurtosis"):
+                mean = tf.reduce_mean(a)
+                result = tf.div(
+                    tf.reduce_mean(
+                        tf.pow(
+                            tf.subtract(
+                                a,
+                                mean
+                            ),
+                            4.
+                        )
+                    ),
+                    tf.pow(
+                        tf.reduce_mean(
+                            tf.square(
+                                tf.subtract(
+                                    a,
+                                    mean
+                                )
+                            )
+                        ),
+                        2.
+                    )
+                )
+
+                a = result.eval()
+
+            return result
+
+        _s = skew(data_list)
+
+        _k = kurtosis(data_list)
+
+        _len = data_list.shape.as_list()[0]
+
+        jb_value = tf.add(
+            tf.div(
+                tf.pow(_s, 2.) * _len,
+                6.
+            ),
+            tf.div(
+                tf.pow(_k - 3., 2.) * _len,
+                24.
+            )
+        )
+
+        p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
+        return p_value
 
     @staticmethod
-    def __get_variance(data_list):
+    def __get_variance(data_list: tf.Tensor):
         data_tf_list = tf.cast(data_list, tf.float32)
         mean = tf.reduce_mean(data_tf_list)
         _sum = tf.pow(
@@ -191,5 +269,26 @@ class GraphBuilder(object):
         )
         return tf.reduce_mean(_sum)
 
-    def __find_max_benefit_intervals(self):
+    def __find_max_benefit_intervals(self, differ_volatility_list: tf.Tensor, rate: float):
+        # no err threshold
+        def get_predict_normal_distribution():
+            if not self.nm_dst:
+                mean = tf.reduce_mean(differ_volatility_list)
+                scl = tf.sqrt(self.__get_variance(differ_volatility_list))
+                self.nm_dst = dst.Normal(loc=mean, scale=scl)
+            return self.nm_dst
+
+        def get_thresholds(sess):
+            vrs = tf.Variable(np.random.rand(2))
+            nm_dst = get_predict_normal_distribution()
+            max_raw = nm_dst.prob(tf.reduce_mean(differ_volatility_list))
+            _threshold = vrs.value()
+            trd_nm = _threshold[0] * max_raw
+            trd_hg = _threshold[1] * trd_nm
+            return trd_nm, trd_hg
+
+        def interval_judgement(ls: tf.Tensor, trd_hg, trd_nm):
+            ls_hg_cvt = dst.Logistic(loc=trd_hg, scale=0.05).cdf
+            mr_nm_cvt = dst.Logistic(loc=trd_nm, scale=0.05).cdf
+
         pass

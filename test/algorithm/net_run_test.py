@@ -38,13 +38,21 @@ def __get_regular_normality_test():
     r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
     import numpy as np
     dr = np.subtract(r2, r1)
+    dr = np.subtract(dr[1:], dr[:-1])
 
-    a_list = [10. * (x % 2) for x in range(8000)]
+    import tensorflow as tf
 
-    import scipy.stats as scs
-    b_list = scs.norm.pdf([x for x in range(8000)], loc=40, scale = 5)
+    tf.InteractiveSession()
+    for i in range(10):
+        a = tf.random_normal([2000])
+        b = np.random.randint(6000)
+        print(cb.get_regular_normality(a).eval(),
+         cb.get_regular_normality(tf.constant(dr[b:b+2000], tf.float32)).eval())
 
-    if (cb.get_regular_normality(dr) < 0.1) &\
-        (cb.get_regular_normality(a_list) > 50 )&\
-        (cb.get_regular_normality(b_list) < 0.05):
-        print("__get_regular_normality_test passed")
+    # if (cb.get_regular_normality(dr) < 0.1) &\
+    #     (cb.get_regular_normality(a_list) > 50 )&\
+    #     (cb.get_regular_normality(b_list) < 0.05):
+    #     print("__get_regular_normality_test passed")
+
+if __name__ == "__main__":
+    __get_regular_normality_test()
