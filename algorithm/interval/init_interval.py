@@ -2,8 +2,6 @@ from algorithm.interval.net_run import *
 from option.models import *
 import itertools
 
-
-#
 def initialize_interval():
     query_set = Option.objects.all()
     option_code_list = []

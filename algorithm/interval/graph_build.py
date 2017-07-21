@@ -1,9 +1,7 @@
 import tensorflow as tf
 from functools import wraps
-import scipy.stats as scs
 import numpy as np
 from statsmodels.tsa.stattools import adfuller, coint
-import pandas as pd
 import tensorflow.contrib.distributions as dst
 
 
