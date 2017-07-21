@@ -98,6 +98,7 @@ def cal_vol(code, current_time, final_time):
     # print(t)
     future_price = dl.get_future_price(code=future_code, time=current_time)
     option_price = dl.get_option_price(code=code, time=current_time)
+    # v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price) # 修改
     v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
     result = v.get_result()
     # print(agreement_price)
