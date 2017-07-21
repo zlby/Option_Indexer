@@ -98,7 +98,7 @@ def cal_vol(code, current_time, final_time):
     # print(t)
     future_price = dl.get_future_price(code=future_code, time=current_time)
     option_price = dl.get_option_price(code=code, time=current_time)
-    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t / 252, k=agreement_price)
+    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
     result = v.get_result()
     # print(agreement_price)
     return result
@@ -109,7 +109,7 @@ def cal_vol_direct(option_code, option_price, future_price, delivery_day):
     current_day = datetime.today()
     days = (delivery_day - current_day).days
     t = days / 252
-    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t / 252, k=agreement_price)
+    v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
     return v.get_result()
 
 
