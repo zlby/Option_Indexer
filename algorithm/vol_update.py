@@ -125,7 +125,7 @@ def update_vol():
         future_code = option_code.split("-")[0]
         final_time = Future.objects.get(code=future_code).delivery_day
         # final_time = datetime.datetime()
-        final_time = datetime.datetime.strptime(str(final_time), '%Y-%m-%d')
+        final_time = datetime.strptime(str(final_time), '%Y-%m-%d')
         # print(final_time)
         # final_time = final_time.replace(tzinfo=None)
         for ite in query_option_data:
