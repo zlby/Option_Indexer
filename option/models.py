@@ -72,14 +72,32 @@ class TreadingDataBase(models.Model):
         return result
 
 
-class FutureTreadingData(TreadingDataBase):
+class FutureTreadingDataBase(TreadingDataBase):
     future = models.ForeignKey(verbose_name=u'对应期货', to=Future)
 
+    class Meta(TreadingDataBase.Meta):
+        abstract = True
 
-class OptionTreadingData(TreadingDataBase):
+
+class FutureTreadingData(FutureTreadingDataBase):
+    pass
+
+
+class HourFutureTreadingData(FutureTreadingDataBase):
+    pass
+
+
+class DayFutureTreadingData(FutureTreadingDataBase):
+    pass
+
+
+class OptionTreadingDataBase(TreadingDataBase):
     option = models.ForeignKey(verbose_name=u'对应期权', to=Option)
     volatility = models.FloatField(verbose_name=u'隐含波动率', null=True)
     volume = models.FloatField(verbose_name=u'成交量', default=0)
+
+    class Meta(TreadingDataBase.Meta):
+        abstract = True
 
     def get_detail(self):
         result = {
@@ -88,6 +106,18 @@ class OptionTreadingData(TreadingDataBase):
         }
         result.update(super().get_detail())
         return result
+
+
+class OptionTreadingData(OptionTreadingDataBase):
+    pass
+
+
+class HourOptionTreadingData(OptionTreadingDataBase):
+    pass
+
+
+class DayOptionTreadingData(OptionTreadingDataBase):
+    pass
 
 
 class Intervals(models.Model):
