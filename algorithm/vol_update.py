@@ -110,7 +110,7 @@ def cal_vol_direct(option_code, option_price, future_price, delivery_day):
     days = (delivery_day - current_day).days
     t = days / 252
     v = Volatility(c=option_price, s0=future_price, r=0.015, t=t / 252, k=agreement_price)
-    pass
+    return v.get_result()
 
 
 def update_vol():
