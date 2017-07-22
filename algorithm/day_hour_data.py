@@ -30,9 +30,6 @@ def save_data_transfered_option(time_begin, time_end, timedelta: dt.timedelta, s
                     new_max_price = data.close_price if data.close_price > new_max_price else new_max_price
                     new_min_price = data.close_price if data.min_price < new_min_price else new_min_price
                     new_volume += data.volume
-<<<<<<< HEAD
-
-
                 if timedelta.days == 1:
                     data_object_list.append(
                         DayOptionTreadingData(time=time_iter + shift_timedelta, open_price=new_open_price,
