@@ -1,5 +1,8 @@
-from option.models import *
 import itertools
+from algorithm.interval.graph_build import *
+from algorithm.data_provider.data_provider_django import *
+from multiprocessing import Process
+
 
 def initialize_interval():
     query_set = Option.objects.all()
@@ -12,5 +15,64 @@ def initialize_interval():
     print("finish")
 
 
+def truncate_interval():
+    Intervals.objects.all().delete()
+
+
+def process_update(part_graph_builders):
+    for part_graph_builder in part_graph_builders:
+        spread_position = part_graph_builder.get__spread_position_of_combined_options()
+        spread_position = -abs(spread_position)
+        if spread_position is not None:
+            # TODO: check if the interval is correct
+            (l_bound_a, u_bound_a), (l_bound_b, u_bound_b) = part_graph_builder.__find_max_benefit_intervals(spread_position, 1)
+            # TODO: use private attribute
+            interval_obj = Intervals.objects.get(positive_option=part_graph_builder.positive_option_code,
+                                                 negative_option=part_graph_builder.negative_option_code)
+            interval_obj.lower_bound_a = l_bound_a
+            interval_obj.upper_bound_a = u_bound_a
+            interval_obj.lower_bound_b = l_bound_b
+            interval_obj.upper_bound_b = u_bound_b
+
+            interval_obj.save()
+
+
 def update_interval():
-    pass
+    truncate_interval()
+    initialize_interval()
+    combinations = Intervals.objects.all()
+    graph_builders = []
+
+    for combination in combinations:
+        graph_builder = GraphBuilder(data_provider=DjangoDataProvider)
+        graph_builder.prepare(combination.positive_option,
+                              combination.negative_option,
+                              2000)
+        graph_builders.append(graph_builder)
+
+    core_num = 8
+    process_len = len(graph_builders) / core_num
+    remain_len = len(graph_builders) % core_num
+
+    mark = 0
+    for i in range(8):
+        if i < remain_len:
+            extra = 1
+        else:
+            extra = 0
+        p = Process(target=process_update, args=(graph_builders[mark:mark+process_len+extra]))
+        p.start()
+
+
+# 子进程要执行的代码
+# def run_proc(name):
+#     for j in range(100000):
+#         print(name)
+#
+# if __name__=='__main__':
+#     print('Parent process %s.' % os.getpid())
+#     for i in range(8):
+#         p = Process(target=run_proc, args=(i,))
+#         print('Process will start.')
+#         p.start()
+#     print('Process end.')
