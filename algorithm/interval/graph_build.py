@@ -104,6 +104,7 @@ class GraphBuilder(object):
         if res1 and res2:
             if res1[1] == res2[1]:
                 _, p_value, _ = coint(rl1, rl2)
+                print(p_value)
                 return p_value < 0.05
         return False
 
@@ -135,7 +136,6 @@ class GraphBuilder(object):
                         1.5
                     )
                 )
-                a = result.eval()
 
             return result
 
@@ -164,8 +164,6 @@ class GraphBuilder(object):
                         2.
                     )
                 )
-
-                a = result.eval()
 
             return result
 
@@ -199,85 +197,33 @@ class GraphBuilder(object):
             return None
         rl1 = self.positive_option_rate_list
         rl2 = self.negative_option_rate_list
-        # training_epoches = 1000
-        #
-        #
-        # with tf.name_scope('Input'):
-        #     xs = tf.placeholder(tf.float32)
-        #     ys = tf.placeholder(tf.float32)
-        #
-        # with tf.name_scope("ratio"):
-        #     alpha = tf.Variable(np.random.rand())
-        #     beta = tf.Variable(np.random.rand())
-        #
-        # with tf.name_scope("white noise"):
-        #     wn = np.random.normal()
-        #
-        # with tf.name_scope("prediction"):
-        #     predict = tf.add(tf.multiply(alpha, xs), tf.multiply(beta, ys))
-        #
-        # with tf.name_scope("cost"):
-        #     cost = predict - wn
-        #
-        # with tf.name_scope("optimizer"):
-        #     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
-        #
-        # with tf.name_scope("initializer"):
-        #     init = tf.global_variables_initializer()
-        #
-        #
-        # with tf.Session() as sess:
-        #     sess.run(init)
-        #
-        #     for epoch in range(training_epoches):
-        #         for (x, y) in zip(rl1, negative_option_rate_list):
-        #             sess.run(optimizer, feed_dict={xs: x, ys: y})
-        #
-        #     print("finish")
 
-        # print(sess.run(cost))
-        # substract_list = []
-        # for i in range(number):
-        #     substract_list.append(rl1[i] - negative_option_rate_list[i])
-        #
-        # counter_positive = 0
-        # df_list = pd.DataFrame(rl1, columns=['a'])
-        # while True:
-        #     data_list = df_list['a'].tolist()
-        #     adf_test = adfuller(data_list)
-        #     if adf_test[1] < 0.05:
-        #         break
-        #     counter_positive += 1
-        #     df_list = df_list.diff()
-        #
-        #
-        # print(counter_positive)
         sample_size = self.sample_size
         with tf.name_scope('Input'):
             x = tf.constant(rl1, tf.float32, [1, sample_size])
             y = tf.constant(rl2, tf.float32, [1, sample_size])
 
-        with tf.name_scope('ratio_mul_x_sub_y'):
-            ratio = tf.Variable(np.random.rand())
-            ax_sub_y = tf.subtract(tf.matmul(ratio, x), y)
+        with tf.name_scope('x_add_ay'):
+            gamma = tf.Variable(np.random.rand())
+            x_add_ay = tf.add(tf.multiply(gamma, y), x)
 
         with tf.name_scope('loss'):
-            loss = self.get_regular_normality(ax_sub_y)
+            loss = self.get_regular_normality(x_add_ay)
 
         with tf.name_scope('optimizer'):
-            optimizer = tf.train.AdamOptimizer().minimize(loss)
+            optimizer = tf.train.AdamOptimizer(learning_rate=0.05).minimize(1.-loss)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-            for _ in range(200):
+            for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run(ratio)
+            return sess.run([gamma])[0]
 
 
-            # res = y = ratio * x
+            # res = y = gamma * x
             # loss = tf.placeholder(tf.float32, 0, "loss")
-            # res_tensor = tf.subtract(tf.matmul(ratio, x), y)
+            # res_tensor = tf.subtract(tf.matmul(gamma, x), y)
             # train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
             # init = tf.global_variables_initializer()
             #

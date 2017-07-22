@@ -3,9 +3,10 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from option.models import Future, FutureTreadingData, Option, OptionTreadingData
+from option.models import Future, FutureTreadingData, Option, OptionTreadingData, Intervals
 from algorithm.vol_update import cal_vol_direct
-import multiprocessing
+from threading import Thread
+from queue import Queue
 
 
 def clean_data(current_data, last_treading_data, attr='close_price'):
@@ -29,10 +30,11 @@ class Spider(object):
     future_url = "http://www.dce.com.cn/webquote/futures_quote.jsp?varietyid=m"
     future_list_url = 'http://www.dce.com.cn/webquote/option_quote.jsp?varietyid=m'
     option_list_url = 'http://www.dce.com.cn/webquote/option_quote.jsp?varietyid=m&contractid=%s'
+    queue = Queue()
 
     @staticmethod
     def get_all_data():
-        futures = []
+        options_data = {}
         response = requests.get(Spider.future_url)
         soup = BeautifulSoup(response.text, 'html.parser')
         table = soup.find("table", "dataT")
@@ -54,21 +56,30 @@ class Spider(object):
             treading_data.save()
             future_data = {
                 'code': future.code,
-                'delivery_date': datetime.strptime(future.delivery_day.strftime('%Y-%m-%d'), '%Y-%m-%d'),
+                'delivery_day': datetime.strptime(future.delivery_day.strftime('%Y-%m-%d'), '%Y-%m-%d'),
                 'close_price': treading_data.close_price,
             }
-            p = multiprocessing.Process(target=Spider.get_option_data, args=(future_data,))
-            p.start()
-            futures.append(future_data)
+            options_data.update(Spider.get_option_data(future_data))
+        # scipy 不是线程安全的，但是默认会自动多线程
+        # 所以取消手动多线程
+        print(options_data)
+        for combo in Intervals.objects.all():
+            positive_option_data = options_data[combo.positive_option_id]
+            negative_option_data = options_data[combo.negative_option_id]
+            interval = positive_option_data['volatility'] - negative_option_data['volatility']
+            # if interval > combo. and
 
     @staticmethod
     def get_option_data(future_data):
         future_code = future_data['code']
         response = requests.get(Spider.option_list_url % future_code)
+        if response.status_code != 200:
+            return {}
         soup = BeautifulSoup(response.text, 'html.parser')
         table = soup.find("table", "dataT")
         rows = table.find_all("tr")
         current_time_without_second = get_current_time_without_second()
+        options_data = {}
         for i in range(1, len(rows)):
             column = rows[i].find_all("td")
             option_code = future_code + '-c-' + column[15].string.strip()
@@ -83,9 +94,14 @@ class Spider(object):
             treading_data.volume = clean_data(column[8].string.strip(), last_treading_data, attr='volume')
 
             # 计算隐含波动率
-            treading_data.volatility = cal_vol_direct(future_code, treading_data.close_price,
+            treading_data.volatility = cal_vol_direct(option_code, treading_data.close_price,
                                                       future_data['close_price'], future_data['delivery_day'])
             treading_data.save()
-            # print(treading_data.volatility)
+            option_data = {
+                'code': option_code,
+                'volatility': treading_data.volatility,
+            }
+            options_data[option_data['code']] = option_data
+        return options_data
 
 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
 from functools import wraps
-from client.models import Client
+from client.models import Client, NotificationHistory
 
 
 # Create your views here.
@@ -279,3 +279,24 @@ def get_all_notification(request):
         status['message'] = 'http method not supported'
         return JsonResponse(result, status=405)
 
+
+@customized_login_required
+def mark_notification_as_read(request, notification_id):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'PUT':
+        try:
+            notification = request.user.client.notificationhistory_set.get(id=notification_id)
+        except NotificationHistory.DoesNotExist:
+            status['code'] = 404
+            status['message'] = '通知id不存在'
+            return JsonResponse(result, status=404)
+        notification.if_read = True
+        notification.save()
+        status['message'] = 'success'
+        return JsonResponse(result, status=200)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)

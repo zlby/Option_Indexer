@@ -116,7 +116,7 @@ def cal_vol_direct(option_code, option_price, future_price, delivery_day):
 
 def update_vol():
     option_list = []
-    query_set = Option.objects.filter(Q(asset='m1712') | Q(asset='m1801') | Q(asset='m1803') | Q(asset='m1805'))
+    query_set = Option.objects.all()
     for item in query_set:
         option_list.append(item.code)
     for option_code in option_list:
@@ -138,8 +138,6 @@ def update_vol():
             current_time = current_time.replace(tzinfo=None)
             try:
                 tup = OptionTreadingData.objects.get(option=option_code, time=current_time)
-                if tup.volatility is not None:
-                    continue
                 vol = cal_vol(option_code, current_time, final_time)
                 tup.volatility = vol
                 tup.save()

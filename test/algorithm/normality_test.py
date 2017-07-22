@@ -1,5 +1,6 @@
 import csv
-import algorithm.interval.net_run as net
+# import algorithm.interval.net_run as net
+from algorithm.data_provider.data_provider_django import *
 from algorithm.data_provider.data import *
 from algorithm.interval.graph_build import GraphBuilder
 
@@ -38,6 +39,8 @@ def __get_regular_normality_test():
 
     r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
     r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
+
+
     import numpy as np
     dr = np.subtract(r2, r1)
     dr = np.subtract(dr[1:], dr[:-1])
@@ -51,5 +54,24 @@ def __get_regular_normality_test():
         print(cb.get_regular_normality(a).eval(),
          cb.get_regular_normality(tf.constant(dr[b:b+2000], tf.float32)).eval())
 
+def __get_ratio_test():
+    optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
+    cb = GraphBuilder(optioncomb)
+    r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
+    r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
+    cb.prepare(code1='m1709c2500', code2='m1709c2600', number=2000)
+    ratio = cb.get__spread_position_of_combined_options()
+    print(ratio)
+
+
+def __get_interval_test():
+    dataprovider = DjangoDataProvider()
+    cb = GraphBuilder(dataprovider)
+    cb.prepare(code1='m1709-c-2500', code2='m1709-c-2600', number=2000)
+    ratio = cb.get__spread_position_of_combined_options()
+    print(ratio)
+
+
 if __name__ == "__main__":
-    __get_regular_normality_test()
+    # __get_regular_normality_test()
+    __get_interval_test()
