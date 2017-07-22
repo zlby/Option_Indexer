@@ -1,7 +1,8 @@
+raise ImportError("This module is marked as deprecated by Alan")
+
 import tensorflow as tf
 import tensorflow.contrib.distributions as dst
 import numpy as np
-
 
 def find_interval(value, avg, scale):
     with tf.name_scope("find_interval_with_raw_value"):
