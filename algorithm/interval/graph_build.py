@@ -135,7 +135,6 @@ class GraphBuilder(object):
                         1.5
                     )
                 )
-                a = result.eval()
 
             return result
 
@@ -164,8 +163,6 @@ class GraphBuilder(object):
                         2.
                     )
                 )
-
-                a = result.eval()
 
             return result
 
@@ -259,7 +256,7 @@ class GraphBuilder(object):
 
         with tf.name_scope('ratio_mul_x_sub_y'):
             ratio = tf.Variable(np.random.rand())
-            ax_sub_y = tf.subtract(tf.matmul(ratio, x), y)
+            ax_sub_y = tf.subtract(tf.multiply(ratio, x), y)
 
         with tf.name_scope('loss'):
             loss = self.get_regular_normality(ax_sub_y)
