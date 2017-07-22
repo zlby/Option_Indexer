@@ -150,6 +150,7 @@ class Intervals(models.Model):
     upper_bound_b = models.FloatField(verbose_name='b区间上限', null=True)
     lower_bound_c = models.FloatField(verbose_name='c区间下限', null=True)
     upper_bound_c = models.FloatField(verbose_name='c区间上限', null=True)
+    rate = models.FloatField(verbose_name='买卖比例', default=1)
 
 
 class News(models.Model):
