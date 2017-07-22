@@ -1,5 +1,5 @@
 from algorithm.data_provider.data import AbstractDataProvider
-from option import *
+from option.models import *
 
 
 class DjangoDataProvider(AbstractDataProvider):
