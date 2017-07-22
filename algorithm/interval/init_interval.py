@@ -1,4 +1,3 @@
-# from algorithm.interval.net_run import *
 from option.models import *
 import itertools
 
@@ -25,7 +24,8 @@ def update_interval():
 
     query_set = Intervals.objects.all()
     for item in query_set:
-        (lower_bound_a, upper_bound_a), (lower_bound_b, upper_bound_b), (lower_bound_c, upper_bound_c) = get_interval(
+
+        (lower_bound_a, upper_bound_a), (lower_bound_b, upper_bound_b), (lower_bound_c, upper_bound_c) = (
             item.positive_option_id, item.negative_option_id)
         item.lower_bound_a = lower_bound_a
         item.upper_bound_a = upper_bound_a

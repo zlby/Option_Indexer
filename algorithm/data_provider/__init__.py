@@ -25,4 +25,7 @@ Class:
 
 """
 from algorithm.data_provider.data import *
-# from algorithm.data_provider.data_provider_django import *
+try:
+    from algorithm.data_provider.data_provider_django import *
+except:
+    pass

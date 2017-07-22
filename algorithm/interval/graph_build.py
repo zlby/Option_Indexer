@@ -203,7 +203,7 @@ class GraphBuilder(object):
         #     xs = tf.placeholder(tf.float32)
         #     ys = tf.placeholder(tf.float32)
         #
-        # with tf.name_scope("ratio"):
+        # with tf.name_scope("gamma"):
         #     alpha = tf.Variable(np.random.rand())
         #     beta = tf.Variable(np.random.rand())
         #
@@ -254,27 +254,27 @@ class GraphBuilder(object):
             x = tf.constant(rl1, tf.float32, [1, sample_size])
             y = tf.constant(rl2, tf.float32, [1, sample_size])
 
-        with tf.name_scope('ratio_mul_x_sub_y'):
-            ratio = tf.Variable(np.random.rand())
-            ax_sub_y = tf.subtract(tf.multiply(ratio, x), y)
+        with tf.name_scope('x_add_ay'):
+            gamma = tf.Variable(np.random.rand())
+            x_add_ay = tf.add(tf.multiply(gamma, y), x)
 
         with tf.name_scope('loss'):
-            loss = self.get_regular_normality(ax_sub_y)
+            loss = self.get_regular_normality(x_add_ay)
 
         with tf.name_scope('optimizer'):
-            optimizer = tf.train.AdamOptimizer().minimize(loss)
+            optimizer = tf.train.RMSPropOptimizer(learning_rate=0.05).minimize(loss)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-            for _ in range(200):
+            for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run(ratio)
+            return sess.run(gamma)
 
 
-            # res = y = ratio * x
+            # res = y = gamma * x
             # loss = tf.placeholder(tf.float32, 0, "loss")
-            # res_tensor = tf.subtract(tf.matmul(ratio, x), y)
+            # res_tensor = tf.subtract(tf.matmul(gamma, x), y)
             # train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
             # init = tf.global_variables_initializer()
             #

@@ -44,6 +44,12 @@ def save_data_transfered_option(time_begin, time_end, timedelta: dt.timedelta, s
                                               close_price=new_close_price, max_price=new_max_price,
                                               min_price=new_min_price, volatility=new_volatility, volume=new_volume,
                                               option=Option(code=item.code)))
+                if len(data_object_list) > 1000:
+                    if timedelta.days == 1:
+                        DayOptionTreadingData.objects.bulk_create(data_object_list)
+                    else:
+                        HourOptionTreadingData.objects.bulk_create(data_object_list)
+                    data_object_list = []
 
             time_iter += timedelta
             # print(len(data_object_list))
@@ -91,10 +97,16 @@ def save_data_transfered_future(time_begin, time_end, timedelta:dt.timedelta, sh
                                                close_price=new_close_price, max_price=new_max_price,
                                                min_price=new_min_price,  # volatility=new_volatility, volume=new_volume,
                                                future=Future(code=item.code)))
+                if len(data_object_list) > 1000:
+                    if timedelta.days == 1:
+                        DayFutureTreadingData.objects.bulk_create(data_object_list)
+                    else:
+                        HourFutureTreadingData.objects.bulk_create(data_object_list)
+                    data_object_list = []
 
             time_iter += timedelta
             # print(len(data_object_list))
     if timedelta.days == 1:
-        DayOptionTreadingData.objects.bulk_create(data_object_list)
+        DayFutureTreadingData.objects.bulk_create(data_object_list)
     else:
-        HourOptionTreadingData.objects.bulk_create(data_object_list)
+        HourFutureTreadingData.objects.bulk_create(data_object_list)
