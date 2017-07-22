@@ -2,8 +2,8 @@ from abc import ABCMeta, abstractmethod
 
 
 class AbstractDataProvider(object):
-    """Abstract class for providing data
-    """
+    """Abstract class for providing data"""
+    
     __metaclass__ = ABCMeta
 
     @abstractmethod

@@ -61,13 +61,19 @@ class NotificationHistory(models.Model):
     sell_option = models.ForeignKey(to=Option, verbose_name='卖出期权', related_name='sell_notification')
     buy_lot = models.IntegerField(verbose_name='买入手数')
     sell_lot = models.IntegerField(verbose_name='卖出手数')
+    if_read = models.BooleanField(verbose_name='是否已读', default=False)
+
+    class Meta:
+        ordering = ['-time']
 
     def get_notification_detail(self):
         data = {
+            'id': self.id,
             'time': self.time.strftime('%Y-%m-%d %H:%M:%S'),
             'buy_option': self.buy_option_id,
             'sell_option': self.sell_option_id,
             'buy_lot': self.buy_lot,
             'sell_lot': self.sell_lot,
+            'if_read': self.if_read,
         }
         return data

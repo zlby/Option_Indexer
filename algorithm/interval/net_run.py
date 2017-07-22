@@ -1,5 +1,6 @@
-from algorithm.interval.net_graph_build import *
+raise ImportError("This module is marked as deprecated by Alan")
 
+from algorithm.interval.net_graph_build import *
 
 def get_interval(code1, code2, graph, options=None):
     if options is None:

@@ -30,6 +30,7 @@ def save_data_transfered_option(time_begin, time_end, timedelta: dt.timedelta, s
                     new_max_price = data.close_price if data.close_price > new_max_price else new_max_price
                     new_min_price = data.close_price if data.min_price < new_min_price else new_min_price
                     new_volume += data.volume
+<<<<<<< HEAD
 
 
                 if timedelta.days == 1:
@@ -98,3 +99,15 @@ def save_data_transfered_future(time_begin, time_end, timedelta:dt.timedelta, sh
         DayOptionTreadingData.objects.bulk_create(data_object_list)
     else:
         HourOptionTreadingData.objects.bulk_create(data_object_list)
+=======
+                data_object_list.append(
+                    HourOptionTreadingData(time=time_iter + shift_timedelta, open_price=new_open_price,
+                                          close_price=new_close_price, max_price=new_max_price,
+                                          min_price=new_min_price, volatility=new_volatility, volume=new_volume,
+                                          option=Option(code=item.code)))
+
+            time_iter += timedelta
+            # print(len(data_object_list))
+
+    HourOptionTreadingData.objects.bulk_create(data_object_list)
+>>>>>>> zhu
