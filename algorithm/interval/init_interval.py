@@ -13,25 +13,4 @@ def initialize_interval():
 
 
 def update_interval():
-    # option_comb_list = initialize_interval()
-    # for comb in option_comb_list:
-    #     print(comb[0])
-    #     print(comb[1])
-    #     try:
-    #         print(get_interval(comb[0], comb[1]))
-    #     except:
-    #         print("not enough data")
-
-    query_set = Intervals.objects.all()
-    for item in query_set:
-
-        (lower_bound_a, upper_bound_a), (lower_bound_b, upper_bound_b), (lower_bound_c, upper_bound_c) = (
-            item.positive_option_id, item.negative_option_id)
-        item.lower_bound_a = lower_bound_a
-        item.upper_bound_a = upper_bound_a
-        item.lower_bound_b = lower_bound_b
-        item.upper_bound_b = upper_bound_b
-        item.lower_bound_c = lower_bound_c
-        item.upper_bound_c = upper_bound_c
-
-        item.save()
+    pass

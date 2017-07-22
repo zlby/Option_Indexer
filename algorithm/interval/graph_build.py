@@ -104,6 +104,7 @@ class GraphBuilder(object):
         if res1 and res2:
             if res1[1] == res2[1]:
                 _, p_value, _ = coint(rl1, rl2)
+                print(p_value)
                 return p_value < 0.05
         return False
 
@@ -217,7 +218,7 @@ class GraphBuilder(object):
             for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run([gamma, loss])
+            return sess.run([gamma])[0]
 
 
             # res = y = gamma * x

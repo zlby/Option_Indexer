@@ -1,6 +1,6 @@
 import csv
 # import algorithm.interval.net_run as net
-import algorithm
+from algorithm.data_provider.data_provider_django import *
 from algorithm.data_provider.data import *
 from algorithm.interval.graph_build import GraphBuilder
 
@@ -64,6 +64,14 @@ def __get_ratio_test():
     print(ratio)
 
 
+def __get_interval_test():
+    dataprovider = DjangoDataProvider()
+    cb = GraphBuilder(dataprovider)
+    cb.prepare(code1='m1709-c-2500', code2='m1709-c-2600', number=2000)
+    ratio = cb.get__spread_position_of_combined_options()
+    print(ratio)
+
+
 if __name__ == "__main__":
     # __get_regular_normality_test()
-    __get_ratio_test()
+    __get_interval_test()
