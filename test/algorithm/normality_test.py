@@ -9,7 +9,6 @@ from algorithm.interval.graph_build import GraphBuilder
 
 
 class CsvDataProvider(AbstractDataProvider):
-
     def __init__(self, code1, code2):
         root = "./"
 
@@ -32,14 +31,12 @@ class CsvDataProvider(AbstractDataProvider):
 
 
 def __get_regular_normality_test():
-
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
 
     cb = GraphBuilder(optioncomb)
 
     r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
     r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
-
 
     import numpy as np
     dr = np.subtract(r2, r1)
@@ -52,7 +49,8 @@ def __get_regular_normality_test():
         a = tf.random_normal([2000])
         b = np.random.randint(6000)
         print(cb.get_regular_normality(a).eval(),
-         cb.get_regular_normality(tf.constant(dr[b:b+2000], tf.float32)).eval())
+              cb.get_regular_normality(tf.constant(dr[b:b + 2000], tf.float32)).eval())
+
 
 def __get_ratio_test():
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
