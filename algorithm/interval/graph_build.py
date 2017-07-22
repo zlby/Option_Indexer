@@ -99,6 +99,9 @@ class GraphBuilder(object):
         rl1 = self.positive_option_rate_list
         rl2 = self.negative_option_rate_list
 
+        if len(rl1) < 3 or len(rl2) < 3:
+            return False
+
         res1 = self.__stationarity_test(rl1)
         res2 = self.__stationarity_test(rl1)
 
