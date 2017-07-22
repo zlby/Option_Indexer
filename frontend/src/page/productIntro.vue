@@ -12,7 +12,7 @@
             <el-submenu :index="key" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
-              <el-menu-item :index="ite" v-for="(ite, index2) in value" >
+              <el-menu-item :index="ite" v-for="(ite, index2) in value" class="menu-item">
                 {{ite}}
                 <div class="add-btn">
                 <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
@@ -56,7 +56,6 @@
     components:{
       headSecond
     },
-
     methods:{
       toggle: function(e) {
         var btn = e.currentTarget;
@@ -99,7 +98,9 @@
   //float: right;
   //margin-top: 10px;
 }
-
+ .el-icon-menu{
+  font-family:"YAHEI"
+ }
 button span i {
   margin-left: 10px
 }
@@ -114,5 +115,8 @@ button span i {
   padding-right:0px;
   position:relative;
   white-space: normal;
+ }
+ .menu-item{
+  font-size: 16px;
  }
 </style>

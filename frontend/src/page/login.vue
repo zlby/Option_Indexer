@@ -37,9 +37,7 @@ import axios from 'axios'
 import router from '../router'
   import { mapActions } from 'vuex'
 export default {
-
  data (){
-
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));

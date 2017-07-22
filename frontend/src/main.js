@@ -9,7 +9,7 @@ import router from './router'
 import Vuex from 'vuex'
 import store from './store/index'
 
-// import $ from 'jquery'
+
 
 
 // Vue.prototype.$http = axios;

@@ -23,7 +23,7 @@ export const UserRegister = ({ commit }, data) => {
   api.localRegister(data).then(function (res) {
     res = res.data
     if (res.status.code == '0') {
-      router.push({path:'/productIntro'})
+      router.push({path:'/homepageIndividual'})
       commit('login', {username: data.username});
     } else if(res.status.code == '-3'){
       alert('用户名已经注册！')
@@ -41,7 +41,6 @@ export const UserLogin = ({ commit }, data) => {
     res = res.data
     if (res.status.code == '0') {
       router.push({path:'/homepageIndividual'})
-      console.log()
       commit('login', {username: data.username});
     } else {
       alert('登录失败！')
@@ -63,7 +62,7 @@ export const UpdateUserInfo = ({ commit }) => {
     }
   })
   .catch(function (error) {
-    console.log('获取用户信息失败！')
+    console.log('获取用户信息失败！！')
   })
 };
 
@@ -95,10 +94,11 @@ export const UserLogout = ({ commit }) => {
   };
 
   export const News = ({ commit }, obj) => {
-    api.localNews({page_number: this.page_number}).then(function (res){
+    api.localNews({page_number: obj.page_number}).then(function (res){
       res = res.data
       if  (res.status.code == '0'){
-        commit('getNews', res.news)
+        
+        commit('getNews', {news: res.news, page_number: obj.page_number})
       }else{
         alert('获取新闻失败！')
       }
@@ -121,4 +121,19 @@ export const UserNewemailphone = ({ commit }, data) =>{
   .catch(function (error){
     alert('修改失败1!')
   })
+};
+
+export const getNotification = ({ commit }, obj)=>{
+  api.localgetNotification().then(function(res){
+    console.log(res);
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getNotification',res.notification_list)
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
 };
