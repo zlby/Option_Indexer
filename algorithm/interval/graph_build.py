@@ -196,59 +196,7 @@ class GraphBuilder(object):
             return None
         rl1 = self.positive_option_rate_list
         rl2 = self.negative_option_rate_list
-        # training_epoches = 1000
-        #
-        #
-        # with tf.name_scope('Input'):
-        #     xs = tf.placeholder(tf.float32)
-        #     ys = tf.placeholder(tf.float32)
-        #
-        # with tf.name_scope("gamma"):
-        #     alpha = tf.Variable(np.random.rand())
-        #     beta = tf.Variable(np.random.rand())
-        #
-        # with tf.name_scope("white noise"):
-        #     wn = np.random.normal()
-        #
-        # with tf.name_scope("prediction"):
-        #     predict = tf.add(tf.multiply(alpha, xs), tf.multiply(beta, ys))
-        #
-        # with tf.name_scope("cost"):
-        #     cost = predict - wn
-        #
-        # with tf.name_scope("optimizer"):
-        #     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
-        #
-        # with tf.name_scope("initializer"):
-        #     init = tf.global_variables_initializer()
-        #
-        #
-        # with tf.Session() as sess:
-        #     sess.run(init)
-        #
-        #     for epoch in range(training_epoches):
-        #         for (x, y) in zip(rl1, negative_option_rate_list):
-        #             sess.run(optimizer, feed_dict={xs: x, ys: y})
-        #
-        #     print("finish")
 
-        # print(sess.run(cost))
-        # substract_list = []
-        # for i in range(number):
-        #     substract_list.append(rl1[i] - negative_option_rate_list[i])
-        #
-        # counter_positive = 0
-        # df_list = pd.DataFrame(rl1, columns=['a'])
-        # while True:
-        #     data_list = df_list['a'].tolist()
-        #     adf_test = adfuller(data_list)
-        #     if adf_test[1] < 0.05:
-        #         break
-        #     counter_positive += 1
-        #     df_list = df_list.diff()
-        #
-        #
-        # print(counter_positive)
         sample_size = self.sample_size
         with tf.name_scope('Input'):
             x = tf.constant(rl1, tf.float32, [1, sample_size])
@@ -262,14 +210,14 @@ class GraphBuilder(object):
             loss = self.get_regular_normality(x_add_ay)
 
         with tf.name_scope('optimizer'):
-            optimizer = tf.train.RMSPropOptimizer(learning_rate=0.05).minimize(loss)
+            optimizer = tf.train.AdamOptimizer(learning_rate=0.05).minimize(1.-loss)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
             for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run(gamma)
+            return sess.run([gamma, loss])
 
 
             # res = y = gamma * x

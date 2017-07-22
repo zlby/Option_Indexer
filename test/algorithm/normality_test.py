@@ -59,8 +59,6 @@ def __get_ratio_test():
     cb = GraphBuilder(optioncomb)
     r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
     r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
-    import tensorflow as tf
-    import numpy as np
     cb.prepare(code1='m1709c2500', code2='m1709c2600', number=2000)
     ratio = cb.get__spread_position_of_combined_options()
     print(ratio)
