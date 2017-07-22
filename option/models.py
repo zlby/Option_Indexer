@@ -151,6 +151,21 @@ class Intervals(models.Model):
     lower_bound_c = models.FloatField(verbose_name='c区间下限', null=True)
     upper_bound_c = models.FloatField(verbose_name='c区间上限', null=True)
     rate = models.FloatField(verbose_name='买卖比例', default=1)
+    current_state = models.CharField(verbose_name='当前处于的区间', null=True, max_length=5)
+
+    def make_tread(self, positive=True):
+        if positive:
+            for subscribe_record in self.subscribe_set.all().select_related('client'):
+                subscribe_record.client.create_notification(buy_option=self.positive_option,
+                                                            sell_option=self.negative_option,
+                                                            buy_lot=1,
+                                                            sell_lot=self.rate)
+        else:
+            for subscribe_record in self.subscribe_set.all().select_related('client'):
+                subscribe_record.client.create_notification(buy_option=self.negative_option,
+                                                            sell_option=self.positive_option,
+                                                            buy_lot=self.rate,
+                                                            sell_lot=1)
 
 
 class News(models.Model):
