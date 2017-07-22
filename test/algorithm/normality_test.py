@@ -1,5 +1,6 @@
 import csv
-import algorithm.interval.net_run as net
+# import algorithm.interval.net_run as net
+import algorithm
 from algorithm.data_provider.data import *
 from algorithm.interval.graph_build import GraphBuilder
 
@@ -23,9 +24,11 @@ class CsvDataProvider(AbstractDataProvider):
 
     def __call__(self, *args, **kwargs):
         if kwargs["attribute"] == "option_volatility_list":
-            return [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            return ls if "number" not in kwargs else ls[-kwargs["number"]:]
         elif kwargs["attribute"] == "option_price_list":
-            return [float(x["close"]) for x in self.option_datas[kwargs["code"]]]
+            ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            return ls if "number" not in kwargs else ls[-kwargs["number"]:]
 
 
 def __get_regular_normality_test():
@@ -36,6 +39,8 @@ def __get_regular_normality_test():
 
     r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
     r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
+
+
     import numpy as np
     dr = np.subtract(r2, r1)
     dr = np.subtract(dr[1:], dr[:-1])
@@ -49,10 +54,18 @@ def __get_regular_normality_test():
         print(cb.get_regular_normality(a).eval(),
          cb.get_regular_normality(tf.constant(dr[b:b+2000], tf.float32)).eval())
 
-    # if (cb.get_regular_normality(dr) < 0.1) &\
-    #     (cb.get_regular_normality(a_list) > 50 )&\
-    #     (cb.get_regular_normality(b_list) < 0.05):
-    #     print("__get_regular_normality_test passed")
+def __get_ratio_test():
+    optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
+    cb = GraphBuilder(optioncomb)
+    r1 = optioncomb(attribute="option_volatility_list", code="m1709c2500")
+    r2 = optioncomb(attribute="option_volatility_list", code="m1709c2600")
+    import tensorflow as tf
+    import numpy as np
+    cb.prepare(code1='m1709c2500', code2='m1709c2600', number=2000)
+    ratio = cb.get__spread_position_of_combined_options()
+    print(ratio)
+
 
 if __name__ == "__main__":
-    __get_regular_normality_test()
+    # __get_regular_normality_test()
+    __get_ratio_test()
