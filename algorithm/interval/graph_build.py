@@ -54,7 +54,8 @@ class GraphBuilder(object):
         # Mean of list of difference of volatility
         self.mean_dif_vol = 0.
         pass
-
+    # 1 gb=graphbuilder
+    # gb.prepare(code1, code2, list_len)
     def prepare(self, code1: str, code2: str, number: int):
         self.__preprocessing_data(code1, code2, number)
 
@@ -186,7 +187,8 @@ class GraphBuilder(object):
 
         p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
         return p_value
-
+    # 2 co_test return ratio , -abs, if not none
+    # find_max_..()
     def get__spread_position_of_combined_options(self):
         """
 
