@@ -74,7 +74,10 @@ methods: {
 
 
 	dj: function() {
-			this.$store.dispatch('UserRegister', this.form);
+			this.$store.dispatch('UserRegister', this.form)
+			.then(() => {
+				this.$store.dispatch('UpdateUserInfo')
+			})
 		}
 
 

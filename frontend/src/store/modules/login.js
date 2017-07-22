@@ -13,11 +13,12 @@ var isLoggedIn = function() {
 const state = {
   loggedin: false,
   username: '名字',
-  title: [],
-  time: [],
-  context: [],
+  title: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+  time: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
+  content: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
   new_email: '21',
-  new_phone: '121'
+  new_phone: '121',
+  notification: []
 };
 
 const mutations = {
@@ -26,6 +27,7 @@ const mutations = {
     state.username = obj.username;
   },
   updateUserInfo (state, obj) {
+    state.username = obj.username
     state.new_email = obj.email
     state.new_phone = obj.phone
   },
@@ -39,21 +41,54 @@ const mutations = {
   change(state) {
     state.loggedin = false;
   },
-  getNews(state,obj) {
-    state.title = obj.map(function(o){
+  getNews(state, obj) {
+    var news = obj.news // 1d
+    var page = obj.page_number
+    var titles = news.map(function(o){
       return o.title
-    });
-    state.time = obj.map(function(o){
+    })
+    var times = news.map(function(o){
       return o.time
-    });;
-    state.context = obj.map(function(o){
-      return o.context
-    });
+    })
+    var contents = news.map(function(o){
+      return o.content
+    })
+    state.title.splice(page-1, 1, titles)
+    state.time.splice(page-1, 1, times)
+    state.content.splice(page-1, 1, contents)
   },
   new_emai_or_phone(state, obj){
     state.new_phone = obj.new_phone;
     state.new_email = obj.new_email;
+  },
+  getNotification(state,obj){
+    
+    state.if_read=obj.map(function(o){
+      if(o.if_read==true){
+          return "read"
+      }else{
+          return "no_read"
+      }
+    })
+    state.buy_time = obj.map(function(o){
+      return o.time
+    })
+    state.buy_option = obj.map(function(o){
+      return o.buy_option
+    })
+    state.sell_option = obj.map(function(o){
+      return o.sell_option
+    })
+    state.buy_lot = obj.map(function(o){
+      return o.buy_lot
+    })
+    state.sell_lot = obj.map(function(o){
+      return o.sell_lot
+    })
+    // state.notifs = obj
   }
+
+
 };
 
 export default {

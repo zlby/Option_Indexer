@@ -6,7 +6,7 @@
 
         <el-col :span="1" :offset="2">
          <el-menu-item index="/">
-          <img src="../assets/bigtouxiang1.png" class="touxiang">
+          <img src="../assets/LOGOQ.png" class="touxiang">
         </el-menu-item>	
       </el-col>
 
@@ -23,7 +23,11 @@
      </el-col>
 
      <el-col :span="6"  :xs="6" :md="6" :lg="6" :sm="6" v-else>
-      <el-menu-item  index="/"  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><i class="el-icon-message"></i></el-menu-item>
+      <el-menu-item  index="/homepageIndividual/infoReminder"  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
+      <el-badge :value="no_readCount" class="item">
+        <i class="el-icon-message"></i>
+      </el-badge>
+      </el-menu-item>
       <el-menu-item  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
       <el-menu-item  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
         <el-dropdown>
@@ -86,9 +90,11 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import Bus from '../bus'
   export default {
    data() {
     return {
+      no_readCount:0,
       dialogFormVisible: false,
       form: {
               // username: '',
@@ -107,6 +113,11 @@
         name () {
           return this.$store.state.login.username;
         }
+      },
+      created(){
+        Bus.$on('getno-read', Obj=>{
+            this.no_readCount=Obj.count;
+        })
       },
       methods: {
        logout: function() {
@@ -200,6 +211,19 @@
 
 #password{
 	opacity: 0.90;
+}
+
+// .item{
+//   // margin-top: 30px;
+//   height: 40px;
+// }
+
+.el-badge{
+  margin-top: 5px;
+}
+
+.el-badge__content{
+  margin-top: 15px;
 }
 
 </style>
