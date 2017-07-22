@@ -1,5 +1,8 @@
-from option.models import *
 import itertools
+from algorithm.interval.graph_build import *
+from algorithm.data_provider.data_provider_django import *
+from multiprocessing import Process
+
 
 def initialize_interval():
     query_set = Option.objects.all()
@@ -12,26 +15,70 @@ def initialize_interval():
     print("finish")
 
 
+def truncate_interval():
+    Intervals.objects.all().delete()
+
+
+def process_update(part_graph_builders):
+    for part_graph_builder in part_graph_builders:
+        spread_position = part_graph_builder.get__spread_position_of_combined_options()
+        print(spread_position)
+        if spread_position is not None:
+            spread_position = -abs(spread_position)
+            # TODO: check if the interval is correct
+            (l_bound_a, u_bound_a), (l_bound_b, u_bound_b) = part_graph_builder.find_max_benefit_intervals(spread_position, 1)
+            # TODO: use private attribute
+            interval_obj = Intervals.objects.get(positive_option=part_graph_builder.positive_option_code,
+                                                 negative_option=part_graph_builder.negative_option_code)
+            interval_obj.lower_bound_a = l_bound_a
+            interval_obj.upper_bound_a = u_bound_a
+            interval_obj.lower_bound_b = l_bound_b
+            interval_obj.upper_bound_b = u_bound_b
+            interval_obj.rate = spread_position
+            interval_obj.save()
+
+
 def update_interval():
-    # option_comb_list = initialize_interval()
-    # for comb in option_comb_list:
-    #     print(comb[0])
-    #     print(comb[1])
-    #     try:
-    #         print(get_interval(comb[0], comb[1]))
-    #     except:
-    #         print("not enough data")
+    truncate_interval()
+    initialize_interval()
+    combinations = Intervals.objects.all()
+    graph_builders = []
 
-    query_set = Intervals.objects.all()
-    for item in query_set:
+    for combination in combinations:
+        dp = DjangoDataProvider()
+        print(combination)
+        graph_builder = GraphBuilder(dp)
+        graph_builder.prepare(combination.positive_option,
+                              combination.negative_option,
+                              2000)
+        graph_builders.append(graph_builder)
 
-        (lower_bound_a, upper_bound_a), (lower_bound_b, upper_bound_b), (lower_bound_c, upper_bound_c) = (
-            item.positive_option_id, item.negative_option_id)
-        item.lower_bound_a = lower_bound_a
-        item.upper_bound_a = upper_bound_a
-        item.lower_bound_b = lower_bound_b
-        item.upper_bound_b = upper_bound_b
-        item.lower_bound_c = lower_bound_c
-        item.upper_bound_c = upper_bound_c
+    process_update(graph_builders)
 
-        item.save()
+    # core_num = 8
+    # process_len = int(len(graph_builders) / core_num)
+    # remain_len = len(graph_builders) % core_num
+    #
+    # mark = 0
+    # for i in range(8):
+    #     if i < remain_len:
+    #         extra = 1
+    #     else:
+    #         extra = 0
+    #     p = Process(target=process_update, args=(graph_builders[mark:mark+process_len+extra]))
+    #     print(i)
+    #     p.start()
+
+
+# 子进程要执行的代码
+# def run_proc(name):
+#     for j in range(100000):
+#         print(name)
+#
+# if __name__=='__main__':
+#     print('Parent process %s.' % os.getpid())
+#     for i in range(8):
+#         p = Process(target=run_proc, args=(i,))
+#         print('Process will start.')
+#         p.start()
+#     print('Process end.')

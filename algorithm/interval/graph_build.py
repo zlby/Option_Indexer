@@ -54,7 +54,8 @@ class GraphBuilder(object):
         # Mean of list of difference of volatility
         self.mean_dif_vol = 0.
         pass
-
+    # 1 gb=graphbuilder
+    # gb.prepare(code1, code2, list_len)
     def prepare(self, code1: str, code2: str, number: int):
         self.__preprocessing_data(code1, code2, number)
 
@@ -98,12 +99,16 @@ class GraphBuilder(object):
         rl1 = self.positive_option_rate_list
         rl2 = self.negative_option_rate_list
 
+        if len(rl1) < 3 or len(rl2) < 3:
+            return False
+
         res1 = self.__stationarity_test(rl1)
         res2 = self.__stationarity_test(rl1)
 
         if res1 and res2:
             if res1[1] == res2[1]:
                 _, p_value, _ = coint(rl1, rl2)
+                print(p_value)
                 return p_value < 0.05
         return False
 
@@ -185,7 +190,8 @@ class GraphBuilder(object):
 
         p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
         return p_value
-
+    # 2 co_test return ratio , -abs, if not none
+    # find_max_..()
     def get__spread_position_of_combined_options(self):
         """
 
@@ -203,7 +209,7 @@ class GraphBuilder(object):
             y = tf.constant(rl2, tf.float32, [1, sample_size])
 
         with tf.name_scope('x_add_ay'):
-            gamma = tf.Variable(np.random.rand())
+            gamma = tf.Variable(np.random.rand(), tf.float32)
             x_add_ay = tf.add(tf.multiply(gamma, y), x)
 
         with tf.name_scope('loss'):
@@ -217,7 +223,7 @@ class GraphBuilder(object):
             for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run([gamma, loss])
+            return sess.run([gamma])[0]
 
 
             # res = y = gamma * x
@@ -246,7 +252,7 @@ class GraphBuilder(object):
         )
         return tf.reduce_mean(_sum)
 
-    def __find_max_benefit_intervals(self, gamma, sale_rate):
+    def find_max_benefit_intervals(self, gamma, sale_rate):
         p1 = self.positive_option_price_list
         p2 = self.negative_option_price_list
         r1 = self.positive_option_rate_list
@@ -254,18 +260,23 @@ class GraphBuilder(object):
 
         # no err threshold
         def get_data_normal_distribution_arguments():
-            if not self.nm_dst:
-                mean = tf.reduce_mean(r1 + gamma * r2)
-                scl = tf.sqrt(self.__get_variance(r1 + gamma * r2))
+            try:
+                res = self.rm_dst
+            except:
+                mean = tf.reduce_mean(r1 + tf.multiply(gamma, r2))
+                scl = tf.sqrt(self.__get_variance(r1 + tf.multiply(gamma, r2)))
                 self.nm_dst = dst.Normal(loc=mean, scale=scl)
-            return self.nm_dst
+                res = self.nm_dst
+            return  res
+            # over~
+            #
 
         def get_thresholds(_nm_dst):
             vrs = tf.Variable(np.random.rand(2))
-            max_raw = _nm_dst.prob(tf.reduce_mean(r1 + gamma * r2))
+            max_raw = _nm_dst.prob(tf.reduce_mean(r1 + tf.multiply(gamma, r2)))
             _threshold = vrs.value()
-            trd_nm = _threshold[0] * max_raw
-            trd_hg = _threshold[1] * trd_nm
+            trd_nm = tf.cast(_threshold[0], tf.float32) * tf.cast(max_raw, tf.float32)
+            trd_hg = tf.cast(_threshold[1], tf.float32) * tf.cast(trd_nm, tf.float32)
             return trd_nm, trd_hg
 
         def interval_signs(ls: tf.Tensor, _trd_hg, _trd_nm):
@@ -274,7 +285,7 @@ class GraphBuilder(object):
 
             def ls_hg_cvt(_ls):
                 _a = dst.Logistic(loc=_trd_hg, scale=0.05).cdf(_ls)
-                return tf.subtract(_a, 1., tf.float32)
+                return tf.subtract(_a, 1.)
 
             return tf.add(ls_hg_cvt(ls), mr_nm_cvt(ls))
 
@@ -289,13 +300,14 @@ class GraphBuilder(object):
             with tf.name_scope("find_interval_with_raw_value"):
                 min_of_interval = avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
                 max_of_interval = avg + tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
-            return min_of_interval, max_of_interval
+
+            return sess.run([min_of_interval, max_of_interval])
 
         nm_dst = get_data_normal_distribution_arguments()
         trd_hg, trd_nm = get_thresholds(nm_dst)
-        sgns = interval_signs(r1 + gamma * r2, trd_hg, trd_nm)
-        dp = p1 + gamma * p2
-        dr = r1 + gamma * r2
+        sgns = interval_signs(r1 + tf.multiply(gamma, r2), trd_hg, trd_nm)
+        dp = p1 + tf.multiply(gamma, p2)
+        dr = r1 + tf.multiply(gamma, r2)
 
         step_bene = sale_rate * (dp) * sgns * sign(dr) - 1. * sale_rate * (1 + gamma * sign(gamma))
 
