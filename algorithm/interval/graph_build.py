@@ -1,9 +1,7 @@
 import tensorflow as tf
 from functools import wraps
-import scipy.stats as scs
 import numpy as np
 from statsmodels.tsa.stattools import adfuller, coint
-import pandas as pd
 import tensorflow.contrib.distributions as dst
 
 
@@ -179,8 +177,6 @@ class GraphBuilder(object):
             else:
                 return False
 
-
-
     @staticmethod
     def get_regular_normality(data_list: tf.Tensor):
 
@@ -262,7 +258,6 @@ class GraphBuilder(object):
 
         p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
         return p_value
-
 
     def __get__spread_position_of_combined_options(self, positive_option_code: str, negative_option_code: str,
                                                    number: int):

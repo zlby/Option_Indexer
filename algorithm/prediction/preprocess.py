@@ -1,4 +1,7 @@
-from algorithm.data_provider.data_provider_django import *
+r"""Unknown Module
+"""
+
+# todo:Complete docString
 from option.models import *
 import datetime
 
