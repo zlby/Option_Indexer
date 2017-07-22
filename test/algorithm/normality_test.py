@@ -23,9 +23,11 @@ class CsvDataProvider(AbstractDataProvider):
 
     def __call__(self, *args, **kwargs):
         if kwargs["attribute"] == "option_volatility_list":
-            return [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            return ls if not kwargs["number"] else ls[-kwargs["number"]:]
         elif kwargs["attribute"] == "option_price_list":
-            return [float(x["close"]) for x in self.option_datas[kwargs["code"]]]
+            ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            return ls if not kwargs["number"] else ls[-kwargs["number"]:]
 
 
 def __get_regular_normality_test():
@@ -48,11 +50,6 @@ def __get_regular_normality_test():
         b = np.random.randint(6000)
         print(cb.get_regular_normality(a).eval(),
          cb.get_regular_normality(tf.constant(dr[b:b+2000], tf.float32)).eval())
-
-    # if (cb.get_regular_normality(dr) < 0.1) &\
-    #     (cb.get_regular_normality(a_list) > 50 )&\
-    #     (cb.get_regular_normality(b_list) < 0.05):
-    #     print("__get_regular_normality_test passed")
 
 if __name__ == "__main__":
     __get_regular_normality_test()

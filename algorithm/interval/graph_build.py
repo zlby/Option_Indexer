@@ -55,12 +55,37 @@ class GraphBuilder(object):
         self.mean_dif_vol = 0.
         pass
 
-    def __preprocessing_data(self, code1: str, code2: str):
-        self.__data()
-        pass
+    def prepare(self, code1: str, code2: str, number: int):
+        self.__preprocessing_data(code1, code2, number)
 
-    def __check_co_integration_relationship(self, positive_option_code: str, negative_option_code: str,
-                                                 number: int):
+    def __preprocessing_data(self, code1: str, code2: str, number: int):
+        self.positive_option_code = code1
+        self.negative_option_code = code2
+        self.sample_size = number
+        self.positive_option_rate_list = self.__data(code=self.positive_option_code,
+                                                     attribute="option_volatility_list",
+                                                     number=self.sample_size)
+        self.negative_option_rate_list = self.__data(code=self.negative_option_code,
+                                                     attribute="option_volatility_list",
+                                                     number=self.sample_size)
+        self.positive_option_price_list = self.__data(code=self.negative_option_code,
+                                                      attribute="option_price_list",
+                                                      number=self.sample_size)
+        self.negative_option_price_list = self.__data(code=self.negative_option_code,
+                                                      attribute="option_price_list",
+                                                      number=self.sample_size)
+        self.isPrepared=True
+
+    @staticmethod
+    def __stationarity_test(ls):
+        for rank in range(10):
+            diff = np.diff(ls, rank)
+            # noinspection PyUnresolvedReferences
+            p_value = adfuller(diff)[1]
+            if p_value <= 0.05:
+                return rank, p_value, diff
+
+    def __check_co_integration_relationship(self):
         """
         check whether two sequences are integrate sequence
                 :param: positive_option_code: the first code of combined option
@@ -68,114 +93,19 @@ class GraphBuilder(object):
                         number: the squence length
                 :return: True or False
                 """
-        positive_option_rate_list = self.__data(code=positive_option_code, attribute="option_volatility_list",
-                                                number=number)
-        negative_option_rate_list = self.__data(code=negative_option_code, attribute="option_volatility_list",
-                                                number=number)
-        # training_epoches = 1000
-        #
-        #
-        # with tf.name_scope('Input'):
-        #     xs = tf.placeholder(tf.float32)
-        #     ys = tf.placeholder(tf.float32)
-        #
-        # with tf.name_scope("ratio"):
-        #     alpha = tf.Variable(np.random.rand())
-        #     beta = tf.Variable(np.random.rand())
-        #
-        # with tf.name_scope("white noise"):
-        #     wn = np.random.normal()
-        #
-        # with tf.name_scope("prediction"):
-        #     predict = tf.add(tf.multiply(alpha, xs), tf.multiply(beta, ys))
-        #
-        # with tf.name_scope("cost"):
-        #     cost = predict - wn
-        #
-        # with tf.name_scope("optimizer"):
-        #     optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
-        #
-        # with tf.name_scope("initializer"):
-        #     init = tf.global_variables_initializer()
-        #
-        #
-        # with tf.Session() as sess:
-        #     sess.run(init)
-        #
-        #     for epoch in range(training_epoches):
-        #         for (x, y) in zip(positive_option_rate_list, negative_option_rate_list):
-        #             sess.run(optimizer, feed_dict={xs: x, ys: y})
-        #
-        #     print("finish")
+        if not self.isPrepared:
+            raise EnvironmentError("Object not prepared, call prepare() first!")
+        rl1 = self.positive_option_rate_list
+        rl2 = self.negative_option_rate_list
 
-            # print(sess.run(cost))
-        # substract_list = []
-        # for i in range(number):
-        #     substract_list.append(positive_option_rate_list[i] - negative_option_rate_list[i])
-        #
-        # counter_positive = 0
-        # df_list = pd.DataFrame(positive_option_rate_list, columns=['a'])
-        # while True:
-        #     data_list = df_list['a'].tolist()
-        #     adf_test = adfuller(data_list)
-        #     if adf_test[1] < 0.05:
-        #         break
-        #     counter_positive += 1
-        #     df_list = df_list.diff()
-        #
-        #
-        # print(counter_positive)
+        res1 = self.__stationarity_test(rl1)
+        res2 = self.__stationarity_test(rl1)
 
-        volatility1 = np.array(positive_option_rate_list)
-        volatility2 = np.array(negative_option_rate_list)
-
-        diff_positive = volatility1
-        diff_negative = volatility2
-        co_integ = True
-        counter = 0
-
-        adf_tuple1 = adfuller(positive_option_rate_list)
-        p_value1 = adf_tuple1[1]
-        adf_tuple2 = adfuller(negative_option_rate_list)
-        p_value2 = adf_tuple2[1]
-
-        # print("Counter: %f" % counter)
-        # print("adf1: %s, adf2: %s" % (format(p_value1, '.5e'), format(p_value2, '.5e')))
-
-
-        while p_value1 > 0.05 and p_value2 > 0.05:
-            counter += 1
-
-            diff_positive = np.diff(diff_positive, 1)
-            diff_negative = np.diff(diff_negative, 1)
-
-            adf_tuple1 = adfuller(diff_positive.tolist())
-            # print(diff_positive)
-            p_value1 = adf_tuple1[1]
-            adf_tuple2 = adfuller(diff_negative.tolist())
-            # print(diff_negative)
-            p_value2 = adf_tuple2[1]
-
-            # print("Counter: %f" % counter)
-            # print("adf1: %s, adf2: %s" % (format(p_value1, '.5e'), format(p_value2, '.5e')))
-
-            if p_value1 < 0.05 < p_value2:
-                co_integ = False
-                break
-            elif p_value1 < 0.05 < p_value2:
-                co_integ = False
-                break
-
-            if counter > 10:
-                break
-
-        if co_integ:
-            _, p_value, _ = coint(volatility1, volatility2)
-            print(p_value)
-            if p_value < 0.05:
-                return True
-            else:
-                return False
+        if res1 and res2:
+            if res1[1] == res2[1]:
+                _, p_value, _ = coint(rl1, rl2)
+                return p_value < 0.05
+        return False
 
     @staticmethod
     def get_regular_normality(data_list: tf.Tensor):
@@ -259,19 +189,16 @@ class GraphBuilder(object):
         p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
         return p_value
 
-    def __get__spread_position_of_combined_options(self, positive_option_code: str, negative_option_code: str,
-                                                   number: int):
+    def get__spread_position_of_combined_options(self):
         """
 
         :param:
         :return: 
         """
-        if not self.__check_co_integration_relationship(positive_option_code, negative_option_code, number):
+        if not self.__check_co_integration_relationship():
             return None
-        positive_option_rate_list = self.__data(code=positive_option_code, attribute="option_volatility_list",
-                                                number=number)
-        negative_option_rate_list = self.__data(code=negative_option_code, attribute="option_volatility_list",
-                                                number=number)
+        rl1 = self.positive_option_rate_list
+        rl2 = self.negative_option_rate_list
         # training_epoches = 1000
         #
         #
@@ -303,7 +230,7 @@ class GraphBuilder(object):
         #     sess.run(init)
         #
         #     for epoch in range(training_epoches):
-        #         for (x, y) in zip(positive_option_rate_list, negative_option_rate_list):
+        #         for (x, y) in zip(rl1, negative_option_rate_list):
         #             sess.run(optimizer, feed_dict={xs: x, ys: y})
         #
         #     print("finish")
@@ -311,10 +238,10 @@ class GraphBuilder(object):
         # print(sess.run(cost))
         # substract_list = []
         # for i in range(number):
-        #     substract_list.append(positive_option_rate_list[i] - negative_option_rate_list[i])
+        #     substract_list.append(rl1[i] - negative_option_rate_list[i])
         #
         # counter_positive = 0
-        # df_list = pd.DataFrame(positive_option_rate_list, columns=['a'])
+        # df_list = pd.DataFrame(rl1, columns=['a'])
         # while True:
         #     data_list = df_list['a'].tolist()
         #     adf_test = adfuller(data_list)
@@ -325,10 +252,10 @@ class GraphBuilder(object):
         #
         #
         # print(counter_positive)
-        sample_size = number
+        sample_size = self.sample_size
         with tf.name_scope('Input'):
-            x = tf.constant(positive_option_rate_list, tf.float32, [1, sample_size])
-            y = tf.constant(negative_option_rate_list, tf.float32, [1, sample_size])
+            x = tf.constant(rl1, tf.float32, [1, sample_size])
+            y = tf.constant(rl2, tf.float32, [1, sample_size])
 
         with tf.name_scope('ratio_mul_x_sub_y'):
             ratio = tf.Variable(np.random.rand())
@@ -374,7 +301,12 @@ class GraphBuilder(object):
         )
         return tf.reduce_mean(_sum)
 
-    def __find_max_benefit_intervals(self, p1, p2, r1, r2, gamma, sale_rate):
+    def __find_max_benefit_intervals(self, gamma, sale_rate):
+        p1 = self.positive_option_price_list
+        p2 = self.negative_option_price_list
+        r1 = self.positive_option_rate_list
+        r2 = self.negative_option_rate_list
+
         # no err threshold
         def get_data_normal_distribution_arguments():
             if not self.nm_dst:
@@ -420,7 +352,7 @@ class GraphBuilder(object):
         dp = p1 + gamma * p2
         dr = r1 + gamma * r2
 
-        step_bene = sale_rate * (p1 + gamma * p2) * sgns * sign(r1 + gamma * r2) - 1. * sale_rate * (1 + gamma * sign(gamma))
+        step_bene = sale_rate * (dp) * sgns * sign(dr) - 1. * sale_rate * (1 + gamma * sign(gamma))
 
         loss = normalize_loss(step_bene)
         train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
