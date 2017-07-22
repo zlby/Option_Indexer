@@ -17,7 +17,7 @@ class NewsSpider:
         for li in news_content_list.find_all('li'):
             title = li.a.text
             time = datetime.strptime('%s' % datetime.now().year+li.a.next_sibling, '%Y(%m-%d %H:%M)')
-            url = li.a['href']
+            url = li.a['href'].strip()
             response = requests.get(url)
             response.encoding = 'utf-8'
             soup = BeautifulSoup(response.text, 'html.parser')
