@@ -1,1 +1,4 @@
-from option.models import *
+try:
+    from option.models import *
+except _:
+    pass

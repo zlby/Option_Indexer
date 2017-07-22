@@ -24,10 +24,10 @@ class CsvDataProvider(AbstractDataProvider):
     def __call__(self, *args, **kwargs):
         if kwargs["attribute"] == "option_volatility_list":
             ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
-            return ls if not kwargs["number"] else ls[-kwargs["number"]:]
+            return ls if "number" not in kwargs else ls[-kwargs["number"]:]
         elif kwargs["attribute"] == "option_price_list":
             ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
-            return ls if not kwargs["number"] else ls[-kwargs["number"]:]
+            return ls if "number" not in kwargs else ls[-kwargs["number"]:]
 
 
 def __get_regular_normality_test():
