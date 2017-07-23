@@ -42,14 +42,13 @@ def process_update(part_graph_builders):
 
 
 def update_interval():
-    # truncate_interval()
-    # initialize_interval()
-    combinations = Intervals.objects.filter(Q(positive_option__code__startswith='m1709'))
+    truncate_interval()
+    initialize_interval()
+    combinations = Intervals.objects.all()
     graph_builders = []
 
     for combination in combinations:
         dp = DjangoDataProvider()
-        print(combination)
         graph_builder = GraphBuilder(dp)
         graph_builder.prepare(combination.positive_option,
                               combination.negative_option,

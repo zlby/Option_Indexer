@@ -218,7 +218,12 @@ class GraphBuilder(object):
         with tf.name_scope('optimizer'):
             optimizer = tf.train.AdamOptimizer(learning_rate=0.05).minimize(1.-loss)
 
-        with tf.Session() as sess:
+        config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
+                                inter_op_parallelism_threads=1,
+                                intra_op_parallelism_threads=1,
+                                log_device_placement=True)
+
+        with tf.Session(config=config) as sess:
             sess.run(tf.global_variables_initializer())
             for _ in range(100):
                 sess.run(optimizer)
@@ -314,7 +319,13 @@ class GraphBuilder(object):
         loss = normalize_loss(step_bene)
         train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
         init = tf.global_variables_initializer()
-        with tf.Session() as sess:
+
+        config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
+                                inter_op_parallelism_threads=1,
+                                intra_op_parallelism_threads=1,
+                                log_device_placement=True)
+
+        with tf.Session(config=config) as sess:
             sess.run(init)
             for i in range(500):
                 sess.run(train_step)
