@@ -219,10 +219,10 @@ class GraphBuilder(object):
             optimizer = tf.train.AdamOptimizer(learning_rate=0.05).minimize(1.-loss)
 
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
-                                inter_op_parallelism_threads=1,
-                                intra_op_parallelism_threads=1,
+                                inter_op_parallelism_threads=8,
+                                intra_op_parallelism_threads=8,
                                 allow_soft_placement=True,
-                                log_device_placement=False)
+                                log_device_placement=True)
 
         with tf.Session(config=config) as sess:
             sess.run(tf.global_variables_initializer())
@@ -322,10 +322,10 @@ class GraphBuilder(object):
         init = tf.global_variables_initializer()
 
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
-                                inter_op_parallelism_threads=1,
-                                intra_op_parallelism_threads=1,
+                                inter_op_parallelism_threads=8,
+                                intra_op_parallelism_threads=8,
                                 allow_soft_placement=True,
-                                log_device_placement=False)
+                                log_device_placement=True)
 
         with tf.Session(config=config) as sess:
             sess.run(init)
