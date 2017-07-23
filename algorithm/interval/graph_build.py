@@ -327,7 +327,7 @@ class GraphBuilder(object):
 
         with tf.Session(config=config) as sess:
             sess.run(init)
-            for i in range(500):
+            for i in range(200):
                 sess.run(train_step)
             values = sess.run([trd_hg, trd_nm])
             return find_interval(values[0], nm_dst.loc, nm_dst.scale), find_interval(values[1], nm_dst.loc, nm_dst.scale)
