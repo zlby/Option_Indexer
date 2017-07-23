@@ -22,7 +22,7 @@ def truncate_interval():
 def process_update(part_graph_builders):
     for part_graph_builder in part_graph_builders:
         spread_position = part_graph_builder.get__spread_position_of_combined_options()
-        print(spread_position)
+        # print(spread_position)
         if spread_position is not None:
             try:
                 spread_position = -abs(spread_position)
