@@ -222,7 +222,7 @@ class GraphBuilder(object):
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
                                 allow_soft_placement=True,
-                                log_device_placement=True)
+                                log_device_placement=False)
 
         with tf.Session(config=config) as sess:
             sess.run(tf.global_variables_initializer())
@@ -325,7 +325,7 @@ class GraphBuilder(object):
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
                                 allow_soft_placement=True,
-                                log_device_placement=True)
+                                log_device_placement=False)
 
         with tf.Session(config=config) as sess:
             sess.run(init)
