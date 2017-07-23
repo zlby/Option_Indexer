@@ -46,7 +46,7 @@ def process_update(part_graph_builders):
 def update_interval():
     truncate_interval()
     initialize_interval()
-    combinations = Intervals.objects.all()
+    combinations = Intervals.objects.filter(positive_option='m1708-c-2450')
     graph_builders = []
 
     for combination in combinations:
