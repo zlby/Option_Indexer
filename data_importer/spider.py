@@ -62,12 +62,35 @@ class Spider(object):
             options_data.update(Spider.get_option_data(future_data))
         # scipy 不是线程安全的，但是默认会自动多线程
         # 所以取消手动多线程
-        print(options_data)
         for combo in Intervals.objects.all():
             positive_option_data = options_data[combo.positive_option_id]
             negative_option_data = options_data[combo.negative_option_id]
             interval = positive_option_data['volatility'] - negative_option_data['volatility']
-            # if interval > combo. and
+            if combo.lower_bound_a < interval < combo.upper_bound_a:
+                if combo.current_state != 'a':
+                    combo.current_state = 'a'
+                    combo.save()
+                    if interval > 0:
+                        combo.make_tread(positive=True)
+                    else:
+                        combo.make_tread(positive=False)
+            elif combo.lower_bound_b < interval < combo.upper_bound_b:
+                if combo.current_state != 'b':
+                    combo.current_state = 'b'
+                    combo.save()
+            elif combo.lower_bound_c < interval < combo.upper_bound_c:
+                if combo.current_state != 'c':
+                    combo.current_state = 'c'
+                    combo.save()
+                    if interval > 0:
+                        combo.make_tread(positive=False)
+                    else:
+                        combo.make_tread(positive=True)
+            else:
+                # supposed tobe error
+                if combo.current_state:
+                    combo.current_state = None
+                    combo.save()
 
     @staticmethod
     def get_option_data(future_data):

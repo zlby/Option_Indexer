@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-from option.models import Option
+from option.models import Option, Intervals
 
 # Create your models here.
 
@@ -38,11 +38,15 @@ class Client(models.Model):
     def get_all_notification(self):
         return list(notice.get_notification_detail() for notice in self.notificationhistory_set.all())
 
+    def create_notification(self, buy_option, sell_option, buy_lot, sell_lot):
+        # 以后要发信息通知就写在这里
+        NotificationHistory.objects.create(client=self, buy_option=buy_option, sell_option=sell_option,
+                                           buy_lot=buy_lot, sell_lot=sell_lot)
+
 
 class OptionCombo(models.Model):
     client = models.ForeignKey(to=Client)
-    positive_option = models.ForeignKey(to=Option, verbose_name='正向期权', related_name='positive_clients')
-    negative_option = models.ForeignKey(to=Option, verbose_name='反向期权', related_name='negative_clients')
+    combo_interval = models.ForeignKey(to=Intervals, related_name='subscribe_set', null=True)
 
     def get_combo_detail(self):
         data = {
