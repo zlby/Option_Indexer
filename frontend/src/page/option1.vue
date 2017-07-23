@@ -1,31 +1,43 @@
 <template style="min-width:800px">
     <el-col :span="20">
         <div id="main" style="width:100%;height:600px;"></div>
+        <el-button type="success" size="large" @click="putCombination">add combination</el-button>
     </el-col>
 </template>
 
 <script>
   import echarts from 'echarts'
   import Bus from '../bus'
+  import axios from 'axios'
 
   export default{
     created:function(){
         Bus.$on('addNewOption', optionObj=>{
             this.removeFuture();
-            this.addFuture(optionObj.future)
-            this.addOption(optionObj.future, optionObj.option)
+            this.addFuture(optionObj.future);
+            this.addOption(optionObj.future, optionObj.option);
+            this.readyCombinedOption.push(optionObj.option);
         })
         Bus.$on('removeOption', optionObj=>{
             this.popOption(optionObj.option)
+            this.readyCombinedOption.splice(this.readyCombinedOption.indexOf(optionObj.option,1));
         })
     },
     mounted:function(){
-
-
         this.myChart=echarts.init(document.getElementById('main'));
-
-        this.future={
-        }
+        this.mapData={};
+        this.future={};
+        this.readyCombinedOption=[];
+        var saveThis=this;
+        axios.get('/market/future/m1709/treading/',{
+          params:{start_time:"2017-07-19 09:00"}
+        }).then(function(res){
+            console.log(res.data)
+            saveThis.appendMapData(res.data);
+            console.log(saveThis.mapData)
+            Bus.$emit("getData", saveThis.mapData);
+            //saveThis.splitAppendData(res.data);
+        })
         this.template={
 
             "optionK":{
@@ -366,15 +378,14 @@
             animation:true,
             series: []
         };
-        // this.createRandomFuture();
-        Bus.$emit("getData", this.createMapData());
+        //this.createRandomFuture();
+        //Bus.$emit("getData", this.mapData);
+        
     //initFuture();
     // this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);
-    var saveThis=this;
     // 自定义事件
     this.myChart.on("legendselectchanged",function(params){
-
         saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
         if(saveThis.checkSelection(params)==2){
             saveThis.showIVDifference(params.selected);
@@ -387,10 +398,9 @@
             saveThis.option.title[1].subtext=selectName.join(",");
             saveThis.option.title[2].subtext=selectName.join(",");
         }
+        console.log(selectName)
         saveThis.myChart.setOption(saveThis.option,true);
     })
-
-
 },
 
 methods: {
@@ -712,7 +722,26 @@ date.setTime(date.getTime()+64800000);
 }
 return data
 },
-
+createSeries:function(data){
+    var series = this.deepClone(this.template.optionK);
+    series.name = data.name;
+    series.data = data.values;
+    series.xAxisIndex=1;
+    series.yAxisIndex=1;
+    if(data.IVData.length!=0){
+        var IVSeries = this.deepClone(this.template.optionIV);
+        IVSeries.data = data.IVData;
+        IVSeries.name = data.name;
+        IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
+        IVSeries.xAxisIndex=2;
+        IVSeries.yAxisIndex=2;
+    }
+    return {
+        series:series,
+        IVSeries:IVSeries,
+        xAxis:data.categoryData
+    }
+},
 //期货切换的函数
 //清除上一个期货
 addFuture: function(futureName){
@@ -763,6 +792,77 @@ popLegend: function(optionName){
         }
     }
     console.log(optionName);
+},
+alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
+    var index=futureXAxis.indexOf(optionXAxis[0]);
+    console.log(futureXAxis[index],optionXAxis[0]);
+    var no_datas=[];
+    for(var i=0;i<index;i++){
+        no_datas.push(["-","-","-","-"]);
+    }
+    return no_datas.concat(optionData);
+},
+splitAppendData:function(res){
+    var tag=res.status.data;
+    var data={};
+    var futureValues=tag.future.data.map(function(o){
+        return [o.time,o.open_price,o.close_price,o.max_price,o.min_price]
+    });
+    var futureXAxis=tag.future.data.map(function(o){
+        return o.time
+    });
+    var dataK=this.createSeries({
+        name:tag.future.code,
+        values:futureValues,
+        categoryData:futureXAxis,
+        IVData:[]
+    });
+    var optionNames=tag.options.map(function(o){
+        return o.code;
+    });
+    var optionSeries=[];
+    for(var i=0;i<tag.options.length;i++){
+        var option=tag.options[i];
+        var optionValues=option.data.map(function(o){
+            return [o.time,o.open_price,o.close_price,o.max_price,o.min_price]
+        });
+        var optionXAxis=option.data.map(function(o){
+            return o.time
+        });
+        var optionIVData=option.data.map(function(o){
+            return o.volatility
+        });
+        var optionProc=this.createSeries({
+            name:option.code,
+            values:optionValues,
+            IVData:optionIVData,
+            categoryData:optionXAxis
+        })
+        this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
+        optionSeries.push()
+    }
+    return {
+        names:optionNames,
+        dataK:dataK,
+        datas:optionSeries
+    }
+},
+appendMapData:function(res){
+    var future=res.status.data.future;
+    this.mapData[future.code]=res.status.data.options.map(function(o){
+        return o.code;
+    });
+},
+putCombination:function(){
+    if(this.readyCombinedOption.length==2){
+        axios.put('/client/add_combo',
+            {params:{positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]}
+        }).then(function(res){
+            console.log(res);
+        })
+    }else{
+        console.log("overSized")
+    }
 }
 
 

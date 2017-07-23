@@ -12,7 +12,7 @@
         </el-menu>
       </el-col>
 
-      <el-col :span="20" style="height: 100%;overflow-x: hidden;overflow-y: auto; background-color: #E8E8E8;">
+      <el-col :span="20" style="height: 100%;overflow-y: auto; background-color: #E8E8E8;">
           <router-view ></router-view>
       </el-col>
     </el-row>

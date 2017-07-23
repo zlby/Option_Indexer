@@ -1,14 +1,55 @@
 <template style="min-width:800px">
+<div>
     <el-col :span="20">
-        <div id="main" style="width:100%;height:600px;"></div>
+        <div id="main" style="width:100%;height:300px;"></div>
     </el-col>
+    <el-col :span="20" >
+        <div id="staggered-list-demo">
+          <input v-model="query">
+          <transition-group name="staggered-fade" tag="ul" v-bind:css="false">
+              <li v-for="(item, index) in computedList" v-bind:key="item.msg" v-bind:data-index="index">
+                  {{ item.msg }}
+              </li>
+          </transition-group>
+      </div>
+  </el-col>
+</div>
 </template>
 
 <script>
   import echarts from 'echarts'
   import Bus from '../bus'
+   import radarCharts from '../components/radarCharts'
+   import Velocity from '../velocity.min.js'
+   import $ from 'jquery'
 
   export default{
+      data(){
+        return{
+        query: '',
+        list: [
+          { msg: 'Bruce Lee' },
+          { msg: 'Jackie Chan' },
+          { msg: 'Chuck Norris' },
+          { msg: 'Jet Li' },
+          { msg: 'Kung Fury' }
+        ]
+    }
+      },
+    
+    components:{
+        radarCharts
+    },
+
+    computed: {
+        computedList: function () {
+          var vm = this
+          return this.list.filter(function (item) {
+            return item.msg.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
+        })
+      }
+  },
+
     created:function(){
         Bus.$on('addNewOption', optionObj=>{
             this.removeFuture();
@@ -176,32 +217,30 @@
             type: "inside",
             start: 50,
             end: 100,
-            xAxisIndex: [0, 1,2,3]
+            xAxisIndex: [0, 1]
         },
         {
             type: "slider",
             show: true,
             start: 50,
             end: 100,
-            xAxisIndex: [0, 1,2,3],
-            bottom: "0",
+            xAxisIndex: [0, 1],
+            bottom:"10px",
             left:"center"
         }
-        ],
-        visualMap:[
         ],
         grid: [
             //
             {
                 left: '5%',
-                height: '30%',
+                height: '70%',
                 top: "10%",
                 width: "40%"
             },
             {
                 left: '55%',
                 top: '10%',
-                height: '30%',
+                height: '70%',
                 width: "40%"
             }
             ],
@@ -243,14 +282,14 @@
             yAxis: [
             {
                 scale: true,
-                gridIndex:1,
+                gridIndex:0,
                 splitArea: {
                     show: true
                 }
             },
             {
                 scale: true,
-                gridIndex: 2,
+                gridIndex: 1,
                 splitNumber: 10,
                 axisLabel: {
                     show: true,
@@ -277,8 +316,13 @@
             animation:true,
             series: []
         };
-    mapData=this.createCombinationMap();
-    combinations=this.createRandomCombination();
+
+    this.combinations=this.createRandomCombination();
+    console.log(this.combinations)
+    this.mapData=this.createCombinationMap();
+    console.log(this.mapData);
+    console.log(this.option.xAxis);
+    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
     this.myChart.setOption(this.option);
     /*var saveThis=this;
     // 自定义事件
@@ -323,16 +367,25 @@ methods: {
 //     this.option.series.push(series);
 //     this.myChart.setOption(this.option);
 //   }
+
+
+
 addCombination:function(optionName1,optionName2){
     var index=this.getCombinationIndex(optionName1,optionName2)
     this.option.series.push(this.combinations[index][0].series);
     this.option.series.push(this.combinations[index][0].IVSeries);
     this.option.series.push(this.combinations[index][1].series);
     this.option.series.push(this.combinations[index][1].IVSeries);
+    this.option.xAxis[0].data=this.combinations[index][0].xAxis;
+    this.option.xAxis[1].data=this.combinations[index][0].xAxis;
+    this.option.title[0].subtext=optionName1+"与"+optionName2
+    this.option.title[1].subtext=optionName1+"与"+optionName2
+    this.myChart.setOption(this.option);
 },
 removeCombination:function(optionName1,optionName2){
     this.popSeries(optionName1);
     this.popSeries(optionName2);
+    this.myChart.setOption(option);
 },
 getCombinationIndex:function(optionName1,optionName2){
     for(var i=0;i<this.mapData.length;i++){
@@ -345,10 +398,12 @@ getCombinationIndex:function(optionName1,optionName2){
 createRandomCombination:function(){
     var combinations=[]
     for(var i=0;i<10;i++){
+        var optionSet=[]
         var option1=this.createRandomSeries();
         var option2=this.createRandomSeries();
-        combinations.push(option1);
-        combinations.push(option2);
+        optionSet.push(option1);
+        optionSet.push(option2);
+        combinations.push(optionSet);
     }
     return combinations;
 },
@@ -372,15 +427,15 @@ createRandomSeries:function(){
       template.optionK);
     series.name = data.name;
     series.data = data.values;
-    series.xAxisIndex=1;
-    series.yAxisIndex=1
+    series.xAxisIndex=0;
+    series.yAxisIndex=0;
     var IVSeries = this.deepClone(this.
       template.optionIV);
     IVSeries.data = data.IVData;
     IVSeries.name = data.name;
     IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
-    IVSeries.xAxisIndex=2;
-    IVSeries.yAxisIndex=2;
+    IVSeries.xAxisIndex=1;
+    IVSeries.yAxisIndex=1;
     return {
       series:series,
       IVSeries:IVSeries,
@@ -552,10 +607,7 @@ return data
 //期货切换的函数
 //清除上一个期货
 
-
-
 }
-
 }
 </script>
 

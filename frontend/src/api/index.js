@@ -22,9 +22,12 @@ export default {
     return axios.post('/client/logout/')
   },
   localNews: function (paramObj){
-    return axios.get('/market/news/',{params:{page_number:this.page_number}})
+    return axios.get('/market/news/',{params:{page_number:paramObj.page_number}})
   },
   localnewphone_email: function (paramObj){
     return axios.put('/client/set_new_email_or_phone/',{email:paramObj.email,phone:paramObj.phone})
+  },
+  localgetNotification: function (){
+    return axios.get('/client/get_all_notification/')
   }
 }

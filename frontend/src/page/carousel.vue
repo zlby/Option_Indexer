@@ -58,113 +58,40 @@
 					<br><br><br>
 				</div>
 
-				<el-carousel @change="carouselChange(index)">
-					<el-carousel-item>
+				<el-carousel>
+					<el-carousel-item v-for="page in 4" :index1="page">
 						<div class="news_container">
 							<el-row :gutter="40">
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6" v-for="news in 4" :index2="news">
 									<el-card class="news-card">
 										<img src= "../assets/pexels-photo-159888.jpeg">
 										<div style="padding: 14px;">
-											<p class="H1">{{title[0]}}</p>
-											<p class="H1">{{time[0]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[0]}}</div>
+											<p class="H1">{{title[page-1][news-1]}}</p>
+											<p class="H1">{{time[page-1][news-1]}}</p>
+											<div class="news-text" style="padding: 14px;">{{content[page-1][news-1]}}</div>
 										</div>
-										<el-button  @click="dialogVisible = true" class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
+										<el-button  @click="bj(page, news)" class="news-btn" type="primary" size="large" style="margin-top:15px" >read more</el-button>
 									</el-card>
 								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-210574.jpeg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[1]}}</p>
-											<p class="H1">{{time[1]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[1]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-286442.jpeg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[2]}}</p>
-											<p class="H1">{{time[2]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[2]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[3]}}</p>
-											<p class="H1">{{time[3]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[3]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-						</el-row>
-					</div>
-				</el-carousel-item>
-									<el-carousel-item>
-						<div class="news_container">
-							<el-row :gutter="40">
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-159888.jpeg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[0]}}</p>
-											<p class="H1">{{time[0]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[0]}}</div>
-										</div>
-										<el-button  @click="dialogVisible = true" class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-210574.jpeg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[1]}}</p>
-											<p class="H1">{{time[1]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[1]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-286442.jpeg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[2]}}</p>
-											<p class="H1">{{time[2]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[2]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6">
-									<el-card class="news-card">
-										<img src= "../assets/taxes-tax-evasion-police-handcuffs.jpg">
-										<div style="padding: 14px;">
-											<p class="H1">{{title[3]}}</p>
-											<p class="H1">{{time[3]}}</p>
-											<div class="news-text" style="padding: 14px;">{{context[3]}}</div>
-										</div>
-										<el-button class="news-btn" type="primary" size="large" style="margin-top:15px">read more</el-button>
-									</el-card>
-								</el-col>
-						</el-row>
-					</div>
-				</el-carousel-item>
-			</el-carousel>
+							</el-row>
+						</div>
+					</el-carousel-item>
+				</el-carousel>
 
+				<el-dialog class="tanchu" title="新闻" :visible.sync="dialogFormVisible" :modal-append-to-body="true" :before-close="handleClose" style="z-index:999;">
+						<p class="H1">{{title[index1-1][index2-1]}}</p>
+						<p class="H1">{{time[index1-1][index2-1]}}</p>
+						<div>{{content[index1-1][index2-1]}}</div>
+					<div slot="footer" class="dialog-footer">
+						<el-button @click="dialogFormVisible=false">退 出</el-button>
+					</div>
+				</el-dialog>
+
+
+			</div>
 		</div>
+		<footerBottom></footerBottom>
 	</div>
-	<footerBottom></footerBottom>
-</div>
 </template>
 
 <script>
@@ -183,8 +110,11 @@
 					email: '',
 					desc: ''
 				},
-				index:'0',
-				dialogVisible: false
+				index:1,
+				dialogVisible: false,
+				dialogFormVisible: false,
+				index1: 1,
+				index2: 1
 			}
 		},
 
@@ -192,21 +122,32 @@
 			title (){
 				return this.$store.state.login.title;
 			},
-			context (){
-				return this.$store.state.login.context;
+			content (){
+				return this.$store.state.login.content;
 			},
 			time (){
 				return this.$store.state.login.time;
+			},
+			pictures (){
+				return ['../assets/pexels-photo-159888.jpeg', '']
 			}
 		},
 
 		mounted:function() {
-			this.$store.dispatch('News',0);
-			this.$store.dispatch('News',1);
+			for (var i = 1; i < 5; i++) {
+				this.$store.dispatch('News',{page_number: i})
+			}
 		},
 		methods:{
 			carouselChange:function(index){
-
+				console.log(index)
+				index++;
+				console.log(index)
+			},
+			bj:function(page, news){
+				this.dialogFormVisible = true;
+				this.index1 = page
+				this.index2 = news
 			}
 		}
 	}
