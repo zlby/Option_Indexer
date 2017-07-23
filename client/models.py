@@ -14,10 +14,9 @@ class Client(models.Model):
     def new_combo(self, positive_option_id, negative_option_id):
         if Option.objects.filter(code=positive_option_id).exists() and \
                 Option.objects.filter(code=negative_option_id).exists():
-            if not OptionCombo.objects.filter(client=self, positive_option_id=positive_option_id,
-                                              negative_option_id=negative_option_id).exists():
-                OptionCombo.objects.create(client=self, positive_option_id=positive_option_id,
-                                           negative_option_id=negative_option_id)
+            interval, if_create = Intervals.objects.get_or_create(positive_option_id=positive_option_id,
+                                                                  negative_option_id=negative_option_id)
+            OptionCombo.objects.get_or_create(client=self, combo_interval=interval)
             return True
         else:
             return False
