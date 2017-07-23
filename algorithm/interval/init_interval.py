@@ -18,6 +18,8 @@ def initialize_interval():
 def truncate_interval():
     Intervals.objects.all().delete()
 
+def delete_none():
+    Intervals.objects.filter(rate=1).delete()
 
 def process_update(part_graph_builders):
     for part_graph_builder in part_graph_builders:
@@ -56,6 +58,8 @@ def update_interval():
         graph_builders.append(graph_builder)
 
     process_update(graph_builders)
+
+    delete_none()
 
     # core_num = 8
     # process_len = int(len(graph_builders) / core_num)

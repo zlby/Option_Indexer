@@ -113,8 +113,7 @@ def cal_vol_direct(option_code, option_price, future_price, delivery_day):
     v = Volatility(c=option_price, s0=future_price, r=0.015, t=t, k=agreement_price)
     return v.get_result()
 
-def delete_none():
-    Intervals.objects.filter(rate=1).delete()
+
 
 
 def update_vol():
@@ -149,7 +148,6 @@ def update_vol():
                 print(option_code)
                 print(current_time)
 
-    delete_none()
 
     print("complete")
 
