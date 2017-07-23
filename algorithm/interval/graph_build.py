@@ -107,8 +107,8 @@ class GraphBuilder(object):
 
         if res1 and res2:
             if res1[1] == res2[1]:
-                _, p_value, _ = coint(rl1, rl2)
-                print(p_value)
+                _, p_value, _ = coint(rl1, rl2)   #coint 函数会自动调用所有cpu
+                # print(p_value)
                 return p_value < 0.05
         return False
 
@@ -221,7 +221,7 @@ class GraphBuilder(object):
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
-                                log_device_placement=True)
+                                log_device_placement=False)
 
         with tf.Session(config=config) as sess:
             sess.run(tf.global_variables_initializer())
@@ -323,7 +323,7 @@ class GraphBuilder(object):
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
-                                log_device_placement=True)
+                                log_device_placement=False)
 
         with tf.Session(config=config) as sess:
             sess.run(init)
