@@ -9,13 +9,13 @@
 					<el-card class="box-card" style="margin-top:40px">
 						<el-form ref="form" :model="form" action="" role="form" :rules="rules2" class="demo-ruleForm">
 							<el-col :span="24" :xs="24" :md="24" :lg="24" :sm="24">
-								<el-form-item>
+								<el-form-item prop="username">
 									<el-input v-model="form.username" class="input_op" style="margin-top:20px" placeholder="Username"></el-input>
 								</el-form-item>
 							</el-col>
 
 							<el-col :span="24" :xs="24" :md="24" :lg="24" :sm="24">
-								<el-form-item>
+								<el-form-item prop="password">
 									<el-input  type="password" class="input_op" v-model="form.password" placeholder="Password" auto-complete="off"></el-input>
 								</el-form-item>
 							</el-col>
@@ -36,39 +36,51 @@
 import axios from 'axios'
 import router from '../router'
   import { mapActions } from 'vuex'
-export default {
- data (){
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } 
-      };
-  return {
-   form: {
-    username: '',
-    password: ''
-  },
-  rules2: {
-          password: [
-            { validator: validatePass, trigger: 'blur' }
-          ],
-      },
-  checked: 'true'
+  export default {
+  	data (){
+  		var validatePass = (rule, value, callback) => {
+  			if (value === '') {
+  				callback(new Error('请输入密码'));
+  			}
+  		};
+  		return {
+  			form: {
+  				username: '',
+  				password: ''
+  			},
+  			rules2: {
+  				// password: [
+  				// { validator: validatePass, trigger: 'blur' }
+  				// ],
+  				username: [
+  				{ required: true, message: '请输入账号名', trigger: 'blur' },
+  				{ min: 0, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
+  				],
+  			},
+  			checked: 'true'
 
-};
-},
+  		}
+  	},
 
-methods: {
-	dj: function() {
-			this.$store.dispatch('UserLogin', this.form)
-			.then(() => {
-				this.$store.dispatch('UpdateUserInfo')
-			})
-		}
-}
+  	methods: {
+  		dj: function() {
 
-}
+  			this.$refs[formName].validate((valid) => {
+  				if (valid) {
+  					this.$store.dispatch('UserLogin', this.form)
+  					.then(() => {
+  						this.$store.dispatch('UpdateUserInfo')
+  					})
 
+  				} else {
+  					console.log('error submit!!');
+  					return false;
+  				}
+  			});
+  		}
+
+  	}
+  }
 
 </script>
 

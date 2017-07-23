@@ -8,29 +8,29 @@
 			</div>
 				<el-col :span="6" :offset="9">
 				<el-card class="box-card" style="margin-top:40px">
-				<el-form ref="form" :model="form" action="" role="form">
+				<el-form ref="form" :model="form" action="" role="form" :rules="rule">
 
 
 					<el-col :span="24">
-					<el-form-item>
+					<el-form-item prop="username">
 						<el-input v-model="form.username" class="input_op" style="margin-top:20px" placeholder="Username"></el-input>
 					</el-form-item>
 					</el-col>
 
 					<el-col :span="24">
-					<el-form-item>
+					<el-form-item prop="form.password">
 						<el-input v-model="form.password" class="input_op" type="password" placeholder="Password"></el-input>
 					</el-form-item>
 					</el-col>
 					
 					<el-col :span="24">
-					<el-form-item>
+					<el-form-item prop="form.email">
 						<el-input v-model="form.email" class="input_op"  placeholder="Email"></el-input>
 					</el-form-item>
 					</el-col>
 
 					<el-col :span="24">
-					<el-form-item>
+					<el-form-item prop="form.phone">
 						<el-input v-model="form.phone" class="input_op" placeholder="Phone"></el-input>
 					</el-form-item>
 					</el-col>
@@ -64,6 +64,12 @@ export default {
 	    email: '',
 	    username: ''
 	  },
+	  rule:{
+	  	username: [
+	  	{ required: true, message: '请输入账号名', trigger: 'blur' },
+	  	{ min: 0, max: 10, message: '长度在 0 到 10 个字符', trigger: 'blur' }
+	  	],
+	  },
 	  active: 0
 	};
 },
@@ -74,17 +80,26 @@ methods: {
 
 
 	dj: function() {
-			this.$store.dispatch('UserRegister', this.form)
+
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.$store.dispatch('UserRegister', this.form)
 			.then(() => {
 				this.$store.dispatch('UpdateUserInfo')
 			})
+
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+		}
 		}
 
 
 
 }
 
-}
 
 
 </script>

@@ -3,7 +3,7 @@
     <header class="admin_title"><i class="el-icon-edit"></i>      个人信息</header>
     <div class="admin_set">
     <el-col :span="18">
-      <el-form :model="form"  :rules="rules2" ref="form" label-width="100px" class="demo-ruleForm">
+      <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm">
         <el-form-item label="昵称" class="input_form">
           <el-input type="name" :value="name" :disabled="true" ></el-input>
         </el-form-item>

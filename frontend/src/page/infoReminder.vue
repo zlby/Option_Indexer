@@ -9,7 +9,7 @@
     </div>
     </el-alert>
 
-    <template v-for="(value,key,index) in notifs" >
+    <div v-for="(value,key,index) in notifs" >
     <el-alert title="买进卖出提醒" type="info" :closable="false" class="info" v-if="if_read[key]==currentStatus||currentStatus=='all'">
       <el-button color="#ff4949" size="mini" type="danger" v-if="if_read[key]=='no_read'" class="read-notice" @click="change2Read($event)" :msgid="notifs[key].id">未读</el-button>
       <el-tag color="#13ce66" v-if="if_read[key]=='read'" class="read-notice" @click="change2Read($event)" :msgid="notifs[key].id">已读</el-tag>
@@ -23,7 +23,7 @@
         </div>
       </div>
     </el-alert>
-    </template>
+    </div>
 </div>
 </template>
 

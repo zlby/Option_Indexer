@@ -27,7 +27,7 @@ export default {
   localnewphone_email: function (paramObj){
     return axios.put('/client/set_new_email_or_phone/',{email:paramObj.email,phone:paramObj.phone})
   },
-  localgetNotification: function (){
-    return axios.get('/client/get_all_notification/')
+  localgetNotification: function (data){
+    return axios.get('/client/get_all_notification/',data)
   }
 }

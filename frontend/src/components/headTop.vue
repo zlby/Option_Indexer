@@ -28,8 +28,8 @@
         <i class="el-icon-message"></i>
       </el-badge>
       </el-menu-item>
-      <el-menu-item  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
-      <el-menu-item  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
+      <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
+      <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
         <el-dropdown>
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>

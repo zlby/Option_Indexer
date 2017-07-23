@@ -78,7 +78,7 @@
 					</el-carousel-item>
 				</el-carousel>
 
-				<el-dialog class="tanchu" title="新闻" :visible.sync="dialogFormVisible" :modal-append-to-body="true" :before-close="handleClose" style="z-index:999;">
+				<el-dialog class="tanchu" title="新闻" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
 						<p class="H1">{{title[index1-1][index2-1]}}</p>
 						<p class="H1">{{time[index1-1][index2-1]}}</p>
 						<div>{{content[index1-1][index2-1]}}</div>

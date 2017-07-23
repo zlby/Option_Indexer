@@ -1,9 +1,6 @@
 <template>
 <div class = "homepagesecond">
 
-
-dsfgdfsg
-
 </div>
 </template>
 

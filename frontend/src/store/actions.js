@@ -125,7 +125,6 @@ export const UserNewemailphone = ({ commit }, data) =>{
 
 export const getNotification = ({ commit }, obj)=>{
   api.localgetNotification().then(function(res){
-    console.log(res);
     res = res.data
     if (res.status.code == '0'){
       commit('getNotification',res.notification_list)
