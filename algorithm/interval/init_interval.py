@@ -45,8 +45,8 @@ def delete_none():
 
 
 def update_interval():
-    # truncate_interval()
-    # initialize_interval()
+    truncate_interval()
+    initialize_interval()
     combinations = Intervals.objects.filter(Q(positive_option__code__startswith='m1708-c-2900'))
     graph_builders = []
 
