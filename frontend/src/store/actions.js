@@ -136,3 +136,17 @@ export const getNotification = ({ commit }, obj)=>{
       console.log(error)
     })
 };
+
+export const getOptionCombo = ({ commit }, obj)=>{
+  api.localOptionCombination().then(function(res){
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getOptionCombo',res.combo_list)
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
+};

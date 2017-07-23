@@ -37,13 +37,12 @@
       return{
         currentStatus:"all",
         no_readCount:0,
+        notifs:this.$store.state.login.notifs,
+        if_read:this.$store.state.login.if_read,
+        msgid:this.$store.state.login.msgid
       }
     },
     computed: {
-      if_read(){
-        this.no_readCount=this.countNoRead();
-        return this.$store.state.login.if_read;
-      },
       buy_time(){
         return this.$store.state.login.buy_time;
       },
@@ -58,15 +57,15 @@
       },
       sell_lot(){
         return this.$store.state.login.sell_lot;
-      },
+      }/*,
       notifs () {
-        this.no_readCount=this.countNoRead();
         return this.$store.state.login.notifs
-      }
+      }*/
     },
 
     mounted:function() {
       this.$store.dispatch('getNotification');
+      window.store=this
     },
 
     methods:{
@@ -84,8 +83,8 @@
       },
       countNoRead:function(){
         var count=0;
-        for(var i=0;i<this.$store.state.login.if_read.length;i++){
-          if(this.$store.state.login.if_read[i]==="no_read"){
+        for(var i=0;i<this.if_read.length;i++){
+          if(this.if_read[i]==="no_read"){
             count++;
           }
         }
@@ -98,18 +97,22 @@
         }else{
           var e=event.target;
         }
+
         var saveThis=this
-        axios.put('/client/notification/'+e.getAttribute("msgId")+'/read/').then(function(res){
-          console.log(res);
+        var id=e.getAttribute("msgId")
+        axios.put('/client/notification/'+id+'/read/').then(function(res){
             if(res.data.status.code=="0"){
-                saveThis.$store.dispatch('getNotification');
-                e.classList.remove("el-button--danger");
-                e.classList.add("el-button--success");
-                e.innerHTML="<span>已读</span>";
+                var index=saveThis.msgid.indexOf(parseInt(id));
+                console.log(index)
+                saveThis.changeStatus(index)
             }else{
                alert("网络问题")
             }
         })
+      },
+      changeStatus:function(index){
+        console.log(index)
+        this.if_read.splice(index,1,"read");
       }
     }
 }

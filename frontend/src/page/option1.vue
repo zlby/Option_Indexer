@@ -1,8 +1,14 @@
 <template style="min-width:800px">
-    <el-col :span="20">
-        <div id="main" style="width:100%;height:600px;"></div>
-        <el-button type="success" size="large" @click="putCombination">add combination</el-button>
-    </el-col>
+    <el-row>
+        <el-col :span="20">
+            <div id="main" style="width:100%;height:600px;">
+            </div>
+            
+        </el-col>
+        <el-col :span="4">
+            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">add combination</el-button>
+        </el-col>
+    </el-row>
 </template>
 
 <script>
@@ -26,17 +32,22 @@
     mounted:function(){
         this.myChart=echarts.init(document.getElementById('main'));
         this.mapData={};
-        this.future={};
+        this.future={
+            name
+        };
         this.readyCombinedOption=[];
         var saveThis=this;
-        axios.get('/market/future/m1709/treading/',{
-          params:{start_time:"2017-07-19 09:00"}
+        axios.get('/market/futures/').then(function(res){
+            console.log(res)
+        })
+        axios.get('/market/future/m1708/treading/',{
+          params:{start_time:"2017-06-01 09:00"}
         }).then(function(res){
-            console.log(res.data)
             saveThis.appendMapData(res.data);
+            saveThis.future[res.data.status.data.future.code]=saveThis.splitAppendData(res.data);
+            console.log(saveThis.future)
             console.log(saveThis.mapData)
             Bus.$emit("getData", saveThis.mapData);
-            //saveThis.splitAppendData(res.data);
         })
         this.template={
 
@@ -131,25 +142,25 @@
         title:[
         {
             text: '期货数据',
-            subtext:"",
+            subtext:"请选择期权", 
             left:"5%",
             top:"0%"
         },
         {
             text: '期权数据',
-            subtext:"",
+            subtext:"请选择期权",
             left:"5%",
             top:"45%"
         },
         {
             text: '期权隐含波动率',
-            subtext:"",
+            subtext:"请选择期权",
             left:"55%",
             top:"0%"
         },
         {
             text: '隐含波动率之差',
-            subtext:"",
+            subtext:"需选择两个期权",
             left:"55%",
             top:"45%"
         }
@@ -342,10 +353,9 @@
                 axisTick: {show: true},
                 splitLine: {show: true},
                 axisPointer: {
-                    label: {
-                        formatter: function (params) {
-                            return "隐含波动率\n" + (params.value * 100).toFixed(2) + "%";
-                        }
+                    tooltip: {
+                        show:true,
+                        formatter: "隐含波动率{value}"
                     }
                 }
             },
@@ -363,8 +373,10 @@
                 axisTick: {show: true},
                 splitLine: {show: true},
                 axisPointer: {
-                    label: {
+                    tooltip: {
+                        show:true,
                         formatter: function (params) {
+                            console.log(params,"IV")
                             return "隐含波动率之差\n" + (params.value * 100).toFixed(2) + "%";
                         }
                     }
@@ -524,7 +536,7 @@ getSeriesIndex:function(seriesName) {
 popSeries:function(seriesName){
   for(var i=0;i<this.option.series.length;i++){
     var series=this.option.series[i];
-    if(series.name.indexOf(seriesName)!=-1){
+    if(series.name===seriesName){
       this.option.series.splice(i,1);
       i--;
   }
@@ -647,7 +659,7 @@ if(calcDataSet.length==2){
 calcIVDifference:function(data1,data2){
   return data1.map(function(value,index) {
     if(data2[index]!=undefined){
-      return (value - data2[index]).toFixed(2);
+      return (value - data2[index]).toFixed(4);
   }else{
       return value;
   }
@@ -752,6 +764,7 @@ addFuture: function(futureName){
     this.option.series.push(this.deepClone(this.future[futureName].dataK.series));
     this.option.title[0].subtext=futureName;
     this.myChart.setOption(this.option,true);
+    console.log(this.option)
 },
 removeFuture: function(){
     var futureName=this.option.title[0].subtext
@@ -766,6 +779,7 @@ addOption: function(futureName,optionName){
     this.option.series.push(IVSeries);
     this.option.series.push(series);
     this.option.legend[0].data.push(optionName);
+    console.log(this.option.legend[0].data)
     this.myChart.setOption(this.option,true);
 },
 popOption: function(optionName){
@@ -795,18 +809,25 @@ popLegend: function(optionName){
 },
 alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
     var index=futureXAxis.indexOf(optionXAxis[0]);
-    console.log(futureXAxis[index],optionXAxis[0]);
+    var fill=["-","-","-","-"];
+    var rtn=[]
     var no_datas=[];
     for(var i=0;i<index;i++){
-        no_datas.push(["-","-","-","-"]);
+        no_datas.push();
     }
-    return no_datas.concat(optionData);
+    rtn=no_datas.concat(optionData);
+    for(var i=index-1;i<futureXAxis.length;i++){
+        if(futureXAxis[i]!=optionXAxis[i]){
+            rtn.splice(i,0,fill);
+        }
+    }
+    return rtn
 },
 splitAppendData:function(res){
     var tag=res.status.data;
     var data={};
     var futureValues=tag.future.data.map(function(o){
-        return [o.time,o.open_price,o.close_price,o.max_price,o.min_price]
+        return [o.open_price,o.close_price,o.max_price,o.min_price]
     });
     var futureXAxis=tag.future.data.map(function(o){
         return o.time
@@ -817,14 +838,30 @@ splitAppendData:function(res){
         categoryData:futureXAxis,
         IVData:[]
     });
+    dataK.series.xAxisIndex=0;
+    dataK.series.yAxisIndex=0;
     var optionNames=tag.options.map(function(o){
-        return o.code;
+        if(o.data.length>30){
+            return o.code;
+        }else{
+            return "-"
+        }
     });
+    for(var i=0;i<optionNames.length;i++){
+        if(optionNames[i]=="-"){
+            optionNames.splice(i,1);
+            i--;
+        }
+    }
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
+        console.log(option,"option")
+        if(option.data.length<30){
+            continue;
+        }
         var optionValues=option.data.map(function(o){
-            return [o.time,o.open_price,o.close_price,o.max_price,o.min_price]
+            return [o.open_price,o.close_price,o.max_price,o.min_price]
         });
         var optionXAxis=option.data.map(function(o){
             return o.time
@@ -838,8 +875,9 @@ splitAppendData:function(res){
             IVData:optionIVData,
             categoryData:optionXAxis
         })
-        this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
-        optionSeries.push()
+        console.log(optionProc,"optionProc")
+        optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
+        optionSeries.push(optionProc)
     }
     return {
         names:optionNames,
@@ -850,14 +888,20 @@ splitAppendData:function(res){
 appendMapData:function(res){
     var future=res.status.data.future;
     this.mapData[future.code]=res.status.data.options.map(function(o){
-        return o.code;
+        if(o.data.length>30){
+            console.log(o.code)
+            return o.code;
+        }else{
+            return "-"
+        }
     });
 },
 putCombination:function(){
+    console.log(this.readyCombinedOption)
     if(this.readyCombinedOption.length==2){
-        axios.put('/client/add_combo',
-            {params:{positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]}
-        }).then(function(res){
+        axios.put('/client/add_combo/',
+            {positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]}
+            ).then(function(res){
             console.log(res);
         })
     }else{

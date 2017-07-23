@@ -29,5 +29,8 @@ export default {
   },
   localgetNotification: function (data){
     return axios.get('/client/get_all_notification/',data)
+  },
+  localOptionCombination:function(paramObj){
+    return axios.get('/client/get_all_combo/',paramObj)
   }
 }

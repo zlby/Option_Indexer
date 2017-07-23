@@ -22,7 +22,7 @@
 
 							<el-col :span="24"  :xs="24" :md="24" :lg="24" :sm="24">
 								<el-form-item>
-									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"   @click="dj">登陆</el-button>
+									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"   @click="dj('form')">登陆</el-button>
 								</el-form-item>
 							</el-col>
 						</el-form>
@@ -63,9 +63,9 @@ import router from '../router'
   	},
 
   	methods: {
-  		dj: function() {
+  		dj: function(formname) {
 
-  			this.$refs[formName].validate((valid) => {
+  			this.$refs[formname].validate((valid) => {
   				if (valid) {
   					this.$store.dispatch('UserLogin', this.form)
   					.then(() => {

@@ -12,7 +12,7 @@
             <el-submenu :index="key" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
-              <el-menu-item :index="ite" v-for="(ite, index2) in value" class="menu-item">
+              <el-menu-item :index="ite" v-for="(ite, index2) in value" v-if="ite!='-'" class="menu-item">
                 {{ite}}
                 <div class="add-btn">
                 <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
