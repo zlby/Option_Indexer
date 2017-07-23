@@ -12,7 +12,7 @@ class Future(models.Model):
     @staticmethod
     def get_future_list():
         result = []
-        for future in Future.objects.filter(delivery_day__lge=date.today()):
+        for future in Future.objects.filter(delivery_day__gte=date.today()):
             result.append(future.code)
         return result
 
