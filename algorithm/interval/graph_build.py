@@ -221,6 +221,7 @@ class GraphBuilder(object):
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
+                                allow_soft_placement=True,
                                 log_device_placement=True)
 
         with tf.Session(config=config) as sess:
@@ -323,6 +324,7 @@ class GraphBuilder(object):
         config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
+                                allow_soft_placement=True,
                                 log_device_placement=True)
 
         with tf.Session(config=config) as sess:
