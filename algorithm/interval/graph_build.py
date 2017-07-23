@@ -204,7 +204,6 @@ class GraphBuilder(object):
         rl2 = self.negative_option_rate_list
 
         sample_size = self.sample_size
-
         with tf.name_scope('Input'):
             x = tf.constant(rl1, tf.float32, [1, sample_size])
             y = tf.constant(rl2, tf.float32, [1, sample_size])
@@ -219,11 +218,10 @@ class GraphBuilder(object):
         with tf.name_scope('optimizer'):
             optimizer = tf.train.AdamOptimizer(learning_rate=0.05).minimize(1.-loss)
 
-        config = tf.ConfigProto(device_count={"cpu": 8},  # limit to num_cpu_core CPU usage
+        config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
-                                # allow_soft_placement=True,
-                                log_device_placement=False)
+                                log_device_placement=True)
 
         with tf.Session(config=config) as sess:
             sess.run(tf.global_variables_initializer())
@@ -322,11 +320,10 @@ class GraphBuilder(object):
         train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
         init = tf.global_variables_initializer()
 
-        config = tf.ConfigProto(device_count={"cpu": 8},  # limit to num_cpu_core CPU usage
+        config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
-                                # allow_soft_placement=True,
-                                log_device_placement=False)
+                                log_device_placement=True)
 
         with tf.Session(config=config) as sess:
             sess.run(init)
