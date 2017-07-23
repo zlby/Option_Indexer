@@ -45,8 +45,8 @@ def delete_none():
 
 
 def update_interval():
-    truncate_interval()
-    initialize_interval()
+    # truncate_interval()
+    # initialize_interval()
     combinations = Intervals.objects.filter(positive_option='m1709-c-2500')
     graph_builders = []
 
@@ -61,31 +61,3 @@ def update_interval():
     process_update(graph_builders)
 
     delete_none()
-
-    # core_num = 8
-    # process_len = int(len(graph_builders) / core_num)
-    # remain_len = len(graph_builders) % core_num
-    #
-    # mark = 0
-    # for i in range(8):
-    #     if i < remain_len:
-    #         extra = 1
-    #     else:
-    #         extra = 0
-    #     p = Process(target=process_update, args=(graph_builders[mark:mark+process_len+extra]))
-    #     print(i)
-    #     p.start()
-
-
-# 子进程要执行的代码
-# def run_proc(name):
-#     for j in range(100000):
-#         print(name)
-#
-# if __name__=='__main__':
-#     print('Parent process %s.' % os.getpid())
-#     for i in range(8):
-#         p = Process(target=run_proc, args=(i,))
-#         print('Process will start.')
-#         p.start()
-#     print('Process end.')
