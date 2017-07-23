@@ -1,7 +1,7 @@
 import itertools
 from algorithm.interval.graph_build import *
 from algorithm.data_provider.data_provider_django import *
-from multiprocessing import Process
+from django.db.models import Q
 
 
 def initialize_interval():
@@ -24,24 +24,27 @@ def process_update(part_graph_builders):
         spread_position = part_graph_builder.get__spread_position_of_combined_options()
         print(spread_position)
         if spread_position is not None:
-            spread_position = -abs(spread_position)
-            # TODO: check if the interval is correct
-            (l_bound_a, u_bound_a), (l_bound_b, u_bound_b) = part_graph_builder.find_max_benefit_intervals(spread_position, 1)
-            # TODO: use private attribute
-            interval_obj = Intervals.objects.get(positive_option=part_graph_builder.positive_option_code,
-                                                 negative_option=part_graph_builder.negative_option_code)
-            interval_obj.lower_bound_a = l_bound_a
-            interval_obj.upper_bound_a = u_bound_a
-            interval_obj.lower_bound_b = l_bound_b
-            interval_obj.upper_bound_b = u_bound_b
-            interval_obj.rate = spread_position
-            interval_obj.save()
+            try:
+                spread_position = -abs(spread_position)
+                # TODO: check if the interval is correct
+                (l_bound_a, u_bound_a), (l_bound_b, u_bound_b) = part_graph_builder.find_max_benefit_intervals(spread_position, 1)
+                # TODO: use private attribute
+                interval_obj = Intervals.objects.get(positive_option=part_graph_builder.positive_option_code,
+                                                     negative_option=part_graph_builder.negative_option_code)
+                interval_obj.lower_bound_a = l_bound_a
+                interval_obj.upper_bound_a = u_bound_a
+                interval_obj.lower_bound_b = l_bound_b
+                interval_obj.upper_bound_b = u_bound_b
+                interval_obj.rate = spread_position
+                interval_obj.save()
+            except:
+                continue
 
 
 def update_interval():
-    truncate_interval()
-    initialize_interval()
-    combinations = Intervals.objects.all()
+    # truncate_interval()
+    # initialize_interval()
+    combinations = Intervals.objects.filter(Q(positive_option__code__startswith='m1709'))
     graph_builders = []
 
     for combination in combinations:
