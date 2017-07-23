@@ -52,8 +52,8 @@ class OptionCombo(models.Model):
         data = {
             'id': self.id,
             'client': self.client.user.username,
-            'positive_option': self.positive_option_id,
-            'negative_option': self.negative_option_id,
+            'positive_option': self.combo_interval.positive_option_id,
+            'negative_option': self.combo_interval.negative_option_id,
         }
         return data
 
