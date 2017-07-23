@@ -18,8 +18,6 @@ def initialize_interval():
 def truncate_interval():
     Intervals.objects.all().delete()
 
-def delete_none():
-    Intervals.objects.filter(rate=1).delete()
 
 def process_update(part_graph_builders):
     for part_graph_builder in part_graph_builders:
@@ -42,11 +40,14 @@ def process_update(part_graph_builders):
             except:
                 continue
 
+def delete_none():
+    Intervals.objects.filter(rate=1).delete()
+
 
 def update_interval():
     truncate_interval()
     initialize_interval()
-    combinations = Intervals.objects.filter(positive_option='m1708-c-2450')
+    combinations = Intervals.objects.filter(positive_option='m1709-c-2500')
     graph_builders = []
 
     for combination in combinations:
