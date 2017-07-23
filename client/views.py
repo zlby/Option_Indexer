@@ -225,7 +225,7 @@ def new_combo(request):
 def delete_combo(request):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
-    if request.method == 'DELETE':
+    if request.method == 'PUT':
         if not request.body:
             request_data = {}
         else:

@@ -18,7 +18,8 @@ const state = {
   content: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
   new_email: '21',
   new_phone: '121',
-  notification: []
+  notification: [],
+  OptionComboList: []
 };
 
 const mutations = {
@@ -62,7 +63,6 @@ const mutations = {
     state.new_email = obj.new_email;
   },
   getNotification(state,obj){
-    
     state.if_read=obj.map(function(o){
       if(o.if_read==true){
           return "read"
@@ -85,7 +85,22 @@ const mutations = {
     state.sell_lot = obj.map(function(o){
       return o.sell_lot
     })
-    // state.notifs = obj
+    state.msgid=obj.map(function(o){
+      return o.id
+    })
+    state.notifs = obj
+  },
+  getOptionCombo(state,obj){
+    state.positive_option = obj.map(function(o){
+      return o.positive_option
+    })
+    state.negative_option = obj.map(function(o){
+      return o.negative_option
+    })
+    state.OptionComboList = obj
+    state.comboId=obj.map(function(o){
+      return o.id;
+    })
   }
 
 

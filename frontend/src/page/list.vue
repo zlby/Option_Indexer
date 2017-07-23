@@ -1,155 +1,175 @@
 <template style="min-width:800px">
-<div>
-    <el-col :span="20">
-        <div id="main" style="width:100%;height:300px;"></div>
-    </el-col>
-    <el-col :span="20" >
-        <div id="staggered-list-demo">
-          <input v-model="query">
-          <transition-group name="staggered-fade" tag="ul" v-bind:css="false">
-              <li v-for="(item, index) in computedList" v-bind:key="item.msg" v-bind:data-index="index">
-                  {{ item.msg }}
-              </li>
-          </transition-group>
-      </div>
-  </el-col>
+    <div>
+        <el-col :span="20">
+            <div id="main" style="width:100%;height:300px; margin-bottom:20px;"></div>
+        </el-col>
+        <el-col :span="20" >
+            <el-card class="box-card">
+              <el-input v-model="query" placeholder="请输入内容"></el-input>
+
+              <div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
+                    <el-col :span="9" style="vertical-align:center">
+                     正期权                  
+                     </el-col>
+                  <el-col :span="9">
+                     负期权
+                  </el-col>
+                  <el-col :span="6">
+                        操作
+                  </el-col>
+                  <el-col :span="24" class="div-divider"></el-col>
+                  <div v-for="(value,key,index) in computedList" class="item" >
+
+                  <el-col :span="9" style="vertical-align:center">
+                     <el-tag color="#ff4949">{{ computedList[key].positive_option }}</el-tag>
+                  </el-col>
+                  <el-col :span="9">
+                     <el-tag color="#13ce66">{{computedList[key].negative_option}}</el-tag>
+                  </el-col>
+                  <el-col :span="6">
+                        <el-button size="mini" type="success"  style="vertical-align:center" @click="updateCombo" :comboid="computedList[key].id">
+                            查看
+                        </el-button>
+                        <el-button size="mini" type="danger" style="vertical-align:center" @click="deleteCombo" :comboid="computedList[key].id">
+                            删除
+                        </el-button>
+                  </el-col>
+                  <el-col :span="24" class="div-divider"></el-col>
+                </div>
+              </div>
+            </el-card>
+        </el-col>
 </div>
 </template>
 
 <script>
   import echarts from 'echarts'
   import Bus from '../bus'
-   import radarCharts from '../components/radarCharts'
-   import Velocity from '../velocity.min.js'
-   import $ from 'jquery'
+  import axios from 'axios'
+  import radarCharts from '../components/radarCharts'
 
   export default{
       data(){
         return{
-        query: '',
-        list: [
-          { msg: 'Bruce Lee' },
-          { msg: 'Jackie Chan' },
-          { msg: 'Chuck Norris' },
-          { msg: 'Jet Li' },
-          { msg: 'Kung Fury' }
-        ]
-    }
-      },
-    
+            query: '',
+            list:this.$store.state.login.OptionComboList,
+            comboid:this.$store.state.login.comboId
+        }
+    },
     components:{
         radarCharts
     },
 
     computed: {
-        computedList: function () {
-          var vm = this
-          return this.list.filter(function (item) {
-            return item.msg.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
-        })
-      }
-  },
-
-    created:function(){
-        Bus.$on('addNewOption', optionObj=>{
-            this.removeFuture();
-            this.addFuture(optionObj.future)
-            this.addOption(optionObj.future, optionObj.option)
-        })
-        Bus.$on('removeOption', optionObj=>{
-            this.popOption(optionObj.option)
+    computedList: function () {
+        var vm = this
+        return this.list.filter(function (item) {
+            return (item.positive_option.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1)||(item.negative_option.toLowerCase().indexOf(vm.query.toLowerCase())!==-1)
         })
     },
-    mounted:function(){
+
+  },
+
+  created:function(){
+    Bus.$on('addNewOption', optionObj=>{
+        this.removeFuture();
+        this.addFuture(optionObj.future)
+        this.addOption(optionObj.future, optionObj.option)
+    })
+    Bus.$on('removeOption', optionObj=>{
+        this.popOption(optionObj.option)
+    })
+},
+mounted:function(){
 
 
-        this.myChart=echarts.init(document.getElementById('main'));
+    this.myChart=echarts.init(document.getElementById('main'));
+    this.$store.dispatch('getOptionCombo')
+    this.future={
+    }
+    this.template={
 
-        this.future={
-        }
-        this.template={
-
-            "optionK":{
-                name: null,
-                type: 'candlestick',
-                step:false,
-                smooth:false,
-                data:null,
-                markPoints:{
-                    label:{
-                        formatter:function(param){
-                            return param!=null?Math.floor(param.value):"";
-                        }
-                    },
-                    data:[
-                    {
-                        name: 'highest value',
-                        type: 'max',
-                        valueDim: 'highest'
-                    },
-                    {
-                        name: 'lowest value',
-                        type: 'min',
-                        valueDim: 'lowest'
-                    },
-                    {
-                        name: 'average value on close',
-                        type: 'average',
-                        valueDim: 'close'
+        "optionK":{
+            name: null,
+            type: 'candlestick',
+            step:false,
+            smooth:false,
+            data:null,
+            markPoints:{
+                label:{
+                    formatter:function(param){
+                        return param!=null?Math.floor(param.value):"";
                     }
-                    ]
                 },
-                markLine: {
-                    symbol: ['none', 'arrow'],
-                    data: [
-                    {
-                        name: 'min line on close',
-                        type: 'min',
-                        valueDim: 'close'
-                    },
-                    {
-                        name: 'max line on close',
-                        type: 'max',
-                        valueDim: 'close'
-                    }
-                    ]
+                data:[
+                {
+                    name: 'highest value',
+                    type: 'max',
+                    valueDim: 'highest'
                 },
-                gridIndex:null,
+                {
+                    name: 'lowest value',
+                    type: 'min',
+                    valueDim: 'lowest'
+                },
+                {
+                    name: 'average value on close',
+                    type: 'average',
+                    valueDim: 'close'
+                }
+                ]
             },
-            "optionIV":{
-                name:null,
-                type:"line",
-                data:null,
-                xAxisIndex:1,
-                yAxisIndex:1,
-                tooltip:{
-                    trigger:"axis",
+            markLine: {
+                symbol: ['none', 'arrow'],
+                data: [
+                {
+                    name: 'min line on close',
+                    type: 'min',
+                    valueDim: 'close'
                 },
-                itemStyle:{
-                    normal:{
-                        color:null,
-                        borderWidth:1
-                    }
-                },
-                gridIndex:null,
+                {
+                    name: 'max line on close',
+                    type: 'max',
+                    valueDim: 'close'
+                }
+                ]
             },
-            "IVD":{
-                name:"隐含波动率之差",
-                type:"line",
-                data:null,
-                xAxisIndex:3,
-                yAxisIndex:3,
-                tooltip:{
-                    trigger:"axis",
-                },
-                itemStyle:{
-                    normal:{
-                        color:"#000000",
-                        borderWidth:1
-                    }
+            gridIndex:null,
+        },
+        "optionIV":{
+            name:null,
+            type:"line",
+            data:null,
+            xAxisIndex:1,
+            yAxisIndex:1,
+            tooltip:{
+                trigger:"axis",
+            },
+            itemStyle:{
+                normal:{
+                    color:null,
+                    borderWidth:1
+                }
+            },
+            gridIndex:null,
+        },
+        "IVD":{
+            name:"隐含波动率之差",
+            type:"line",
+            data:null,
+            xAxisIndex:3,
+            yAxisIndex:3,
+            tooltip:{
+                trigger:"axis",
+            },
+            itemStyle:{
+                normal:{
+                    color:"#000000",
+                    borderWidth:1
                 }
             }
         }
+    }
 
 
     // var dataK=[];
@@ -225,7 +245,7 @@
             start: 50,
             end: 100,
             xAxisIndex: [0, 1],
-            bottom:"10px",
+            bottom:"0px",
             left:"center"
         }
         ],
@@ -316,14 +336,14 @@
             animation:true,
             series: []
         };
-
-    this.combinations=this.createRandomCombination();
-    console.log(this.combinations)
-    this.mapData=this.createCombinationMap();
-    console.log(this.mapData);
-    console.log(this.option.xAxis);
-    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
-    this.myChart.setOption(this.option);
+        this.combinations=this.createRandomCombination();
+        console.log(this.combinations)
+        this.mapData=this.createCombinationMap();
+        console.log(this.mapData);
+        console.log(this.option.xAxis);
+        this.addCombination(this.mapData[0][0],this.mapData[0][1]);
+        this.myChart.setOption(this.option);
+        window.store=this
     /*var saveThis=this;
     // 自定义事件
     this.myChart.on("legendselectchanged",function(params){
@@ -603,7 +623,24 @@ date.setTime(date.getTime()+64800000);
 }
 return data
 },
-
+deleteCombo:function(event){
+        if(event.target.tagName=="SPAN"){
+          var e=event.target.parentNode;
+        }else{
+          var e=event.target;
+        }
+        var id=e.getAttribute("comboid");
+        var saveThis=this
+        axios.put('/client/delete_combo/',{id:id}).then(function(res){
+          console.log(res);
+            if(res.data.status.code=="0"){
+                var index=saveThis.comboid.indexOf(id);
+                saveThis.list.splice(index,1);
+            }else{
+               alert("网络问题")
+            }
+        })
+      }
 //期货切换的函数
 //清除上一个期货
 
@@ -615,4 +652,27 @@ return data
 
 <style lang="less" scoped>
   @import '../style/common';
+
+.list{
+    // margin-top: 20px;
+    margin-left: 40px;
+}
+.div-divider{
+    margin:5px 0px;
+    height:0px;
+    background-color: #666
+}
+  .msg{
+  //     height:25px;   
+  // line-height:25px;  
+  // overflow:hidden;
+  // margin-top: 20px; 
+  }
+  span{
+
+  }
+
+  .item{
+    margin-top:10px;
+  }
 </style>
