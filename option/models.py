@@ -125,7 +125,7 @@ class OptionTreadingDataBase(TreadingDataBase):
             'volatility': self.volatility,
             'volume': self.volume,
         }
-        result.update(super().get_detail())
+        result.update(super(OptionTreadingDataBase, self).get_detail())
         return result
 
 
