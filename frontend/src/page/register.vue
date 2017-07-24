@@ -60,6 +60,7 @@
 
 import axios from 'axios'
 import router from '../router'
+import {notifi} from '../notif'
 
 export default {
 
@@ -111,26 +112,34 @@ methods: {
 
 
 	dj: function(formname) {
-
+		var context = this
         this.$refs[formname].validate((valid) => {
           if (valid) {
-            this.$store.dispatch('UserRegister', this.form)
-			.then(() => {
-				this.$store.dispatch('UpdateUserInfo')
-			})
+   //          this.$store.dispatch('UserRegister', this.form)
+			// .then(() => {
+			// 	this.$store.dispatch('UpdateUserInfo')
+			// })
+
+			this.$store.dispatch('UserRegister', this.form)
+			.then(function success(){
+	        	notifi('注册成功', '欢迎您，' + context.form.username, 'success', context)
+	        	context.$store.dispatch('UpdateUserInfo')
+	        }, function fail(){
+	        	notifi('注册失败', '用户名已存在', 'error', context)
+	        })
 
           } else {
-            console.log('error submit!!');
+            notifi('注册失败', '用户名或密码不合法！', 'error', context)
             return false;
           }
         });
 		},
 
-	   next() {
-        if (this.active++ > 1)
-         this.active = 0;
-      }
-		}
+	    next() {
+	    	if (this.active++ > 1)
+	        	this.active = 0;
+	    }
+	}
 
 
 

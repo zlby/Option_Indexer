@@ -35,6 +35,8 @@
 </template>
 
 <script>
+
+  import {notifi} from '../notif'
   export default{
 
     data:function(){
@@ -88,7 +90,7 @@
         if (this.form.new_password != '') {
           this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password, new_password:this.form.new_password})
           .then(function success(){
-            context.notif('修改成功', '密码修改成功，请重新登录！', 'success')
+            notifi('修改成功', '密码修改成功，请重新登录！', 'success', context)
           }, function fail(){
             context.notif('修改失败', '密码修改失败，请重新登录！', 'error')
           })

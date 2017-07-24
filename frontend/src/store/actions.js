@@ -7,22 +7,15 @@ export const UserNewpassword = ({ commit }, data) =>{
       res = res.data
       if(res.status.code == '0'){
         commit('new_password', {new_password: data.new_password});
-        // alert('密码修改成功，请重新登录！')
         resolve()
-        // commit('logout');
-        // router.push({path:'/login'})
       }else{
-        // alert('密码修改失败！')
         reject()
       }
     })
     .catch(function (error){
-      // alert('密码修改失败！！')
-      console.log('error1')
       reject()
     })
   })
-  
 };
 
 
@@ -36,15 +29,12 @@ export const UserRegister = ({ commit }, data) => {
         commit('login', {username: data.username});
         resolve()
       } else if(res.status.code == '-3'){
-        alert('用户名已经注册！')
         reject()
       } else{
-        alert('请输入完整的账号密码！')
         reject()
       }
     })
     .catch(function (error) {
-      alert('登录失败！')
       reject()
     })
   })
@@ -59,12 +49,12 @@ export const UserLogin = ({ commit }, data) => {
         commit('login', {username: data.username});
         resolve()
       } else {
-        alert('登录失败！')
+        // alert('登录失败！')
         reject()
       }
     })
     .catch(function (error) {
-      alert('登录失败！')
+      // alert('登录失败！!')
       reject()
     })
   })

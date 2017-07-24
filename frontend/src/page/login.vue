@@ -33,9 +33,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import router from '../router'
+  import axios from 'axios'
+  import router from '../router'
   import { mapActions } from 'vuex'
+  import { notifi } from '../notif'
   export default {
   	data (){
   		var validatePass = (rule, value, callback) => {
@@ -64,16 +65,19 @@ import router from '../router'
 
   	methods: {
   		dj: function(formname) {
+  			var context = this
 
   			this.$refs[formname].validate((valid) => {
   				if (valid) {
   					this.$store.dispatch('UserLogin', this.form)
-  					.then(() => {
-  						this.$store.dispatch('UpdateUserInfo')
-  					})
-
+  					.then(function success(){
+			        	notifi('登录成功', '欢迎您，'+context.$store.state.login.username, 'success', context)
+			        	context.$store.dispatch('UpdateUserInfo')
+			        }, function fail(){
+			        	notifi('登录失败', '用户名或密码错误', 'error', context)
+			        })
   				} else {
-  					console.log('error submit!!');
+  					notifi('登录失败', '用户名或密码不合法！', 'error', context)
   					return false;
   				}
   			});
