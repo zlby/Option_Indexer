@@ -48,10 +48,10 @@
                      <el-tag color="#13ce66">{{computedList[key].negative_option}}</el-tag>
                   </el-col>
                   <el-col :span="6">
-                        <el-button size="mini" type="success"  style="vertical-align:center" @click="updateCombo" :comboid="computedList[key].id">
+                        <el-button size="mini" type="success"  style="vertical-align:center" @click="updateCombo($event)" :comboid="computedList[key].id">
                             查看
                         </el-button>
-                        <el-button size="mini" type="danger" style="vertical-align:center" @click="deleteCombo" :comboid="computedList[key].id">
+                        <el-button size="mini" type="danger" style="vertical-align:center" @click="deleteCombo($event)" :comboid="computedList[key].id">
                             删除
                         </el-button>
                   </el-col>
@@ -136,8 +136,11 @@ mounted:function(){
     this.$store.dispatch('getOptionCombo')
     this.future={
     }
+    this.combinations=[];
+    this.mapData=[];
     this.dataFormat={
             start_time:"2017-06-01 09:00",
+            end_time:"2017-07-01 09:00",
             data_type:"hour"
         };
     this.option= {
@@ -383,17 +386,10 @@ mounted:function(){
         }
     }
     this.myChart=echarts.init(document.getElementById('main'));
-    this.addCombination("m1709-c-2500","m1709-c-2550");
-    
-    
-
-
     // var dataK=[];
     // for(var i=0;i<20;i++){
     //     dataK.push(splitData());
     // }
-    
-        
         this.myChart.setOption(this.option);
         window.store=this
     /*var saveThis=this;
@@ -443,30 +439,80 @@ methods: {
 
 
 addCombination:function(optionName1,optionName2){
-    var params=this.deepClone(this.dataFormat)
-    params.option_list=[optionName1,optionName2];
-    console.log(params)
-    axios.get('/market/options/treading_data/',{params:params}).then(function(res){
+    var reqparams=this.deepClone(this.dataFormat)
+    reqparams.option_list="[\""+optionName1+"\",\""+optionName2+"\"]";
+    var saveThis=this
+    axios.get('/market/options/treading_data/',{params:reqparams}).then(function(res){
         res=res.data;
         if(res.status.code===0){
-            /*this.option.series.push(this.combinations[index][0].series);
-            this.option.series.push(this.combinations[index][0].IVSeries);
-            this.option.series.push(this.combinations[index][1].series);
-            this.option.series.push(this.combinations[index][1].IVSeries);
-            this.option.xAxis[0].data=this.combinations[index][0].xAxis;
-            this.option.xAxis[1].data=this.combinations[index][0].xAxis;
-            this.option.title[0].subtext=optionName1+"与"+optionName2
-            this.option.title[1].subtext=optionName1+"与"+optionName2
-            this.myChart.setOption(this.option);*/
+            saveThis.combinations.push(saveThis.splitAppendCombination(res,[optionName1,optionName2]));
+            saveThis.mapData.push([optionName1,optionName2]);
+            var index=saveThis.getCombinationIndex(optionName1,optionName2);
+            if(index!==-1){
+                saveThis.option.series.push(saveThis.combinations[index][0].series);
+                saveThis.option.series.push(saveThis.combinations[index][0].IVSeries);
+                saveThis.option.series.push(saveThis.combinations[index][1].series);
+                saveThis.option.series.push(saveThis.combinations[index][1].IVSeries);
+                saveThis.option.xAxis[0].data=saveThis.combinations[index][0].xAxis;
+                saveThis.option.xAxis[1].data=saveThis.combinations[index][0].xAxis;
+                saveThis.option.title[0].subtext=optionName1+"与"+optionName2
+                saveThis.option.title[1].subtext=optionName1+"与"+optionName2
+                saveThis.myChart.setOption(saveThis.option);
+            }
         }else{
             alert('出错')
         }
     })
 },
-removeCombination:function(optionName1,optionName2){
-    this.popSeries(optionName1);
-    this.popSeries(optionName2);
-    this.myChart.setOption(option);
+removeCombination:function(){
+    var optionNames=this.option.title[0].subtext.split("与")
+    this.popSeries(optionNames[0]);
+    this.popSeries(optionNames[1]);
+    this.myChart.setOption(this.option);
+},
+splitAppendCombination:function(res,optionNames){
+    var combine=[];
+    var xAxis=[];
+    for(var i=0;i<res.data.length;i++){
+        var option=res.data[i];
+        var optionValues=option.data.map(function(o){
+            return [o.open_price,o.close_price,o.max_price,o.min_price]
+        });
+        var optionXAxis=option.data.map(function(o){
+            return o.time
+        });
+        var optionIVData=option.data.map(function(o){
+            return o.volatility.toFixed(4);
+        });
+        var optionProc=this.createSeries({
+            name:option.code,
+            values:optionValues,
+            IVData:optionIVData,
+            categoryData:optionXAxis
+        })
+        //optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
+        combine.push(optionProc);
+    }
+    return combine;
+},
+alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
+    var index=futureXAxis.indexOf(optionXAxis[0]);
+    if(index==-1){
+        return [];
+    }
+    var fill=["-","-","-","-"];
+    var rtn=[]
+    var no_datas=[];
+    for(var i=0;i<index;i++){
+        no_datas.push(fill);
+    }
+    rtn=no_datas.concat(optionData);
+    for(var i=index,j=0;i<futureXAxis.length;i++,j++){
+        if(futureXAxis[i]!=optionXAxis[j]){
+            rtn.splice(i,0,fill);
+        }
+    }
+    return rtn
 },
 getCombinationIndex:function(optionName1,optionName2){
     for(var i=0;i<this.mapData.length;i++){
@@ -492,15 +538,15 @@ createSeries:function(data){
     var series = this.deepClone(this.template.optionK);
     series.name = data.name;
     series.data = data.values;
-    series.xAxisIndex=1;
-    series.yAxisIndex=1;
+    series.xAxisIndex=0;
+    series.yAxisIndex=0;
     if(data.IVData.length!=0){
         var IVSeries = this.deepClone(this.template.optionIV);
         IVSeries.data = data.IVData;
         IVSeries.name = data.name;
         IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
-        IVSeries.xAxisIndex=2;
-        IVSeries.yAxisIndex=2;
+        IVSeries.xAxisIndex=1;
+        IVSeries.yAxisIndex=1;
     }
     return {
         series:series,
@@ -606,7 +652,6 @@ return newobj
 },
 //计算期权隐含波动率之差
 showIVDifference:function(selected){
-  var selectName=this.getSelectedName(selected);
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
@@ -702,8 +747,21 @@ date.setTime(date.getTime()+64800000);
 }
 return data
 },
-updateCombo:function(comboid){
-    var index=this.comboid.indexOf(comboid);
+updateCombo:function(event){
+    if(event.target.tagName=="SPAN"){
+        var comboid=event.target.parentNode.getAttribute("comboid")
+    }else{
+        var comboid=event.target.getAttribute("comboid")
+    }
+    console.log(this.comboid,comboid);
+    var index=this.comboid.indexOf(parseInt(comboid));
+    console.log(this.list[index],index)
+    var pOption=this.list[index].positive_option;
+    var nOption=this.list[index].negative_option;
+    if(this.option.title[0].subtext!=""){
+        this.removeCombination();
+    }
+    this.addCombination(pOption,nOption);
 },
 deleteCombo:function(event){
         if(event.target.tagName=="SPAN"){
