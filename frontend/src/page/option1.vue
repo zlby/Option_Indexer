@@ -13,15 +13,23 @@
                   align="right"
                   placeholder="选择日期范围"
                   :picker-options="pickerOption"
-                  style="margin-left:50px">
+                  style="margin-left:50px; width:200px;">
                 </el-date-picker>
             </div>
-            <el-radio-group v-model="interval" :span="4">
-                <el-radio-button label="day">日</el-radio-button>
-                <el-radio-button label="hour">小时</el-radio-button>
+
+            <el-col :span="4">
+            <el-radio-group v-model="interval">
+                <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
             </el-radio-group>
+            </el-col>
+            
+            <el-col :span="4">
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
-            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">添加期权组合</el-button>
+            </el-col>
+            <el-col :span="4">
+            <el-button type="success" size="large" style="position:relative;bottom:0px;margin-left:50px;" @click="putCombination">添加期权组合</el-button>
+            </el-col>
+
         </el-col>
     </el-row>
 </template>
@@ -227,7 +235,7 @@
     // for(var i=0;i<20;i++){
     //     dataK.push(splitData());
     // }
-    this.option= {
+    this.optionbackup= {
         title:[
         {
             text: '期货数据',
@@ -480,7 +488,7 @@
         };
         //this.createRandomFuture();
         //Bus.$emit("getData", this.mapData);
-    this.optionbackup=this.deepClone(this.option);
+    this.option=this.deepClone(this.optionbackup);
     //initFuture();
     // this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);
@@ -488,7 +496,8 @@
     this.myChart.on("legendselectchanged",function(params){
         saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
         if(saveThis.checkSelection(params)==2){
-            var selectName=this.getSelectedName(params.selected);
+            var selectName=saveThis.getSelectedName(params.selected);
+            console.log(selectName)
             saveThis.showIVDifference(selectName);
         }else{
             saveThis.popSeries("隐含波动率之差");
@@ -528,7 +537,10 @@ methods: {
 //     this.myChart.setOption(this.option);
 //   }
 resetChart:function(){
-    this.option=this.optionbackup;
+    this.myChart.clear();
+    console.log(this.option,this.optionbackup)
+    this.option=this.deepClone(this.optionbackup);
+    console.log(this.option,this.optionbackup)
     this.readyCombinedOption=[];
     this.futureDataGet=[];
     this.future={
@@ -683,7 +695,7 @@ deepClone:function(obj){
     if (Array.isArray(obj)) {
       var newarr = [];
       for (var i = 0; i < obj.length; i++) {
-        newarr.push(obj[i]);
+        newarr.push(this.deepClone(obj[i]));
     }
     return newarr;
 } else {
@@ -969,7 +981,7 @@ splitAppendData:function(res){
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        if(option.data.length<10){
+        if(option.data.length==0){
             this.fewDataOptionSet.push(option.code);
             var optionProc=this.createZeroDataSeries(futureXAxis,{name:option.code});
         }else{
@@ -1079,4 +1091,8 @@ putCombination:function(){
 
 <style lang="less" scoped>
   @import '../style/common';
+.el-input__icon .el-icon-date{
+    padding-left: 200px;
+}
+
 </style>

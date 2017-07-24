@@ -3,6 +3,27 @@
         <el-col :span="20">
             <div id="main" style="width:100%;height:300px; margin-bottom:20px;"></div>
         </el-col>
+        <el-col :span="20">
+            <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
+                <el-date-picker
+                  v-model="daypicker"
+                  type="daterange"
+                  align="right"
+                  placeholder="选择日期范围"
+                  :picker-options="pickerOption"
+                  style="margin-left:50px; width:200px;">
+                </el-date-picker>
+            </div>
+
+            <el-col :span="4">
+            <el-radio-group v-model="interval">
+                <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
+            </el-radio-group>
+            </el-col>
+            <el-col :span="4">
+            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
+            </el-col>
+        </el-col>
         <el-col :span="20" >
             <el-card class="box-card">
               <el-input v-model="query" placeholder="请输入内容"></el-input>
@@ -55,7 +76,36 @@
         return{
             query: '',
             list:this.$store.state.login.OptionComboList,
-            comboid:this.$store.state.login.comboId
+            comboid:this.$store.state.login.comboId,
+            interval: 'hour',
+            pickerOption: {
+              shortcuts: [{
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近一个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近三个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
+            daypicker: ''
         }
     },
     components:{
@@ -83,8 +133,13 @@
     })
 },
 mounted:function(){
+    this.$store.dispatch('getOptionCombo')
     this.future={
     }
+    this.dataFormat={
+            start_time:"2017-06-01 09:00",
+            data_type:"hour"
+        };
     this.option= {
         title:[
         {
@@ -328,10 +383,8 @@ mounted:function(){
         }
     }
     this.myChart=echarts.init(document.getElementById('main'));
-    this.combinations=this.createRandomCombination();
-    this.mapData=this.createCombinationMap();
-    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
-    this.$store.dispatch('getOptionCombo')
+    this.addCombination("m1709-c-2500","m1709-c-2550");
+    
     
 
 
@@ -390,16 +443,25 @@ methods: {
 
 
 addCombination:function(optionName1,optionName2){
-    var index=this.getCombinationIndex(optionName1,optionName2)
-    this.option.series.push(this.combinations[index][0].series);
-    this.option.series.push(this.combinations[index][0].IVSeries);
-    this.option.series.push(this.combinations[index][1].series);
-    this.option.series.push(this.combinations[index][1].IVSeries);
-    this.option.xAxis[0].data=this.combinations[index][0].xAxis;
-    this.option.xAxis[1].data=this.combinations[index][0].xAxis;
-    this.option.title[0].subtext=optionName1+"与"+optionName2
-    this.option.title[1].subtext=optionName1+"与"+optionName2
-    this.myChart.setOption(this.option);
+    var params=this.deepClone(this.dataFormat)
+    params.option_list=[optionName1,optionName2];
+    console.log(params)
+    axios.get('/market/options/treading_data/',{params:params}).then(function(res){
+        res=res.data;
+        if(res.status.code===0){
+            /*this.option.series.push(this.combinations[index][0].series);
+            this.option.series.push(this.combinations[index][0].IVSeries);
+            this.option.series.push(this.combinations[index][1].series);
+            this.option.series.push(this.combinations[index][1].IVSeries);
+            this.option.xAxis[0].data=this.combinations[index][0].xAxis;
+            this.option.xAxis[1].data=this.combinations[index][0].xAxis;
+            this.option.title[0].subtext=optionName1+"与"+optionName2
+            this.option.title[1].subtext=optionName1+"与"+optionName2
+            this.myChart.setOption(this.option);*/
+        }else{
+            alert('出错')
+        }
+    })
 },
 removeCombination:function(optionName1,optionName2){
     this.popSeries(optionName1);
@@ -425,6 +487,26 @@ createRandomCombination:function(){
         combinations.push(optionSet);
     }
     return combinations;
+},
+createSeries:function(data){
+    var series = this.deepClone(this.template.optionK);
+    series.name = data.name;
+    series.data = data.values;
+    series.xAxisIndex=1;
+    series.yAxisIndex=1;
+    if(data.IVData.length!=0){
+        var IVSeries = this.deepClone(this.template.optionIV);
+        IVSeries.data = data.IVData;
+        IVSeries.name = data.name;
+        IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
+        IVSeries.xAxisIndex=2;
+        IVSeries.yAxisIndex=2;
+    }
+    return {
+        series:series,
+        IVSeries:IVSeries,
+        xAxis:data.categoryData
+    }
 },
 createCombinationMap:function(){
     return this.combinations.map(function(o){
