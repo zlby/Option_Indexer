@@ -205,6 +205,7 @@ def new_combo(request):
         if positive_option and negative_option:
             if request.user.client.new_combo(positive_option, negative_option):
                 status['message'] = 'created'
+                result['combo_list'] = request.user.client.get_all_combo()
                 return JsonResponse(result, status=201)
             else:
                 status['code'] = -6
@@ -234,6 +235,7 @@ def delete_combo(request):
         if combo_id:
             if request.user.client.delete_combo(combo_id):
                 status['message'] = 'combo delete'
+                result['combo_list'] = request.user.client.get_all_combo()
                 return JsonResponse(result, status=200)
             else:
                 status['code'] = -7
