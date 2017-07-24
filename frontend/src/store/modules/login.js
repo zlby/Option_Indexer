@@ -16,16 +16,18 @@ const state = {
   title: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
   time: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
   content: [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]],
-  new_email: '21',
-  new_phone: '121',
+  new_email: '',
+  new_phone: '',
   notification: [],
-  OptionComboList: []
+  OptionComboList: [],
 };
 
 const mutations = {
   login (state, obj) {
-    state.loggedin = true;
-    state.username = obj.username;
+    state.loggedin = true
+    state.username = obj.username
+     // state.new_email = obj.email
+     // state.new_phone = obj.phone
   },
   updateUserInfo (state, obj) {
     state.username = obj.username

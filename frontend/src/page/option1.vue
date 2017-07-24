@@ -3,7 +3,6 @@
         <el-col :span="20">
             <div id="main" style="width:100%;height:600px;">
             </div>
-            
         </el-col>
         <el-col :span="4">
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">add combination</el-button>
@@ -37,16 +36,21 @@
         };
         this.readyCombinedOption=[];
         var saveThis=this;
+        var futureList=[]
         axios.get('/market/futures/').then(function(res){
+            res=res.data;
             console.log(res)
+            if(res.status.code===0){
+                futureList=res.data.future_list
+            }else{
+                alert('出错')
+            }
         })
         axios.get('/market/future/m1708/treading/',{
           params:{start_time:"2017-06-01 09:00"}
         }).then(function(res){
             saveThis.appendMapData(res.data);
             saveThis.future[res.data.status.data.future.code]=saveThis.splitAppendData(res.data);
-            console.log(saveThis.future)
-            console.log(saveThis.mapData)
             Bus.$emit("getData", saveThis.mapData);
         })
         this.template={
@@ -376,7 +380,6 @@
                     tooltip: {
                         show:true,
                         formatter: function (params) {
-                            console.log(params,"IV")
                             return "隐含波动率之差\n" + (params.value * 100).toFixed(2) + "%";
                         }
                     }
@@ -410,7 +413,6 @@
             saveThis.option.title[1].subtext=selectName.join(",");
             saveThis.option.title[2].subtext=selectName.join(",");
         }
-        console.log(selectName)
         saveThis.myChart.setOption(saveThis.option,true);
     })
 },
@@ -519,7 +521,6 @@ createRandomArea:function(){
         color:"green"
     })
   }
-  console.log(pieces);
   return pieces;
 },
 //自定义的操作
@@ -764,7 +765,6 @@ addFuture: function(futureName){
     this.option.series.push(this.deepClone(this.future[futureName].dataK.series));
     this.option.title[0].subtext=futureName;
     this.myChart.setOption(this.option,true);
-    console.log(this.option)
 },
 removeFuture: function(){
     var futureName=this.option.title[0].subtext
@@ -779,7 +779,6 @@ addOption: function(futureName,optionName){
     this.option.series.push(IVSeries);
     this.option.series.push(series);
     this.option.legend[0].data.push(optionName);
-    console.log(this.option.legend[0].data)
     this.myChart.setOption(this.option,true);
 },
 popOption: function(optionName){
@@ -805,7 +804,6 @@ popLegend: function(optionName){
             i--;
         }
     }
-    console.log(optionName);
 },
 alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
     var index=futureXAxis.indexOf(optionXAxis[0]);
@@ -856,7 +854,6 @@ splitAppendData:function(res){
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        console.log(option,"option")
         if(option.data.length<30){
             continue;
         }
@@ -875,7 +872,6 @@ splitAppendData:function(res){
             IVData:optionIVData,
             categoryData:optionXAxis
         })
-        console.log(optionProc,"optionProc")
         optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
         optionSeries.push(optionProc)
     }
@@ -889,7 +885,6 @@ appendMapData:function(res){
     var future=res.status.data.future;
     this.mapData[future.code]=res.status.data.options.map(function(o){
         if(o.data.length>30){
-            console.log(o.code)
             return o.code;
         }else{
             return "-"
@@ -897,7 +892,6 @@ appendMapData:function(res){
     });
 },
 putCombination:function(){
-    console.log(this.readyCombinedOption)
     if(this.readyCombinedOption.length==2){
         axios.put('/client/add_combo/',
             {positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]}

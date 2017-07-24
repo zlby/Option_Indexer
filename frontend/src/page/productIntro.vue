@@ -24,7 +24,6 @@
           </el-submenu>
         </el-menu>
       </el-col>
-
       <el-col :span="20" style="height: 100%;overflow-x: hidden;overflow-y: auto; background-color: #E8E8E8;">
       <keep-alive>
           <router-view ></router-view>

@@ -51,8 +51,19 @@
     computed: {
       name () {
         return this.$store.state.login.username;
-      }
+      },
+      // email () {
+      //   return this.$store.state.login.email;
+      // },
+      // phone () {
+      //   return this.$store.state.login.phone;
+      // },
     },
+    // created: function (){
+
+    //   form.email = this.$store.state.login.new_email,
+    //   form.phone = this.$store.state.login.new_phone
+    // },
 
 
     components:{

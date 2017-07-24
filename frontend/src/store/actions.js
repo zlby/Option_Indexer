@@ -20,35 +20,47 @@ export const UserNewpassword = ({ commit }, data) =>{
 
 
 export const UserRegister = ({ commit }, data) => {
+  return new Promise((resolve, reject) => {
   api.localRegister(data).then(function (res) {
     res = res.data
     if (res.status.code == '0') {
       router.push({path:'/homepageIndividual'})
       commit('login', {username: data.username});
+      resolve()
     } else if(res.status.code == '-3'){
       alert('用户名已经注册！')
+      reject()
     } else{
       alert('请输入完整的账号密码！')
+      reject()
     }
   })
   .catch(function (error) {
     alert('登录失败！')
+    reject()
   })
+})
 };
 
 export const UserLogin = ({ commit }, data) => {
-  api.localLogin(data).then(function (res) {
-    res = res.data
-    if (res.status.code == '0') {
-      router.push({path:'/homepageIndividual'})
-      commit('login', {username: data.username});
-    } else {
+  return new Promise((resolve, reject) => {
+    api.localLogin(data).then(function (res) {
+      res = res.data
+      if (res.status.code == '0') {
+        router.push({path:'/homepageIndividual'})
+        commit('login', {username: data.username});
+        resolve()
+      } else {
+        alert('登录失败！')
+        reject()
+      }
+    })
+    .catch(function (error) {
       alert('登录失败！')
-    }
+      reject()
+    })
   })
-  .catch(function (error) {
-    alert('登录失败！')
-  })
+    
 };
 
 export const UpdateUserInfo = ({ commit }) => {

@@ -50,6 +50,8 @@
 
   export default{
       data(){
+        console.log(this.$store.state.login.OptionComboList)
+        console.log(this.$store.state.login.comboId)
         return{
             query: '',
             list:this.$store.state.login.OptionComboList,
@@ -84,6 +86,9 @@ mounted:function(){
 
 
     this.myChart=echarts.init(document.getElementById('main'));
+    this.combinations=this.createRandomCombination();
+    this.mapData=this.createCombinationMap();
+    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
     this.$store.dispatch('getOptionCombo')
     this.future={
     }
@@ -336,12 +341,7 @@ mounted:function(){
             animation:true,
             series: []
         };
-        this.combinations=this.createRandomCombination();
-        console.log(this.combinations)
-        this.mapData=this.createCombinationMap();
-        console.log(this.mapData);
-        console.log(this.option.xAxis);
-        this.addCombination(this.mapData[0][0],this.mapData[0][1]);
+        
         this.myChart.setOption(this.option);
         window.store=this
     /*var saveThis=this;
@@ -622,6 +622,9 @@ randomDataGenK:function(){
 date.setTime(date.getTime()+64800000);
 }
 return data
+},
+updateCombo:function(comboid){
+    var index=this.comboid.indexOf(comboid);
 },
 deleteCombo:function(event){
         if(event.target.tagName=="SPAN"){
