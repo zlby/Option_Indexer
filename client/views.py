@@ -209,7 +209,7 @@ def new_combo(request):
                 return JsonResponse(result, status=201)
             else:
                 status['code'] = -6
-                status['message'] = 'option not found'
+                status['message'] = '期权或期权套利组合不存在'
                 return JsonResponse(result, status=404)
         else:
             status['code'] = -2

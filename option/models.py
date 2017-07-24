@@ -167,6 +167,14 @@ class Intervals(models.Model):
                                                             buy_lot=self.rate,
                                                             sell_lot=1)
 
+    @staticmethod
+    def get_possible_combo(option_code):
+        possible_list = list(Intervals.objects.filter(positive_option_id=option_code)
+                             .values_list('negative_option_id', flat=True))
+        possible_list += list(Intervals.objects.filter(negative_option_id=option_code)
+                              .values_list('positive_option_id', flat=True))
+        return possible_list
+
 
 class News(models.Model):
     title = models.CharField(verbose_name='标题', max_length=50)

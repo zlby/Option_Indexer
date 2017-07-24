@@ -14,12 +14,16 @@ class Client(models.Model):
     def new_combo(self, positive_option_id, negative_option_id):
         if Option.objects.filter(code=positive_option_id).exists() and \
                 Option.objects.filter(code=negative_option_id).exists():
-            interval, if_create = Intervals.objects.get_or_create(positive_option_id=positive_option_id,
-                                                                  negative_option_id=negative_option_id)
-            OptionCombo.objects.get_or_create(client=self, combo_interval=interval)
-            return True
-        else:
-            return False
+            possibility1 = models.Q(positive_option_id=positive_option_id) & \
+                models.Q(negative_option_id=negative_option_id)
+            possibility2 = models.Q(negative_option_id=positive_option_id) & \
+                models.Q(positive_option_id=negative_option_id)
+            interval = Intervals.objects.filter(possibility1 | possibility2)
+            if interval:
+                interval = interval[0]
+                OptionCombo.objects.get_or_create(client=self, combo_interval=interval)
+                return True
+        return False
 
     def delete_combo(self, combo_id):
         try:

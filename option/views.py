@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 import json
 from datetime import datetime
-from option.models import Future, Option, FutureTreadingData, OptionTreadingData, News
+from option.models import Future, Option, News, Intervals
 
 # Create your views here.
 
@@ -94,3 +94,22 @@ def get_treading_data(request, future_code):
         status['code'] = 405
         status['message'] = 'http method not supported'
         return JsonResponse(result, status=405)
+
+
+def get_possible_combo(request, option_code):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        if Option.objects.filter(code=option_code).exists():
+            status['message'] = 'success'
+            result['possible_combo'] = Intervals.get_possible_combo(option_code)
+        else:
+            status['code'] = 404
+            status['message'] = '期权代码不存在'
+            return JsonResponse(result, status=404)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
