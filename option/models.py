@@ -71,7 +71,7 @@ class Future(models.Model):
             'future': {
                 'code': self.code,
                 'data': list(treading.get_detail() for treading in
-                             HourFutureTreadingData.objects.filter(time_filter & models.Q(future=self)))
+                             DayFutureTreadingData.objects.filter(time_filter & models.Q(future=self)))
             },
             'options': []
         }
