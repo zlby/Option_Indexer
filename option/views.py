@@ -66,29 +66,39 @@ def get_future_treading_data(request, future_code):
         datetime_format = '%Y-%m-%d %H:%M'
         start_time = request.GET.get('start_time')
         end_time = request.GET.get('end_time')
+        data_type = request.GET.get('data_type')
         if start_time:
-            try:
-                future = Future.objects.get(code=future_code)
-            except Future.DoesNotExist:
-                status['code'] = 404
-                status['message'] = '期货代码不存在'
-                return JsonResponse(result, status=404)
-            try:
-                start_time = datetime.strptime(start_time, datetime_format)
-                if end_time:
-                    end_time = datetime.strptime(end_time, datetime_format)
-            except ValueError:
-                status['code'] = -12
-                status['message'] = 'time_format_not_right'
+            if data_type in ['day', 'hour', 'minute']:
+                try:
+                    future = Future.objects.get(code=future_code)
+                except Future.DoesNotExist:
+                    status['code'] = 404
+                    status['message'] = '期货代码不存在'
+                    return JsonResponse(result, status=404)
+                try:
+                    start_time = datetime.strptime(start_time, datetime_format)
+                    if end_time:
+                        end_time = datetime.strptime(end_time, datetime_format)
+                except ValueError:
+                    status['code'] = -12
+                    status['message'] = 'time_format_not_right'
+                    return JsonResponse(result, status=400)
+                if data_type == 'minute':
+                    status['data'] = future.get_minute_treading_data(start_time=start_time, end_time=end_time)
+                elif data_type == 'hour':
+                    status['data'] = future.get_hour_treading_data(start_time=start_time, end_time=end_time)
+                else:
+                    status['data'] = future.get_day_treading_data(start_time=start_time, end_time=end_time)
+                status['message'] = '获取成功'
+                return JsonResponse(result, status=200)
+            else:
+                status['code'] = -2
+                status['message'] = 'data_type format not right'
                 return JsonResponse(result, status=400)
-            status['data'] = future.get_hour_treading_data(start_time=start_time, end_time=end_time)
-            status['message'] = '获取成功'
-            return JsonResponse(result, status=200)
         else:
             status['code'] = -2
             status['message'] = 'need more argument'
             return JsonResponse(result, status=400)
-
     else:
         # http方法不支持
         status['code'] = 405
@@ -103,30 +113,50 @@ def get_option_treading_data(request):
         datetime_format = '%Y-%m-%d %H:%M'
         start_time = request.GET.get('start_time')
         end_time = request.GET.get('end_time')
-        try:
-            start_time = datetime.strptime(start_time, datetime_format)
-            if end_time:
-                end_time = datetime.strptime(end_time, datetime_format)
-        except ValueError:
-            status['code'] = -12
-            status['message'] = 'time_format_not_right'
-            return JsonResponse(result, status=400)
+        data_type = request.GET.get('data_type')
         option_list = request.GET.get('option_list')
-        try:
-            option_list = list(json.loads(option_list))
-        except TypeError:
-            status['code'] = -12
-            status['message'] = 'time_format_not_right'
-            return JsonResponse(result, status=400)
-        if start_time:
-            pass
+        if start_time and option_list:
+            if data_type in ['day', 'hour', 'minute']:
+                try:
+                    start_time = datetime.strptime(start_time, datetime_format)
+                    if end_time:
+                        end_time = datetime.strptime(end_time, datetime_format)
+                except ValueError:
+                    status['code'] = -12
+                    status['message'] = 'time_format_not_right'
+                    return JsonResponse(result, status=400)
+                try:
+                    option_list = list(json.loads(option_list))
+                except TypeError:
+                    status['code'] = -12
+                    status['message'] = 'option list format not right'
+                    return JsonResponse(result, status=400)
+                data = []
+                for option_code in option_list:
+                    try:
+                        option = Option.objects.get(code=option_code)
+                    except Option.DoesNotExist:
+                        continue
+                    if data_type == 'minute':
+                        option_data = option.get_minute_treading_data(start_time, end_time)
+                    elif data_type == 'hour':
+                        option_data = option.get_hour_treading_data(start_time, end_time)
+                    else:
+                        option_data = option.get_day_treading_data(start_time, end_time)
+                    if option_data:
+                        data.append(option_data)
+                result['data'] = data_type
+                status['message'] = '获取成功'
+                return JsonResponse(result, status=200)
+
+            else:
+                status['code'] = -2
+                status['message'] = 'data_type format not right'
+                return JsonResponse(result, status=400)
         else:
             status['code'] = -2
             status['message'] = 'need more argument'
             return JsonResponse(result, status=400)
-        if start_time:
-            pass
-
     else:
         # http方法不支持
         status['code'] = 405

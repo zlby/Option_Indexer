@@ -40,12 +40,9 @@ class Future(models.Model):
             'options': []
         }
         for option in Option.objects.filter(asset=self):
-            option_detail = {
-                'code': option.code,
-                'data': list(treading.get_detail() for treading in
-                             OptionTreadingData.objects.filter(time_filter & models.Q(option=option)))
-            }
-            result['options'].append(option_detail)
+            option_data = option.get_minute_treading_data(start_time, end_time)
+            if option_data:
+                result['options'].append(option_data)
         return result
 
     def get_hour_treading_data(self, start_time, end_time=None):
@@ -61,12 +58,27 @@ class Future(models.Model):
             'options': []
         }
         for option in Option.objects.filter(asset=self):
-            option_detail = {
-                'code': option.code,
+            option_data = option.get_hour_treading_data(start_time, end_time)
+            if option_data:
+                result['options'].append(option_data)
+        return result
+
+    def get_day_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
+        result = {
+            'future': {
+                'code': self.code,
                 'data': list(treading.get_detail() for treading in
-                             HourOptionTreadingData.objects.filter(time_filter & models.Q(option=option)))
-            }
-            result['options'].append(option_detail)
+                             HourFutureTreadingData.objects.filter(time_filter & models.Q(future=self)))
+            },
+            'options': []
+        }
+        for option in Option.objects.filter(asset=self):
+            option_data = option.get_day_treading_data(start_time, end_time)
+            if option_data:
+                result['options'].append(option_data)
         return result
 
 
@@ -80,6 +92,48 @@ class Option(models.Model):
         for option in Option.objects.filter(asset=future):
             result.append(option.code)
         return result
+
+    def get_minute_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
+        all_treading_data = OptionTreadingData.objects.filter(time_filter & models.Q(option=self))
+        if len(all_treading_data) > 1000:
+            result = {
+                'code': self.code,
+                'data': list(treading.get_detail() for treading in all_treading_data)
+            }
+            return result
+        else:
+            return None
+
+    def get_hour_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
+        all_treading_data = HourOptionTreadingData.objects.filter(time_filter & models.Q(option=self))
+        if len(all_treading_data) > 40:
+            result = {
+                'code': self.code,
+                'data': list(treading.get_detail() for treading in all_treading_data)
+            }
+            return result
+        else:
+            return None
+
+    def get_day_treading_data(self, start_time, end_time=None):
+        time_filter = models.Q(time__gte=start_time)
+        if end_time:
+            time_filter &= models.Q(time__lte=end_time)
+        all_treading_data = DayOptionTreadingData.objects.filter(time_filter & models.Q(option=self))
+        if len(all_treading_data) > 3:
+            result = {
+                'code': self.code,
+                'data': list(treading.get_detail() for treading in all_treading_data)
+            }
+            return result
+        else:
+            return None
 
 
 class TreadingDataBase(models.Model):
