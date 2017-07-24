@@ -45,7 +45,8 @@
           new_password: '',
           email: '',
           phone: ''
-        }
+        },
+        emailOrPhoneChanged: false
       }
     },
     computed: {
@@ -58,6 +59,7 @@
         },
         set: function(newVal) {
           this.form.email = newVal
+          this.emailOrPhoneChanged = true
         }
       },
       cphone: {
@@ -66,6 +68,7 @@
         },
         set: function(newVal) {
           this.form.phone = newVal
+          this.emailOrPhoneChanged = true
         }
       },
     },
@@ -81,13 +84,34 @@
 
     methods:{
       dj: function(){
-        this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password,
-          new_password:this.form.new_password});
-        this.$store.dispatch('UserNewemailphone',{email:this.form.email,
-          phone:this.form.phone});
+        var context = this
+        if (this.form.new_password != '') {
+          this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password, new_password:this.form.new_password})
+          .then(function success(){
+            context.notif('修改成功', '密码修改成功，请重新登录！', 'success')
+          }, function fail(){
+            context.notif('修改失败', '密码修改失败，请重新登录！', 'error')
+          })
+        }
+        if (this.emailOrPhoneChanged) {
+          this.$store.dispatch('UserNewemailphone',{email:this.form.email, phone:this.form.phone})
+          .then(function success(){
+            context.notif('修改成功', '邮箱或手机修改成功，请重新登录！', 'success')
+          }, function fail(){
+            context.notif('修改失败', '邮箱或手机修改失败，请重新登录！', 'error')
+          })
+        }
+        
         this.$store.dispatch('UserLogout');
         this.$router.push({ path: '/' })
       },
+      notif: function(title, msg, type){
+        this.$notify({
+          title: title,
+          message: msg,
+          type: type
+        });
+      }
     }
 
   }

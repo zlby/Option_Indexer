@@ -2,54 +2,52 @@ import api from '../api'
 import router from '../router'
 
 export const UserNewpassword = ({ commit }, data) =>{
-  api.localNewpassword(data).then(function (res){
-    res = res.data
-    if(res.status.code == '0'){
-      commit('new_password', {new_password: data.new_password});
-      // commit('logout');
-      // router.push({path:'/login'})
-    }else{
-      // alert('密码修改失败!')
-          this.$notify({
-          title: '警告',
-          message: '密码修改失败',
-          type: 'warning'
-      })
-    }
+  return new Promise((resolve, reject) => {
+    api.localNewpassword(data).then(function (res){
+      res = res.data
+      if(res.status.code == '0'){
+        commit('new_password', {new_password: data.new_password});
+        // alert('密码修改成功，请重新登录！')
+        resolve()
+        // commit('logout');
+        // router.push({path:'/login'})
+      }else{
+        // alert('密码修改失败！')
+        reject()
+      }
+    })
+    .catch(function (error){
+      // alert('密码修改失败！！')
+      console.log('error1')
+      reject()
+    })
   })
-
-  .catch(function (error){
-    this.$notify({
-      title: '警告',
-      message: '密码修改失败',
-      type: 'warning'
-    })
-    })
+  
 };
 
 
 
 export const UserRegister = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
-  api.localRegister(data).then(function (res) {
-    res = res.data
-    if (res.status.code == '0') {
-      router.push({path:'/homepageIndividual'})
-      commit('login', {username: data.username});
-      resolve()
-    } else if(res.status.code == '-3'){
-      alert('用户名已经注册！')
+    api.localRegister(data).then(function (res) {
+      res = res.data
+      if (res.status.code == '0') {
+        router.push({path:'/homepageIndividual'})
+        commit('login', {username: data.username});
+        resolve()
+      } else if(res.status.code == '-3'){
+        alert('用户名已经注册！')
+        reject()
+      } else{
+        alert('请输入完整的账号密码！')
+        reject()
+      }
+    })
+    .catch(function (error) {
+      alert('登录失败！')
       reject()
-    } else{
-      alert('请输入完整的账号密码！')
-      reject()
-    }
+    })
   })
-  .catch(function (error) {
-    alert('登录失败！')
-    reject()
-  })
-})
 };
 
 export const UserLogin = ({ commit }, data) => {
@@ -130,19 +128,25 @@ export const UserLogout = ({ commit }) => {
   };
 
 export const UserNewemailphone = ({ commit }, data) =>{
-  api.localnewphone_email({email:data.email,phone:data.phone}).then(function (res){
-    res = res.data
-    if(res.status.code == '0'){
-      commit('new_emai_or_phone', {new_email: data.new_email,
-        new_phone: data.new_phone});
-      alert('修改成功!')
-    }else{
-      alert('修改!')
-    }
+  return new Promise((resolve, reject) => {
+    api.localnewphone_email({email:data.email,phone:data.phone})
+    .then(function (res){
+      res = res.data
+      if(res.status.code == '0'){
+        commit('new_emai_or_phone', {new_email: data.new_email, new_phone: data.new_phone});
+        resolve()
+        // alert('邮箱或手机修改成功，请重新登录!')
+      }else{
+        reject()
+        // alert('邮箱或手机修改失败！')
+      }
+    })
+    .catch(function (error){
+      reject()
+      // alert('邮箱或手机修改失败！！')
+    })
   })
-  .catch(function (error){
-    alert('修改失败1!')
-  })
+  
 };
 
 export const getNotification = ({ commit }, obj)=>{
