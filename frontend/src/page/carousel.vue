@@ -65,12 +65,12 @@
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6" v-for="news in 4" :index2="news">
 									<el-card class="news-card">
 										<img src= "../assets/pexels-photo-159888.jpeg">
-										<div style="padding: 14px;">
+										<div style="padding: 14px; height:150px" >
 											<p class="H1">{{title[page-1][news-1]}}</p>
 											<p class="H1">{{time[page-1][news-1]}}</p>
 											<div class="news-text" style="padding: 14px;">{{content[page-1][news-1]}}</div>
 										</div>
-										<el-button  @click="bj(page, news)" class="news-btn" type="primary" size="large" style="margin-top:15px" >read more</el-button>
+										<el-button  @click="bj(page, news)" class="news-btn" type="primary" size="large" style="margin-top:10px" >read more</el-button>
 									</el-card>
 								</el-col>
 							</el-row>
@@ -234,6 +234,7 @@
 	.news_container{
 		width: 80%;
 		margin: auto;
+		height: 400px;
 	}
 
 	.p1{

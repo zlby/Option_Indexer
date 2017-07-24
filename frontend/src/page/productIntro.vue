@@ -2,7 +2,7 @@
   <div class="manage_page fillcontain">
       <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
-      <el-col :span="4"  style="min-height: 100%; background-color: #324057;min-width:200px">
+      <el-col :span="4"  style="height: 100%; background-color: #324057;min-width:200px;overflow-y:scroll;">
         <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo">
 
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
@@ -118,4 +118,26 @@ button span i {
  .menu-item{
   font-size: 16px;
  }
+
+
+ /*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar{
+    width: 5px;
+    background-color: #f5f5f5;
+}
+/*定义滚动条的轨道，内阴影及圆角*/
+::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    width:5px;
+    background-color: #fff;
+}
+/*定义滑块，内阴影及圆角*/
+::-webkit-scrollbar-thumb{
+    /*width: 10px;*/
+    height: 5px;
+    border-radius: 2px;
+    width:5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
 </style>

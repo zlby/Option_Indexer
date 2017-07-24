@@ -83,104 +83,8 @@
     })
 },
 mounted:function(){
-
-
-    this.myChart=echarts.init(document.getElementById('main'));
-    this.combinations=this.createRandomCombination();
-    this.mapData=this.createCombinationMap();
-    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
-    this.$store.dispatch('getOptionCombo')
     this.future={
     }
-    this.template={
-
-        "optionK":{
-            name: null,
-            type: 'candlestick',
-            step:false,
-            smooth:false,
-            data:null,
-            markPoints:{
-                label:{
-                    formatter:function(param){
-                        return param!=null?Math.floor(param.value):"";
-                    }
-                },
-                data:[
-                {
-                    name: 'highest value',
-                    type: 'max',
-                    valueDim: 'highest'
-                },
-                {
-                    name: 'lowest value',
-                    type: 'min',
-                    valueDim: 'lowest'
-                },
-                {
-                    name: 'average value on close',
-                    type: 'average',
-                    valueDim: 'close'
-                }
-                ]
-            },
-            markLine: {
-                symbol: ['none', 'arrow'],
-                data: [
-                {
-                    name: 'min line on close',
-                    type: 'min',
-                    valueDim: 'close'
-                },
-                {
-                    name: 'max line on close',
-                    type: 'max',
-                    valueDim: 'close'
-                }
-                ]
-            },
-            gridIndex:null,
-        },
-        "optionIV":{
-            name:null,
-            type:"line",
-            data:null,
-            xAxisIndex:1,
-            yAxisIndex:1,
-            tooltip:{
-                trigger:"axis",
-            },
-            itemStyle:{
-                normal:{
-                    color:null,
-                    borderWidth:1
-                }
-            },
-            gridIndex:null,
-        },
-        "IVD":{
-            name:"隐含波动率之差",
-            type:"line",
-            data:null,
-            xAxisIndex:3,
-            yAxisIndex:3,
-            tooltip:{
-                trigger:"axis",
-            },
-            itemStyle:{
-                normal:{
-                    color:"#000000",
-                    borderWidth:1
-                }
-            }
-        }
-    }
-
-
-    // var dataK=[];
-    // for(var i=0;i<20;i++){
-    //     dataK.push(splitData());
-    // }
     this.option= {
         title:[
         {
@@ -341,6 +245,101 @@ mounted:function(){
             animation:true,
             series: []
         };
+    this.template={
+        "optionK":{
+            name: null,
+            type: 'candlestick',
+            step:false,
+            smooth:false,
+            data:null,
+            markPoints:{
+                label:{
+                    formatter:function(param){
+                        return param!=null?Math.floor(param.value):"";
+                    }
+                },
+                data:[
+                {
+                    name: 'highest value',
+                    type: 'max',
+                    valueDim: 'highest'
+                },
+                {
+                    name: 'lowest value',
+                    type: 'min',
+                    valueDim: 'lowest'
+                },
+                {
+                    name: 'average value on close',
+                    type: 'average',
+                    valueDim: 'close'
+                }
+                ]
+            },
+            markLine: {
+                symbol: ['none', 'arrow'],
+                data: [
+                {
+                    name: 'min line on close',
+                    type: 'min',
+                    valueDim: 'close'
+                },
+                {
+                    name: 'max line on close',
+                    type: 'max',
+                    valueDim: 'close'
+                }
+                ]
+            },
+            gridIndex:null,
+        },
+        "optionIV":{
+            name:null,
+            type:"line",
+            data:null,
+            xAxisIndex:1,
+            yAxisIndex:1,
+            tooltip:{
+                trigger:"axis",
+            },
+            itemStyle:{
+                normal:{
+                    color:null,
+                    borderWidth:1
+                }
+            },
+            gridIndex:null,
+        },
+        "IVD":{
+            name:"隐含波动率之差",
+            type:"line",
+            data:null,
+            xAxisIndex:3,
+            yAxisIndex:3,
+            tooltip:{
+                trigger:"axis",
+            },
+            itemStyle:{
+                normal:{
+                    color:"#000000",
+                    borderWidth:1
+                }
+            }
+        }
+    }
+    this.myChart=echarts.init(document.getElementById('main'));
+    this.combinations=this.createRandomCombination();
+    this.mapData=this.createCombinationMap();
+    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
+    this.$store.dispatch('getOptionCombo')
+    
+
+
+    // var dataK=[];
+    // for(var i=0;i<20;i++){
+    //     dataK.push(splitData());
+    // }
+    
         
         this.myChart.setOption(this.option);
         window.store=this
@@ -443,14 +442,12 @@ return color;
 createRandomSeries:function(){
     var data = this.splitData();
     data.name = "M"+(Math.random()*1000+1000).toFixed(0);
-    var series = this.deepClone(this.
-      template.optionK);
+    var series = this.deepClone(this.template.optionK);
     series.name = data.name;
     series.data = data.values;
     series.xAxisIndex=0;
     series.yAxisIndex=0;
-    var IVSeries = this.deepClone(this.
-      template.optionIV);
+    var IVSeries = this.deepClone(this.template.optionIV);
     IVSeries.data = data.IVData;
     IVSeries.name = data.name;
     IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();

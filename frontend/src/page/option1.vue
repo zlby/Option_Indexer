@@ -1,10 +1,25 @@
 <template style="min-width:800px">
     <el-row>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:600px;">
+            <div id="main" style="width:100%;height:600px; margin:20px 0px;">
             </div>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="20">
+            
+            <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
+                <el-date-picker
+                  v-model="value7"
+                  type="daterange"
+                  align="right"
+                  placeholder="选择日期范围"
+                  :picker-options="pickerOptions2"
+                  style="margin-left:50px">
+                </el-date-picker>
+            </div>
+            <el-radio-group v-model="radio3" :span="4">
+                <el-radio-button label="日"></el-radio-button>
+                <el-radio-button label="小时"></el-radio-button>
+            </el-radio-group>
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">add combination</el-button>
         </el-col>
     </el-row>
@@ -16,12 +31,64 @@
   import axios from 'axios'
 
   export default{
+    data() {
+      return {
+        radio3: '小时',
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+        value7: ''
+      };
+    },
     created:function(){
+        var saveThis=this;
         Bus.$on('addNewOption', optionObj=>{
-            this.removeFuture();
-            this.addFuture(optionObj.future);
-            this.addOption(optionObj.future, optionObj.option);
-            this.readyCombinedOption.push(optionObj.option);
+            if(this.futureDataGet.indexOf(optionObj.future)===-1){
+                axios.get('/market/future/'+optionObj.future+'/treading/',{
+            params:{start_time:"2017-06-01 09:00"}}).then(function(res){
+                    console.log(res);
+                    res=res.data;
+                    if(res.status.code===0){
+                        saveThis.future[optionObj.future]=saveThis.splitAppendData(res);
+                        saveThis.removeFuture();
+                        saveThis.addFuture(optionObj.future);
+                        saveThis.addOption(optionObj.future, optionObj.option);
+                        saveThis.readyCombinedOption.push(optionObj.option);
+                        saveThis.futureDataGet.push(optionObj.future)
+                    }else{
+                        alert('出错')
+                    }
+                })
+            }else{
+                saveThis.removeFuture();
+                saveThis.addFuture(optionObj.future);
+                saveThis.addOption(optionObj.future, optionObj.option);
+                saveThis.readyCombinedOption.push(optionObj.option);
+            }
         })
         Bus.$on('removeOption', optionObj=>{
             this.popOption(optionObj.option)
@@ -32,26 +99,28 @@
         this.myChart=echarts.init(document.getElementById('main'));
         this.mapData={};
         this.future={
-            name
+            name:[]
         };
         this.readyCombinedOption=[];
+        this.futureDataGet=[]
         var saveThis=this;
-        var futureList=[]
+        var futureList=[];
+/*        axios.get('/market/futures/',{
+            params:{start_time:"2017-06-01 09:00"}
+        }).then(function(res){
+            saveThis.createMapData(res.data);
+            //saveThis.future[res.data.status.data.future.code]=saveThis.splitAppendData(res.data);
+            
+        })*/
         axios.get('/market/futures/').then(function(res){
             res=res.data;
             console.log(res)
             if(res.status.code===0){
-                futureList=res.data.future_list
+                saveThis.createMapData(res);
+                Bus.$emit("getData", saveThis.mapData);
             }else{
                 alert('出错')
             }
-        })
-        axios.get('/market/future/m1708/treading/',{
-          params:{start_time:"2017-06-01 09:00"}
-        }).then(function(res){
-            saveThis.appendMapData(res.data);
-            saveThis.future[res.data.status.data.future.code]=saveThis.splitAppendData(res.data);
-            Bus.$emit("getData", saveThis.mapData);
         })
         this.template={
 
@@ -415,6 +484,7 @@
         }
         saveThis.myChart.setOption(saveThis.option,true);
     })
+    window.store=this;
 },
 
 methods: {
@@ -786,7 +856,7 @@ popOption: function(optionName){
     this.popLegend(optionName);
     this.myChart.setOption(this.option,true);
 },
-createMapData: function() {
+createRandomMapData: function() {
     this.createRandomFuture();
     var mapData={};
     for(var i=0;i<this.future.name.length;i++){
@@ -806,16 +876,21 @@ popLegend: function(optionName){
     }
 },
 alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
+    console.log(optionXAxis);
     var index=futureXAxis.indexOf(optionXAxis[0]);
+    if(index==-1){
+        return [];
+    }
     var fill=["-","-","-","-"];
     var rtn=[]
     var no_datas=[];
     for(var i=0;i<index;i++){
-        no_datas.push();
+        no_datas.push(fill);
     }
     rtn=no_datas.concat(optionData);
-    for(var i=index-1;i<futureXAxis.length;i++){
-        if(futureXAxis[i]!=optionXAxis[i]){
+    for(var i=index,j=0;i<futureXAxis.length;i++,j++){
+        if(futureXAxis[i]!=optionXAxis[j]){
+            console.log(futureXAxis[i],optionXAxis[j],i,j)
             rtn.splice(i,0,fill);
         }
     }
@@ -823,6 +898,7 @@ alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
 },
 splitAppendData:function(res){
     var tag=res.status.data;
+    var threshold=0
     var data={};
     var futureValues=tag.future.data.map(function(o){
         return [o.open_price,o.close_price,o.max_price,o.min_price]
@@ -834,12 +910,12 @@ splitAppendData:function(res){
         name:tag.future.code,
         values:futureValues,
         categoryData:futureXAxis,
-        IVData:[]
+        IVData:["-"]
     });
     dataK.series.xAxisIndex=0;
     dataK.series.yAxisIndex=0;
     var optionNames=tag.options.map(function(o){
-        if(o.data.length>30){
+        if(o.data.length>=threshold){
             return o.code;
         }else{
             return "-"
@@ -848,15 +924,13 @@ splitAppendData:function(res){
     for(var i=0;i<optionNames.length;i++){
         if(optionNames[i]=="-"){
             optionNames.splice(i,1);
+            this.mapData[tag.future.code].splice(i,1);
             i--;
         }
     }
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        if(option.data.length<30){
-            continue;
-        }
         var optionValues=option.data.map(function(o){
             return [o.open_price,o.close_price,o.max_price,o.min_price]
         });
@@ -864,7 +938,7 @@ splitAppendData:function(res){
             return o.time
         });
         var optionIVData=option.data.map(function(o){
-            return o.volatility
+            return o.volatility.toFixed(4);
         });
         var optionProc=this.createSeries({
             name:option.code,
@@ -873,6 +947,9 @@ splitAppendData:function(res){
             categoryData:optionXAxis
         })
         optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
+        if(optionProc.series.name!=tag.future.code){
+            optionProc.IVSeries.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.IVSeries.data);
+        }
         optionSeries.push(optionProc)
     }
     return {
@@ -881,15 +958,12 @@ splitAppendData:function(res){
         datas:optionSeries
     }
 },
-appendMapData:function(res){
-    var future=res.status.data.future;
-    this.mapData[future.code]=res.status.data.options.map(function(o){
-        if(o.data.length>30){
-            return o.code;
-        }else{
-            return "-"
-        }
-    });
+createMapData:function(res){
+    console.log(res);
+    for(var i=0;i<res.future_list.length;i++){
+        var future=res.future_list[i];
+        this.mapData[future.code]=future.options;
+    }
 },
 putCombination:function(){
     if(this.readyCombinedOption.length==2){
