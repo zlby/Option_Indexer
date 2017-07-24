@@ -4,7 +4,7 @@
             <div id="main" style="width:100%;height:600px; margin:20px 0px;">
             </div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="20" style="margin-top:20px">
             
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
@@ -13,7 +13,7 @@
                   align="right"
                   placeholder="选择日期范围"
                   :picker-options="pickerOption"
-                  style="margin-left:50px; width:200px;">
+                  style="margin-left:50px; width:60%">
                 </el-date-picker>
             </div>
 

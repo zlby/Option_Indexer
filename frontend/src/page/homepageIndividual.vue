@@ -2,7 +2,7 @@
   <div class="manage_page fillcontain">
     <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
-      <el-col :span="4"  style="min-height: 100%; background-color: #324057;min-width:200px">
+      <el-col :span="5"  style="min-height: 100%; background-color: #324057;min-width:200px">
         <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
           <el-menu-item index="/homepageIndividual"><i class="el-icon-menu"></i>个人资料</el-menu-item>
@@ -12,7 +12,7 @@
         </el-menu>
       </el-col>
 
-      <el-col :span="20" style="height: 100%;overflow-y: auto; background-color: #E8E8E8;">
+      <el-col :span="19" style="height: 100%;overflow-y: auto; background-color: #E8E8E8;">
           <router-view ></router-view>
       </el-col>
     </el-row>

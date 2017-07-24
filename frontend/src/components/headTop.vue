@@ -13,7 +13,6 @@
       <el-col :span="7" :offset="8" :xs="7" :md="7" :lg="7" :sm="7" class="main-page-group">
        <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>		
        <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >策略套利</el-menu-item>
-       <el-menu-item index="/use"  class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn">信息资源</el-menu-item>
      </el-col>
 
 
@@ -28,12 +27,15 @@
         <i class="el-icon-message"></i>
       </el-badge>
       </el-menu-item>
+
       <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
+
       <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
         <el-dropdown>
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
+          
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><i class="el-icon-document"></i>
               <el-button type="text" @click="homepageIndividual">个人主页</el-button>

@@ -1,9 +1,9 @@
 <template style="min-width:800px">
     <div>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:300px; margin-bottom:20px;"></div>
+            <div id="main" style="width:100%;height:300px; margin-bottom:20px; margin-top:20px"></div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="20" style="margin-top:30px">
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
                   v-model="daypicker"
@@ -11,22 +11,22 @@
                   align="right"
                   placeholder="选择日期范围"
                   :picker-options="pickerOption"
-                  style="margin-left:50px; width:200px;">
+                  style="margin-left:50px; width:60%;">
                 </el-date-picker>
             </div>
 
-            <el-col :span="4">
+            <el-col :span="7">
             <el-radio-group v-model="interval">
                 <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
             </el-radio-group>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="8">
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
             </el-col>
         </el-col>
-        <el-col :span="20" >
+        <el-col :span="20" style="margin-top:30px; margin-left:50px">
             <el-card class="box-card">
-              <el-input v-model="query" placeholder="请输入内容"></el-input>
+              <el-input v-model="query" placeholder="搜索所需组合"></el-input>
 
               <div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
                     <el-col :span="9" style="vertical-align:center">

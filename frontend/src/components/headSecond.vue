@@ -7,13 +7,13 @@
 			<el-menu-item index="/" class="el-col el-col-16 el-col-xs-16 el-col-md-16 el-col-sm-16 el-col-lg-16">我的主页</el-menu-item>
 		</el-col>
 
-		<el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6">
+<!-- 		<el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6">
 			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/login"><i class="el-icon-menu"></i></el-menu-item>
 			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/productIntro" >中文</el-menu-item>
 			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/use"><i class="el-icon-search"></i></el-menu-item>
-		</el-col>
+		</el-col> -->
 
-		<el-col :span="3" :offset="10" >
+<!-- 		<el-col :span="3" :offset="10" >
 		<el-menu-item class="el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24"
 		index="/login">
 			<el-dropdown>
@@ -35,7 +35,7 @@
 				</el-dropdown-menu>
 			</el-dropdown>
 		</el-menu-item>
-		</el-col>
+		</el-col> -->
 
 
 		</el-menu>
