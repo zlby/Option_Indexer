@@ -127,7 +127,7 @@ def get_option_treading_data(request):
                     return JsonResponse(result, status=400)
                 try:
                     option_list = list(json.loads(option_list))
-                except TypeError:
+                except (TypeError, json.JSONDecodeError):
                     status['code'] = -12
                     status['message'] = 'option list format not right'
                     return JsonResponse(result, status=400)
@@ -145,7 +145,7 @@ def get_option_treading_data(request):
                         option_data = option.get_day_treading_data(start_time, end_time)
                     if option_data:
                         data.append(option_data)
-                result['data'] = data_type
+                result['data'] = data
                 status['message'] = '获取成功'
                 return JsonResponse(result, status=200)
 
