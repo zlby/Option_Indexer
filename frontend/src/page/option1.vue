@@ -967,13 +967,47 @@ createMapData:function(res){
 },
 putCombination:function(){
     if(this.readyCombinedOption.length==2){
+        var saveThis=this;
         axios.put('/client/add_combo/',
-            {positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]}
+            {positive_option:this.readyCombinedOption[0],negative_option:this.readyCombinedOption[1]},
+            {validateStatus:null}
             ).then(function(res){
-            console.log(res);
-        })
-    }else{
-        console.log("overSized")
+              if(res.data.status.code=='0'){
+                  saveThis.$notify({
+                      title: '成功',
+                      message: '您已经成功选择期权组合\n'+saveThis.readyCombinedOption[0]+"与"+saveThis.readyCombinedOption[1],
+                      type: 'success'
+                  });
+              }else if(res.data.status.code=="-6"){
+                saveThis.$notify.error({
+                    title: '错误',
+                    message: '您选择的期权不存在或者该期权组合无法预测',
+                    type: 'danger'
+                });
+              }
+              else{
+                console.log(res.data.status)
+                  saveThis.$notify.error({
+                      title: '错误',
+                      message: '似乎有点内部错误',
+                      type: 'danger'
+                  });
+              }
+          }).catch(function(e){
+            console.log(e)
+            saveThis.$notify.error({
+              title: '错误',
+              message: '您的网络似乎出了问题',
+              type: 'danger'
+            })
+    })
+      }
+          else{
+        this.$notify({
+          title: '警告',
+          message: '添加期权组合需要选定两个期权',
+          type: 'warning'
+      });
     }
 }
 

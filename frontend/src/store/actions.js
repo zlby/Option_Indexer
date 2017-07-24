@@ -9,12 +9,22 @@ export const UserNewpassword = ({ commit }, data) =>{
       // commit('logout');
       // router.push({path:'/login'})
     }else{
-      alert('密码修改失败!')
+      // alert('密码修改失败!')
+          this.$notify({
+          title: '警告',
+          message: '密码修改失败',
+          type: 'warning'
+      })
     }
   })
+
   .catch(function (error){
-    alert('密码修改失败!')
-  })
+    this.$notify({
+      title: '警告',
+      message: '密码修改失败',
+      type: 'warning'
+    })
+    })
 };
 
 

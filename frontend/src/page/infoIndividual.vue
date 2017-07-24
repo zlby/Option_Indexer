@@ -85,6 +85,8 @@
           new_password:this.form.new_password});
         this.$store.dispatch('UserNewemailphone',{email:this.form.email,
           phone:this.form.phone});
+        this.$store.dispatch('UserLogout');
+        this.$router.push({ path: '/' })
       },
     }
 
