@@ -79,7 +79,7 @@ class Option(models.Model):
         result = []
         for option in Option.objects.filter(asset=future):
             result.append(option.code)
-            return result
+        return result
 
 
 class TreadingDataBase(models.Model):
