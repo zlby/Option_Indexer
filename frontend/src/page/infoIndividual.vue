@@ -17,12 +17,12 @@
         </el-form-item>
 
         <el-form-item label="邮箱" class="input_form">
-          <el-input v-model="form.email" ></el-input>
+          <el-input v-model="cemail" ></el-input>
 <!--           <el-input type="name" :value="name" ></el-input> -->
         </el-form-item>
 
         <el-form-item label="手机号码" class="input_form">
-          <el-input v-model="form.phone"></el-input>
+          <el-input v-model="cphone"></el-input>
         </el-form-item>
 
         <el-form-item class="input_form">
@@ -43,8 +43,8 @@
         form: {
           old_password: '',
           new_password: '',
-          email: this.$store.state.login.new_email,
-          phone: this.$store.state.login.new_phone
+          email: '',
+          phone: ''
         }
       }
     },
@@ -52,12 +52,22 @@
       name () {
         return this.$store.state.login.username;
       },
-      // email () {
-      //   return this.$store.state.login.email;
-      // },
-      // phone () {
-      //   return this.$store.state.login.phone;
-      // },
+      cemail: {
+        get: function() {
+          return this.$store.state.login.new_email
+        },
+        set: function(newVal) {
+          this.form.email = newVal
+        }
+      },
+      cphone: {
+        get: function() {
+          return this.$store.state.login.new_phone
+        },
+        set: function(newVal) {
+          this.form.phone = newVal
+        }
+      },
     },
     // created: function (){
 
