@@ -2,7 +2,7 @@
   <div class="manage_page fillcontain">
       <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
-      <el-col :span="4"  style="height: 100%; background-color: #324057;overflow-y:scroll;">
+      <el-col :span="5"  style="height: 100%; background-color: #324057;overflow-y:scroll;">
         <el-menu theme="dark" style="height: 100%;min-width:230px;" default-active="defaultActive" class="el-menu-vertical-demo">
 
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
@@ -24,7 +24,7 @@
           </el-submenu>
         </el-menu>
       </el-col>
-      <el-col :span="20" style="height: 100%;overflow-x: hidden;overflow-y: auto; background-color: #E8E8E8;">
+      <el-col :span="19" style="height: 100%;overflow-x: hidden;overflow-y: auto; background-color: #E8E8E8;">
       <keep-alive>
           <router-view ></router-view>
       </keep-alive>
@@ -42,6 +42,19 @@
     created:function(){
       Bus.$on("getData", data => {
         this.items=data
+      })
+      Bus.$on("resetAllBtn",function(){
+        var btnSet=document.getElementsByClassName("el-button--danger");
+        for(;;){
+            var btn=btnSet[0];
+            removeClass(btn, 'el-button--danger');
+            addClass(btn, 'el-button--primary');
+            removeClass(btn.children[0].children[0], 'el-icon-minus');
+            addClass(btn.children[0].children[0], 'el-icon-plus');
+            if(btnSet.length==0){
+              break;
+            }
+        }
       })
     },
     data:function(){

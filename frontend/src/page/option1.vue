@@ -8,19 +8,20 @@
             
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
-                  v-model="value7"
+                  v-model="daypicker"
                   type="daterange"
                   align="right"
                   placeholder="选择日期范围"
-                  :picker-options="pickerOptions2"
+                  :picker-options="pickerOption"
                   style="margin-left:50px">
                 </el-date-picker>
             </div>
-            <el-radio-group v-model="radio3" :span="4">
-                <el-radio-button label="日"></el-radio-button>
-                <el-radio-button label="小时"></el-radio-button>
+            <el-radio-group v-model="interval" :span="4">
+                <el-radio-button label="day">日</el-radio-button>
+                <el-radio-button label="hour">小时</el-radio-button>
             </el-radio-group>
-            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">add combination</el-button>
+            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
+            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">添加期权组合</el-button>
         </el-col>
     </el-row>
 </template>
@@ -33,8 +34,8 @@
   export default{
     data() {
       return {
-        radio3: '小时',
-        pickerOptions2: {
+        interval: 'hour',
+        pickerOption: {
           shortcuts: [{
             text: '最近一周',
             onClick(picker) {
@@ -61,24 +62,32 @@
             }
           }]
         },
-        value7: ''
+        daypicker: ''
       };
     },
     created:function(){
         var saveThis=this;
-        Bus.$on('addNewOption', optionObj=>{
+        Bus.$on('addNewOption', optionObj=>{                        
+            saveThis.readyCombinedOption.push(optionObj.option);
             if(this.futureDataGet.indexOf(optionObj.future)===-1){
                 axios.get('/market/future/'+optionObj.future+'/treading/',{
-            params:{start_time:"2017-06-01 09:00"}}).then(function(res){
-                    console.log(res);
+            params:saveThis.dataFormat}).then(function(res){
                     res=res.data;
                     if(res.status.code===0){
+                        if(saveThis.fewDataOptionSet.indexOf(optionObj.option)!==-1){
+                            console.log("notice")
+                            saveThis.$notify({
+                                type:"warning",
+                                title:"提示",
+                                message:"该期权的数据量较小，显示效果可能较差"
+                            })
+                        }
                         saveThis.future[optionObj.future]=saveThis.splitAppendData(res);
                         saveThis.removeFuture();
                         saveThis.addFuture(optionObj.future);
                         saveThis.addOption(optionObj.future, optionObj.option);
-                        saveThis.readyCombinedOption.push(optionObj.option);
-                        saveThis.futureDataGet.push(optionObj.future)
+                        saveThis.futureDataGet.push(optionObj.future);
+
                     }else{
                         alert('出错')
                     }
@@ -87,12 +96,15 @@
                 saveThis.removeFuture();
                 saveThis.addFuture(optionObj.future);
                 saveThis.addOption(optionObj.future, optionObj.option);
-                saveThis.readyCombinedOption.push(optionObj.option);
             }
         })
         Bus.$on('removeOption', optionObj=>{
             this.popOption(optionObj.option)
-            this.readyCombinedOption.splice(this.readyCombinedOption.indexOf(optionObj.option,1));
+            var index=this.readyCombinedOption.indexOf(optionObj.option)
+            if(index!=-1){
+                this.readyCombinedOption.splice(index,1);
+            }
+            
         })
     },
     mounted:function(){
@@ -102,7 +114,12 @@
             name:[]
         };
         this.readyCombinedOption=[];
-        this.futureDataGet=[]
+        this.dataFormat={
+            start_time:"2017-06-01 09:00",
+            data_type:"hour"
+        };
+        this.futureDataGet=[];
+        this.fewDataOptionSet=[];
         var saveThis=this;
         var futureList=[];
 /*        axios.get('/market/futures/',{
@@ -114,7 +131,6 @@
         })*/
         axios.get('/market/futures/').then(function(res){
             res=res.data;
-            console.log(res)
             if(res.status.code===0){
                 saveThis.createMapData(res);
                 Bus.$emit("getData", saveThis.mapData);
@@ -464,7 +480,7 @@
         };
         //this.createRandomFuture();
         //Bus.$emit("getData", this.mapData);
-        
+    this.optionbackup=this.deepClone(this.option);
     //initFuture();
     // this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);
@@ -472,7 +488,8 @@
     this.myChart.on("legendselectchanged",function(params){
         saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
         if(saveThis.checkSelection(params)==2){
-            saveThis.showIVDifference(params.selected);
+            var selectName=this.getSelectedName(params.selected);
+            saveThis.showIVDifference(selectName);
         }else{
             saveThis.popSeries("隐含波动率之差");
             saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
@@ -510,8 +527,32 @@ methods: {
 //     this.option.series.push(series);
 //     this.myChart.setOption(this.option);
 //   }
+resetChart:function(){
+    this.option=this.optionbackup;
+    this.readyCombinedOption=[];
+    this.futureDataGet=[];
+    this.future={
+        name:[]
+    };
+    this.fewDataOptionSet=[];
+    this.myChart.setOption(this.option,true);
+},
 
 
+
+
+changeDataFormat:function(){
+    Bus.$emit("resetAllBtn");
+    this.resetChart();
+    var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
+    var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
+    var dataType=this.data
+    this.dataFormat={
+        start_time:startTime,
+        end_time:endTime,
+        data_type:this.interval
+    }
+},
 
 
 randomGenWebSafeColor:function(){
@@ -673,7 +714,6 @@ clearLastFuture:function(){
 }
 }
 this.popSeries("隐含波动率之差");
-console.log(this.option.series);
 },
 //载入下一个期货
 loadFuture:function(futureName){
@@ -708,8 +748,8 @@ if(selectName.length!=0){
 this.myChart.setOption(this.option);
 },
 //计算期权隐含波动率之差
-showIVDifference:function(selected){
-  var selectName=this.getSelectedName(selected);
+showIVDifference:function(selectName){
+
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
@@ -876,7 +916,6 @@ popLegend: function(optionName){
     }
 },
 alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
-    console.log(optionXAxis);
     var index=futureXAxis.indexOf(optionXAxis[0]);
     if(index==-1){
         return [];
@@ -890,7 +929,6 @@ alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
     rtn=no_datas.concat(optionData);
     for(var i=index,j=0;i<futureXAxis.length;i++,j++){
         if(futureXAxis[i]!=optionXAxis[j]){
-            console.log(futureXAxis[i],optionXAxis[j],i,j)
             rtn.splice(i,0,fill);
         }
     }
@@ -931,21 +969,26 @@ splitAppendData:function(res){
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        var optionValues=option.data.map(function(o){
-            return [o.open_price,o.close_price,o.max_price,o.min_price]
-        });
-        var optionXAxis=option.data.map(function(o){
-            return o.time
-        });
-        var optionIVData=option.data.map(function(o){
-            return o.volatility.toFixed(4);
-        });
-        var optionProc=this.createSeries({
-            name:option.code,
-            values:optionValues,
-            IVData:optionIVData,
-            categoryData:optionXAxis
-        })
+        if(option.data.length<10){
+            this.fewDataOptionSet.push(option.code);
+            var optionProc=this.createZeroDataSeries(futureXAxis,{name:option.code});
+        }else{
+            var optionValues=option.data.map(function(o){
+                return [o.open_price,o.close_price,o.max_price,o.min_price]
+            });
+            var optionXAxis=option.data.map(function(o){
+                return o.time
+            });
+            var optionIVData=option.data.map(function(o){
+                return o.volatility.toFixed(4);
+            });
+            var optionProc=this.createSeries({
+                name:option.code,
+                values:optionValues,
+                IVData:optionIVData,
+                categoryData:optionXAxis
+            })
+        }
         optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
         if(optionProc.series.name!=tag.future.code){
             optionProc.IVSeries.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.IVSeries.data);
@@ -958,8 +1001,25 @@ splitAppendData:function(res){
         datas:optionSeries
     }
 },
+createZeroDataSeries:function(futureXAxis,obj){
+    var series = this.deepClone(this.template.optionK);
+    series.name = obj.name;
+    series.data = [["-","-","-","-"]];
+    series.xAxisIndex=1;
+    series.yAxisIndex=1;
+    var IVSeries = this.deepClone(this.template.optionIV);
+    IVSeries.data = ["-"];
+    IVSeries.name = obj.name;
+    IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
+    IVSeries.xAxisIndex=2;
+    IVSeries.yAxisIndex=2;
+    return {
+        series:series,
+        IVSeries:IVSeries,
+        xAxis:futureXAxis
+    }
+},
 createMapData:function(res){
-    console.log(res);
     for(var i=0;i<res.future_list.length;i++){
         var future=res.future_list[i];
         this.mapData[future.code]=future.options;
@@ -975,7 +1035,7 @@ putCombination:function(){
               if(res.data.status.code=='0'){
                   saveThis.$notify({
                       title: '成功',
-                      message: '您已经成功选择期权组合\n'+saveThis.readyCombinedOption[0]+"与"+saveThis.readyCombinedOption[1],
+                      message: '您已经成功选择期权组合'+saveThis.readyCombinedOption[0]+"与"+saveThis.readyCombinedOption[1],
                       type: 'success'
                   });
               }else if(res.data.status.code=="-6"){
@@ -986,7 +1046,6 @@ putCombination:function(){
                 });
               }
               else{
-                console.log(res.data.status)
                   saveThis.$notify.error({
                       title: '错误',
                       message: '似乎有点内部错误',
@@ -994,7 +1053,6 @@ putCombination:function(){
                   });
               }
           }).catch(function(e){
-            console.log(e)
             saveThis.$notify.error({
               title: '错误',
               message: '您的网络似乎出了问题',
