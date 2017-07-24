@@ -43,6 +43,19 @@
       Bus.$on("getData", data => {
         this.items=data
       })
+      Bus.$on("resetAllBtn",function(){
+        var btnSet=document.getElementsByClassName("el-button--danger");
+        for(;;){
+            var btn=btnSet[0];
+            removeClass(btn, 'el-button--danger');
+            addClass(btn, 'el-button--primary');
+            removeClass(btn.children[0].children[0], 'el-icon-minus');
+            addClass(btn.children[0].children[0], 'el-icon-plus');
+            if(btnSet.length==0){
+              break;
+            }
+        }
+      })
     },
     data:function(){
 
