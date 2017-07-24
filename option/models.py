@@ -16,6 +16,17 @@ class Future(models.Model):
             result.append(future.code)
         return result
 
+    @staticmethod
+    def get_future_option_list():
+        result = []
+        for future in Future.objects.filter(delivery_day__gte=date.today()):
+            item = {
+                'code': future.code,
+                'options': Option.get_option_list(future)
+            }
+            result.append(item)
+        return result
+
     def get_minute_treading_data(self, start_time, end_time=None):
         time_filter = models.Q(time__gte=start_time)
         if end_time:

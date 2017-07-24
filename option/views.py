@@ -10,7 +10,7 @@ def get_future_list(request):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
     if request.method == 'GET':
-        result['future_list'] = Future.get_future_list()
+        result['future_list'] = Future.get_future_option_list()
         status['message'] = '获取成功'
         return JsonResponse(result, status=200)
     else:
@@ -59,7 +59,7 @@ def get_news(request):
         return JsonResponse(result, status=405)
 
 
-def get_treading_data(request, future_code):
+def get_future_treading_data(request, future_code):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
     if request.method == 'GET':
@@ -88,6 +88,44 @@ def get_treading_data(request, future_code):
             status['code'] = -2
             status['message'] = 'need more argument'
             return JsonResponse(result, status=400)
+
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_option_treading_data(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        datetime_format = '%Y-%m-%d %H:%M'
+        start_time = request.GET.get('start_time')
+        end_time = request.GET.get('end_time')
+        try:
+            start_time = datetime.strptime(start_time, datetime_format)
+            if end_time:
+                end_time = datetime.strptime(end_time, datetime_format)
+        except ValueError:
+            status['code'] = -12
+            status['message'] = 'time_format_not_right'
+            return JsonResponse(result, status=400)
+        option_list = request.GET.get('option_list')
+        try:
+            option_list = list(json.loads(option_list))
+        except TypeError:
+            status['code'] = -12
+            status['message'] = 'time_format_not_right'
+            return JsonResponse(result, status=400)
+        if start_time:
+            pass
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
+        if start_time:
+            pass
 
     else:
         # http方法不支持
