@@ -20,6 +20,7 @@ const state = {
   new_phone: '',
   notification: [],
   OptionComboList: [],
+  comboId: [],
 };
 
 const mutations = {
@@ -103,6 +104,11 @@ const mutations = {
     state.comboId=obj.map(function(o){
       return o.id;
     })
+  },
+  deleteCombo(state, obj){
+    var idx = obj.index
+    state.OptionComboList.splice(idx, 1)
+    state.comboId.splice(idx,1);
   }
 
 

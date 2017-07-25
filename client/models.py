@@ -11,6 +11,9 @@ class Client(models.Model):
     email = models.CharField(verbose_name='通知邮箱', max_length=50, null=True)
     phone = models.CharField(verbose_name='通知手机号', max_length=20, null=True)
 
+    def __str__(self):
+        return self.user.username
+
     def new_combo(self, positive_option_id, negative_option_id):
         if Option.objects.filter(code=positive_option_id).exists() and \
                 Option.objects.filter(code=negative_option_id).exists():
