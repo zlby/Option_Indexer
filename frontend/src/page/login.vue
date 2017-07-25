@@ -73,6 +73,7 @@
   					.then(function success(){
 			        	notifi('登录成功', '欢迎您，'+context.$store.state.login.username, 'success', context)
 			        	context.$store.dispatch('UpdateUserInfo')
+			        	context.$store.dispatch('getNotification')
 			        }, function fail(){
 			        	notifi('登录失败', '用户名或密码错误', 'error', context)
 			        })
