@@ -144,6 +144,7 @@
         this.readyCombinedOption=[];
         this.dataFormat={
             start_time:"2017-06-01 09:00",
+            end_time:"2017-07-01 09:00",
             data_type:"hour"
         };
         this.futureDataGet=[];
@@ -577,6 +578,12 @@ changeDataFormat:function(){
     this.resetChart();
     var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
     var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
+    
+    if(this.interval=="hour"){
+        var dataType="小时";
+    }else{
+        var dataType="日"
+    }
     if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
         this.$notify({
             title: '警告',
@@ -590,6 +597,11 @@ changeDataFormat:function(){
         end_time:endTime,
         data_type:this.interval
     }
+    this.$notify({
+        title: '当前数据范围',
+        message: '起始时间:'+startTime+"终止时间:"+endTime+"时间间隔:以"+dataType+"计",
+        type: 'success'
+    })
 },
 
 

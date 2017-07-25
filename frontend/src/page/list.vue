@@ -449,6 +449,11 @@ changeDataFormat:function(){
     this.resetChart();
     var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
     var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
+    if(this.interval=="hour"){
+        var dataType="小时";
+    }else{
+        var dataType="日"
+    }
     if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
         this.$notify({
             title: '警告',
@@ -461,8 +466,13 @@ changeDataFormat:function(){
     this.dataFormat={
         start_time:startTime,
         end_time:endTime,
-        data_type:dataType
+        data_type:this.interval
     }
+    this.$notify({
+        title: '当前数据范围',
+        message: '起始时间:'+startTime+"终止时间:"+endTime+"时间间隔:以"+dataType+"计",
+        type: 'success'
+    })
 },
 addCombination:function(optionName1,optionName2){
     console.log(this.dataFormat)
