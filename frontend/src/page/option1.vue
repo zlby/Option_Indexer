@@ -934,12 +934,22 @@ removeFuture: function(){
 addOption: function(futureName,optionName){
     var currentFuture=this.deepClone(this.future[futureName]);
     var index=currentFuture.names.indexOf(optionName);
-    var series=currentFuture.datas[index].series;
-    var IVSeries=currentFuture.datas[index].IVSeries;
-    this.option.series.push(IVSeries);
-    this.option.series.push(series);
-    this.option.legend[0].data.push(optionName);
-    this.myChart.setOption(this.option,true);
+    if(index!=-1){
+        var series=currentFuture.datas[index].series;
+        var IVSeries=currentFuture.datas[index].IVSeries;
+        this.option.legend[0].data.push(optionName);
+        this.option.series.push(IVSeries);
+        this.option.series.push(series);
+        this.myChart.setOption(this.option,true);
+    }else{
+        var zeroSeries=this.createZeroDataSeries(currentFuture.dataK.xAxis,{name:optionName})
+        var series=zeroSeries.series;
+        var IVSeries=zeroSeries.IVSeries;
+        this.option.legend[0].data.push(optionName);
+        this.option.series.push(IVSeries);
+        this.option.series.push(series);
+        this.myChart.setOption(this.option,true);
+    }
 },
 popOption: function(optionName){
     this.popSeries(optionName);
@@ -1019,7 +1029,8 @@ splitAppendData:function(res){
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        if(option.data.length==0){
+        if((option.data.length<40&&this.dataFormat.data_type=="hour")||
+            (option.data.length<3&&this.dataFormat.data_type=="day")){
             this.fewDataOptionSet.push(option.code);
             var optionProc=this.createZeroDataSeries(futureXAxis,{name:option.code});
         }else{
