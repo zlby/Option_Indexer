@@ -9,6 +9,9 @@ class Future(models.Model):
     code = models.CharField(verbose_name=u'期货代码', max_length=20, primary_key=True)
     delivery_day = models.DateField(verbose_name=u'交割日', null=True)
 
+    def __str__(self):
+        return self.code
+
     @staticmethod
     def get_future_list():
         result = []
@@ -85,6 +88,9 @@ class Future(models.Model):
 class Option(models.Model):
     code = models.CharField(verbose_name=u'期权代码', max_length=20, primary_key=True)
     asset = models.ForeignKey(verbose_name=u'标的期货', to=Future)
+
+    def __str__(self):
+        return self.code
 
     @staticmethod
     def get_option_list(future):
