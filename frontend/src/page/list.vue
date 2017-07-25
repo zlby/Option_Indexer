@@ -1,7 +1,7 @@
 <template style="min-width:800px">
     <div>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:300px; margin-bottom:20px; margin-top:20px"></div>
+            <div id="list" style="width:100%;height:300px; margin-bottom:20px; margin-top:20px"></div>
         </el-col>
         <el-col :span="20" style="margin-top:30px">
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
@@ -68,6 +68,7 @@
   import Bus from '../bus'
   import axios from 'axios'
   import radarCharts from '../components/radarCharts'
+  import {notifi} from '../notif'
 
   export default{
       data(){
@@ -75,8 +76,8 @@
         console.log(this.$store.state.login.comboId)
         return{
             query: '',
-            list:this.$store.state.login.OptionComboList,
-            comboid:this.$store.state.login.comboId,
+            // list:this.$store.state.login.OptionComboList,
+            // comboid:this.$store.state.login.comboId,
             interval: 'hour',
             pickerOption: {
               shortcuts: [{
@@ -113,10 +114,16 @@
     },
 
     computed: {
-    computedList: function () {
-        var vm = this
-        return this.list.filter(function (item) {
-            return (item.positive_option.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1)||(item.negative_option.toLowerCase().indexOf(vm.query.toLowerCase())!==-1)
+        comboid: function() {
+            return this.$store.state.login.comboId
+        },
+        list: function() {
+            return this.$store.state.login.OptionComboList
+        },
+        computedList: function () {
+            var vm = this
+            return this.list.filter(function (item) {
+                return (item.positive_option.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1)||(item.negative_option.toLowerCase().indexOf(vm.query.toLowerCase())!==-1)
         })
     },
 
@@ -386,7 +393,7 @@ mounted:function(){
         }
     }
     this.optionbackup=this.deepClone(this.option);
-    this.myChart=echarts.init(document.getElementById('main'));
+    this.myChart=echarts.init(document.getElementById('list'));
     // var dataK=[];
     // for(var i=0;i<20;i++){
     //     dataK.push(splitData());
@@ -808,14 +815,22 @@ deleteCombo:function(event){
         }
         var id=e.getAttribute("comboid");
         var saveThis=this
-        axios.put('/client/delete_combo/',{id:id}).then(function(res){
-          console.log(res);
+        axios.put('/client/delete_combo/',{id:id})
+        .then(function(res){
+            console.log(res);
             if(res.data.status.code=="0"){
-                var index=saveThis.comboid.indexOf(id);
-                saveThis.list.splice(index,1);
+                var index=saveThis.comboid.indexOf(parseInt(id));
+                console.log(index,saveThis.list,saveThis.comboid)
+                // console.log(saveThis.list[index].id,saveThis.comboid[index])
+                // saveThis.list.splice(index,1);
+                saveThis.$store.commit("deleteCombo", {index: index})
             }else{
-               alert("网络问题")
+               notifi("删除失败", "网络问题", "error", saveThis)
             }
+        })
+        .catch(function(error){
+            console.log(error)
+            notifi("删除失败", "请检查网络连接", "error", saveThis)
         })
       }
 //期货切换的函数

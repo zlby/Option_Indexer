@@ -1,7 +1,7 @@
 <template style="min-width:800px">
     <el-row>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:600px; margin:20px 0px;">
+            <div id="option" style="width:100%;height:600px; margin:20px 0px;">
             </div>
         </el-col>
         <el-col :span="20" style="margin-top:20px">
@@ -136,7 +136,7 @@
         })
     },
     mounted:function(){
-        this.myChart=echarts.init(document.getElementById('main'));
+        this.myChart=echarts.init(document.getElementById('option'));
         this.mapData={};
         this.future={
             name:[]
