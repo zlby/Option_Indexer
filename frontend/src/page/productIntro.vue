@@ -45,6 +45,9 @@
       })
       Bus.$on("resetAllBtn",function(){
         var btnSet=document.getElementsByClassName("el-button--danger");
+        if(btnSet.length==0){
+          return ;
+        }
         for(;;){
             var btn=btnSet[0];
             removeClass(btn, 'el-button--danger');

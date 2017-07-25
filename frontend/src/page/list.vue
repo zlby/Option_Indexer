@@ -147,13 +147,13 @@ mounted:function(){
         title:[
         {
             text: '期权数据',
-            subtext:"",
+            subtext:"请查看期权组合",
             left:"5%",
             top:"0%"
         },
         {
             text: '期权隐含波动率',
-            subtext:"",
+            subtext:"请查看期权组合",
             left:"55%",
             top:"0%"
         }
@@ -385,6 +385,7 @@ mounted:function(){
             }
         }
     }
+    this.optionbackup=this.deepClone(this.option);
     this.myChart=echarts.init(document.getElementById('main'));
     // var dataK=[];
     // for(var i=0;i<20;i++){
@@ -436,39 +437,73 @@ methods: {
 //     this.myChart.setOption(this.option);
 //   }
 
+resetChart:function(){
+    this.myChart.clear();
+    this.combinations=[];
+    this.mapData=[];
+    this.option=this.deepClone(this.optionbackup);
+    this.myChart.setOption(this.option,true);
+},
 
-
+changeDataFormat:function(){
+    this.resetChart();
+    var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
+    var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
+    if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
+        this.$notify({
+            title: '警告',
+            message: '您似乎没有指定时间，请指定一个时间范围',
+            type: 'warning'
+        })
+        return ;
+    }
+    var dataType=this.interval;
+    this.dataFormat={
+        start_time:startTime,
+        end_time:endTime,
+        data_type:dataType
+    }
+},
 addCombination:function(optionName1,optionName2){
+    console.log(this.dataFormat)
     var reqparams=this.deepClone(this.dataFormat)
+    console.log(reqparams,this.dataFormat)
     reqparams.option_list="[\""+optionName1+"\",\""+optionName2+"\"]";
     var saveThis=this
-    axios.get('/market/options/treading_data/',{params:reqparams}).then(function(res){
+    if(this.getCombinationIndex(optionName1,optionName2)==-1){
+        axios.get('/market/options/treading_data/',{params:reqparams}).then(function(res){
         res=res.data;
         if(res.status.code===0){
             saveThis.combinations.push(saveThis.splitAppendCombination(res,[optionName1,optionName2]));
             saveThis.mapData.push([optionName1,optionName2]);
-            var index=saveThis.getCombinationIndex(optionName1,optionName2);
-            if(index!==-1){
-                saveThis.option.series.push(saveThis.combinations[index][0].series);
-                saveThis.option.series.push(saveThis.combinations[index][0].IVSeries);
-                saveThis.option.series.push(saveThis.combinations[index][1].series);
-                saveThis.option.series.push(saveThis.combinations[index][1].IVSeries);
-                saveThis.option.xAxis[0].data=saveThis.combinations[index][0].xAxis;
-                saveThis.option.xAxis[1].data=saveThis.combinations[index][0].xAxis;
-                saveThis.option.title[0].subtext=optionName1+"与"+optionName2
-                saveThis.option.title[1].subtext=optionName1+"与"+optionName2
-                saveThis.myChart.setOption(saveThis.option);
-            }
+            saveThis.changeDisplayCombination(optionName1,optionName2);
         }else{
             alert('出错')
         }
     })
+    }else{
+        this.changeDisplayCombination(optionName1,optionName2)
+    }
+},
+changeDisplayCombination:function(optionName1,optionName2){
+    var index=this.getCombinationIndex(optionName1,optionName2);
+    if(index!==-1){
+        this.option.series.push(this.combinations[index][0].series);
+        this.option.series.push(this.combinations[index][0].IVSeries);
+        this.option.series.push(this.combinations[index][1].series);
+        this.option.series.push(this.combinations[index][1].IVSeries);
+        this.option.xAxis[0].data=this.combinations[index][0].xAxis;
+        this.option.xAxis[1].data=this.combinations[index][0].xAxis;
+        this.option.title[0].subtext=optionName1+"与"+optionName2
+        this.option.title[1].subtext=optionName1+"与"+optionName2
+        this.myChart.setOption(this.option);
+    }
 },
 removeCombination:function(){
     var optionNames=this.option.title[0].subtext.split("与")
     this.popSeries(optionNames[0]);
     this.popSeries(optionNames[1]);
-    this.myChart.setOption(this.option);
+    this.myChart.setOption(this.option,true);
 },
 splitAppendCombination:function(res,optionNames){
     var combine=[];
@@ -607,6 +642,8 @@ popSeries:function(seriesName){
   }
 }
 },
+
+
 
 getSelectedName:function(selected){
   if(!selected){

@@ -2,43 +2,43 @@
 	<div class="homepage">
 		<div class="Carousel1">
 			<el-carousel>
-				<el-carousel-item>
+				<el-carousel-item class="background1">
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+						<p class="p2">最前沿的豆粕期货期权资讯</p>
 						<br><br><br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background2">
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+						<p class="p2">最精确的豆粕期货期权预测</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background3">
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+						<p class="p2">最权威的豆粕期权交易策略</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background4">
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+						<p class="p2">最准时的豆粕期权交易提醒</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
 					<!-- <img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -64,7 +64,7 @@
 							<el-row :gutter="40">
 								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6" v-for="news in 4" :index2="news">
 									<el-card class="news-card">
-										<img src= "../assets/pexels-photo-159888.jpeg">
+										<img :src="imgArr[page-1][news-1]">
 										<div style="padding: 14px; height:150px" >
 											<p class="H1">{{title[page-1][news-1]}}</p>
 											<p class="H1">{{time[page-1][news-1]}}</p>
@@ -78,7 +78,7 @@
 					</el-carousel-item>
 				</el-carousel>
 
-				<el-dialog class="tanchu" title="新闻" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
+				<el-dialog class="tanchu" title="新闻" size="large" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
 						<p class="H1">{{title[index1-1][index2-1]}}</p>
 						<p class="H1">{{time[index1-1][index2-1]}}</p>
 						<div>{{content[index1-1][index2-1]}}</div>
@@ -114,7 +114,11 @@
 				dialogVisible: false,
 				dialogFormVisible: false,
 				index1: 1,
-				index2: 1
+				index2: 1,
+				imgArr:[[require('../assets/pexels-photo-1.jpeg'), require('../assets/pexels-photo-2.jpeg'), require('../assets/pexels-photo-3.jpeg'),require('../assets/pexels-photo-4.jpeg')],
+						[require('../assets/pexels-photo-5.jpeg'), require('../assets/pexels-photo-6.jpeg'), require('../assets/pexels-photo-7.jpeg'),require('../assets/pexels-photo-8.jpeg')],
+						[require('../assets/pexels-photo-9.jpeg'), require('../assets/pexels-photo-10.jpeg'), require('../assets/pexels-photo-11.jpeg'),require('../assets/pexels-photo-12.jpeg')],
+						[require('../assets/pexels-photo-13.jpeg'), require('../assets/pexels-photo-14.jpeg'), require('../assets/pexels-photo-15.jpeg'),require('../assets/pexels-photo-16.jpeg')] ]
 			}
 		},
 
@@ -137,6 +141,8 @@
 			for (var i = 1; i < 5; i++) {
 				this.$store.dispatch('News',{page_number: i})
 			}
+
+
 		},
 		methods:{
 			carouselChange:function(index){
@@ -148,6 +154,9 @@
 				this.dialogFormVisible = true;
 				this.index1 = page
 				this.index2 = news
+			},
+			buttongroup:function(){
+				this.$router.push({ path: '/login' })
 			}
 		}
 	}
@@ -191,8 +200,24 @@
 		border-top-right-radius: 0px;
 	}
 
-	.Carousel1 .el-carousel__item{
-		background-image: url("../assets/background1_副本.png");
+	.background1{
+		background-image: url("../assets/background1.jpeg");
+
+	}
+
+		.background2{
+		background-image: url("../assets/background2.jpeg");
+
+	}
+
+		.background3{
+		background-image: url("../assets/background3.jpeg");
+
+	}
+
+		.background4{
+		background-image: url("../assets/background4.jpeg");
+
 	}
 
 	.Carousel2 .el-carousel__item{
@@ -250,6 +275,8 @@
 	.button1{
 		background-color: transparent;
 		color:#fff;
+
+
 	}
 
 

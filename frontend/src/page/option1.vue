@@ -83,7 +83,6 @@
                     res=res.data;
                     if(res.status.code===0){
                         if(saveThis.fewDataOptionSet.indexOf(optionObj.option)!==-1){
-                            console.log("notice")
                             saveThis.$notify({
                                 type:"warning",
                                 title:"提示",
@@ -95,7 +94,15 @@
                         saveThis.addFuture(optionObj.future);
                         saveThis.addOption(optionObj.future, optionObj.option);
                         saveThis.futureDataGet.push(optionObj.future);
-
+                        console.log(saveThis.readyCombinedOption.length)
+                        if(saveThis.readyCombinedOption.length==2){
+                            saveThis.showIVDifference(saveThis.readyCombinedOption);
+                            saveThis.myChart.setOption(saveThis.option,true)
+                        }else{
+                            saveThis.popSeries("隐含波动率之差");
+                            saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
+                            saveThis.myChart.setOption(saveThis.option,true)
+                        }
                     }else{
                         alert('出错')
                     }
@@ -104,6 +111,15 @@
                 saveThis.removeFuture();
                 saveThis.addFuture(optionObj.future);
                 saveThis.addOption(optionObj.future, optionObj.option);
+                if(saveThis.readyCombinedOption.length==2){
+                    var selected={};
+                    saveThis.showIVDifference(saveThis.readyCombinedOption);
+                    saveThis.myChart.setOption(saveThis.option,true)
+                }else{
+                    saveThis.popSeries("隐含波动率之差");
+                    saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
+                    saveThis.myChart.setOption(saveThis.option,true)
+                }
             }
         })
         Bus.$on('removeOption', optionObj=>{
@@ -112,7 +128,11 @@
             if(index!=-1){
                 this.readyCombinedOption.splice(index,1);
             }
-            
+            if(this.readyCombinedOption.length==2){
+                var selected={};
+                this.showIVDifference(this.readyCombinedOption);
+                this.myChart.setOption(this.option,true)
+            }
         })
     },
     mounted:function(){
@@ -497,7 +517,6 @@
         saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
         if(saveThis.checkSelection(params)==2){
             var selectName=saveThis.getSelectedName(params.selected);
-            console.log(selectName)
             saveThis.showIVDifference(selectName);
         }else{
             saveThis.popSeries("隐含波动率之差");
@@ -558,7 +577,14 @@ changeDataFormat:function(){
     this.resetChart();
     var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
     var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
-    var dataType=this.data
+    if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
+        this.$notify({
+            title: '警告',
+            message: '您似乎没有指定时间，请指定一个时间范围',
+            type: 'warning'
+        })
+        return ;
+    }
     this.dataFormat={
         start_time:startTime,
         end_time:endTime,
@@ -761,10 +787,10 @@ this.myChart.setOption(this.option);
 },
 //计算期权隐含波动率之差
 showIVDifference:function(selectName){
-
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
+  this.popSeries("隐含波动率之差");
   this.option.title[3].subtext=selectName[0]+"与"+selectName[1];
   for(var i=0;i<this.option.series.length;i++){
     var series=this.option.series[i];
