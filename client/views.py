@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth import authenticate, login as set_session_as_logged, logout as detach_logged_status
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 import json
 from functools import wraps
-from client.models import Client
+from client.models import Client, NotificationHistory
 
 
 # Create your views here.
@@ -41,7 +42,7 @@ def login(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         username = request_data.get('username')
         password = request_data.get('password')
         if password and username:
@@ -79,7 +80,7 @@ def new_client(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         username = request_data.get('username')
         password = request_data.get('password')
         email = request_data.get('email')
@@ -92,7 +93,7 @@ def new_client(request):
             else:
                 new_user = User.objects.create_user(username=username, password=password)
                 Client.objects.create(user=new_user, email=email, phone=phone)
-                set_session_as_logged(result, authenticate(username=username, password=password))
+                set_session_as_logged(request, authenticate(username=username, password=password))
                 status['message'] = 'register success'
                 return JsonResponse(result, status=200)
         else:
@@ -134,12 +135,14 @@ def set_new_password(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         old_password = request_data.get('old_password')
         new_password = request_data.get('new_password')
         if old_password and new_password:
-            if request.user.check_password(old_password):
-                request.user.set_password(new_password)
+            user = request.user
+            if user.check_password(old_password):
+                user.set_password(new_password)
+                user.save()
                 status['message'] = 'change password success'
                 return JsonResponse(result, status=200)
             else:
@@ -165,7 +168,7 @@ def set_new_email_phone(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         new_email = request_data.get('email')
         new_phone = request_data.get('phone')
         if new_email or new_phone:
@@ -196,16 +199,17 @@ def new_combo(request):
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         positive_option = request_data.get('positive_option')
         negative_option = request_data.get('negative_option')
         if positive_option and negative_option:
             if request.user.client.new_combo(positive_option, negative_option):
                 status['message'] = 'created'
+                result['combo_list'] = request.user.client.get_all_combo()
                 return JsonResponse(result, status=201)
             else:
                 status['code'] = -6
-                status['message'] = 'option not found'
+                status['message'] = '期权或期权套利组合不存在'
                 return JsonResponse(result, status=404)
         else:
             status['code'] = -2
@@ -222,15 +226,16 @@ def new_combo(request):
 def delete_combo(request):
     status = {'code': 0, 'message': 'unknown'}
     result = {'status': status}
-    if request.method == 'DELETE':
+    if request.method == 'PUT':
         if not request.body:
             request_data = {}
         else:
-            request_data = json.loads(request.body)
+            request_data = json.loads(request.body.decode('utf-8'))
         combo_id = request_data.get('id')
         if combo_id:
             if request.user.client.delete_combo(combo_id):
                 status['message'] = 'combo delete'
+                result['combo_list'] = request.user.client.get_all_combo()
                 return JsonResponse(result, status=200)
             else:
                 status['code'] = -7
@@ -276,3 +281,24 @@ def get_all_notification(request):
         status['message'] = 'http method not supported'
         return JsonResponse(result, status=405)
 
+
+@customized_login_required
+def mark_notification_as_read(request, notification_id):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'PUT':
+        try:
+            notification = request.user.client.notificationhistory_set.get(id=notification_id)
+        except NotificationHistory.DoesNotExist:
+            status['code'] = 404
+            status['message'] = '通知id不存在'
+            return JsonResponse(result, status=404)
+        notification.if_read = True
+        notification.save()
+        status['message'] = 'success'
+        return JsonResponse(result, status=200)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)

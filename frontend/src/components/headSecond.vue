@@ -1,25 +1,43 @@
 <template>
 <div class="second">
-		<el-row :gutter="20" style="margin-left: 0px; margin-right: 0px;">
-		<el-menu :default-active="activeIndex" class="el-menu-demo3" mode="horizontal" @select="handleSelect" router>
-		<el-col :span= "4">
-			<el-menu-item index="/"><i class="el-icon-share"></i></el-menu-item>
-			<el-menu-item index="/">我的主页</el-menu-item>
+		<el-row >
+		<el-menu class="el-menu-demo3" mode="horizontal" router>
+		<el-col :span= "5" :xs="5" :md="5" :lg="5" :sm="5"style="background-color: #FFCC66; min-width:200px">
+			<el-menu-item index="/" class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8"><i class="el-icon-share"></i></el-menu-item>
+			<el-menu-item index="/homepageIndividual" class="el-col el-col-16 el-col-xs-16 el-col-md-16 el-col-sm-16 el-col-lg-16">个人主页</el-menu-item>
 		</el-col>
 
-		<el-col :span= "4">
-			<el-menu-item index="11"><i class="el-icon-menu"></i></el-menu-item>
-			<el-menu-item index="/productIntro" >中文</el-menu-item>
-			<el-menu-item index="/use"><i class="el-icon-search"></i></el-menu-item>
-		</el-col>
-		
-		<el-col :span="7" :offset="9">
-			<el-menu-item  index="11"><i class="el-icon-menu"></i></el-menu-item>
-			<el-menu-item  index="/login"><i class="el-icon-information"></i></el-menu-item>
-			<el-menu-item  index="/login"><i class="el-icon-message"></i></el-menu-item>
-			<el-menu-item  index="8"><img src="../assets/bigtouxiang.png"></el-menu-item>
-			<el-menu-item  index="9">周思尧</el-menu-item>
-		</el-col>
+<!-- 		<el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6">
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/login"><i class="el-icon-menu"></i></el-menu-item>
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/productIntro" >中文</el-menu-item>
+			<el-menu-item class="el-col el-col-8 el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8" index="/use"><i class="el-icon-search"></i></el-menu-item>
+		</el-col> -->
+
+<!-- 		<el-col :span="3" :offset="10" >
+		<el-menu-item class="el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24"
+		index="/login">
+			<el-dropdown>
+				<span class="el-dropdown-link el-col el-col-24 el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24">
+				 推送消息
+				</span>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item >
+					<div>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</div>
+					</el-dropdown-item>
+					<el-dropdown-item>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</el-dropdown-item>
+					<el-dropdown-item>
+						<img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png">
+					</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</el-menu-item>
+		</el-col> -->
+
+
 		</el-menu>
 		</el-row>
 </div>
@@ -27,7 +45,29 @@
 
 <script>
 	export default {
-	}
+	data() {
+      return {
+        dialogFormVisible: false,
+        form: {
+    		userName: '',
+   		    password: '',
+   		    newpassword: '',
+   		    email: '',
+   		    phone: ''
+        },
+
+      };
+    },
+    methods:{
+    	      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      }
+    }
+ }
 </script>
 
 <style lang="less">
@@ -57,12 +97,22 @@ background-size:100% 100%;
     background-color: #eef1f600;
     }
 	
-	.el-menu-demo3 .el-col:nth-child(1){
+	.yellow{
 		background-color: #FFCC66;
 	}
 
 	.second{
-				margin-right: 0px;
+		margin-right: 0px;
 		margin-left: 0px;
 	}
+
+	.el-dialog{
+	width: 800px;
+	height: 600px;
+}
+
+.second{
+	
+}
+
 </style>

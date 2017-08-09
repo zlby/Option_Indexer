@@ -1,46 +1,46 @@
 <template>
 	<div class="homepage">
-		<div class="Carousel">
-			<el-carousel height="730px">
-				<el-carousel-item>
+		<div class="Carousel1">
+			<el-carousel>
+				<el-carousel-item class="background1">
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">最前沿的豆粕期货期权资讯</p>
 						<br><br><br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background2">
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">最精确的豆粕期货期权预测</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background3">
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">最权威的豆粕期权交易策略</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
-				<el-carousel-item>
+				<el-carousel-item class="background4">
 					<div class="inner">
-						<p class="p1">介绍文字</p>
+						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">英文说明</p>
+						<p class="p2">最准时的豆粕期权交易提醒</p>
 						<br><br>						<br><br>
-						<el-button class="button1">learn more</el-button>
+						<el-button class="button1" v-on:click="buttongroup">learn more</el-button>
 					</div>
-					<img src= "../assets/pexels-photo-374018.jpeg">
+					<!-- <img src= "../assets/background1.png"> -->
 				</el-carousel-item>
 
 			</el-carousel>
@@ -50,242 +50,258 @@
 
 
 		<div class="news">
-			<el-row>
-				<p class="p1">新闻资讯</p>
-				<br><br>
-				<p class="p2">英文说明</p>
+			<div class="Carousel2">
+				<div class="outer" style="padding-top:50px">
+					<p class="p1">新闻资讯</p>
+					<br>
+					<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+					<br><br><br>
+				</div>
 
-				<el-carousel :interval="4000" type="card" height="625px">
-					<el-carousel-item>
-						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
-							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
-							</div>
-						</el-card>
-					</el-carousel-item>
-					<el-carousel-item>
-						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
-							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
-							</div>
-						</el-card>
-					</el-carousel-item>
-					<el-carousel-item>
-						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
-							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
-							</div>
-						</el-card>
-					</el-carousel-item>
-					<el-carousel-item>
-						<el-card :body-style="{ padding: '0px' }">
-							<img src= "../assets/first4.jpg">
-							<div style="padding: 14px;">
-								<span>好吃的汉堡</span>
-								<p>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。</p>
-								<el-button type="primary" size="large">read more</el-button>
-							</div>
-						</el-card>
+				<el-carousel>
+					<el-carousel-item v-for="page in 4" :index1="page">
+						<div class="news_container">
+							<el-row :gutter="40">
+								<el-col :span="6" :xs="6" :sm="6" :md="6" :lg="6" v-for="news in 4" :index2="news">
+									<el-card class="news-card">
+										<img :src="imgArr[page-1][news-1]">
+										<div style="padding: 14px; height:150px" >
+											<p class="H1">{{title[page-1][news-1]}}</p>
+											<p class="H1">{{time[page-1][news-1]}}</p>
+											<div class="news-text" style="padding: 14px;">{{content[page-1][news-1]}}</div>
+										</div>
+										<el-button  @click="bj(page, news)" class="news-btn" type="primary" size="large" style="margin-top:10px" >read more</el-button>
+									</el-card>
+								</el-col>
+							</el-row>
+						</div>
 					</el-carousel-item>
 				</el-carousel>
 
-			</el-row>
+				<el-dialog class="tanchu" title="新闻" size="large" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
+						<p class="H1">{{title[index1-1][index2-1]}}</p>
+						<p class="H1">{{time[index1-1][index2-1]}}</p>
+						<div>{{content[index1-1][index2-1]}}</div>
+					<div slot="footer" class="dialog-footer">
+						<el-button @click="dialogFormVisible=false">退 出</el-button>
+					</div>
+				</el-dialog>
+
+
+			</div>
 		</div>
-		
-
-		<div class="news1">
-			<el-row>
-				<el-col :span="24">
-					<el-card>
-						<img src="../assets/first4.jpg" class="pic1">
-						<p><h1>星期五早晨</h1>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。 一颗流星在蓝幽幽的天空中划过一道神奇的弧线，像织女抛出的梭子，转瞬即逝。星空真蓝啊，蓝的发黑，蓝的发黑，蓝的清澈，蓝的纯洁，像磨的一常光滑的蓝宝石。一丝丝凉风刮过，呼呼的直往人怀里钻，让人感觉既凉爽 ，又惬意 。星星，还眨着眼睛。月亮，还是那么皎洁。早晨的天空，依然是那么美。
-						</p>
-					</el-card>
-				</el-col>
-			</el-row>
-		</div>
-
-		<div class="news2">
-			<el-row>
-				<el-col :span="24">
-					<el-card>
-						<img src="../assets/first4.jpg" class="pic2">
-						<p><h1>星期五早晨</h1>我特意起了个大早，为的就是看看早晨的天空。我一抬头，星空毫无遮拦的出现在我面前了。璀璨耀眼的小星星眨着亮晶晶的大眼睛，像一颗颗闪着荧光的小水滴。中间有一轮皎洁的明月。万点繁星衬托着月亮 ，而月亮像一个披着荧光衣服的小姑娘惬意地望着小星星。 一颗流星在蓝幽幽的天空中划过一道神奇的弧线，像织女抛出的梭子，转瞬即逝。星空真蓝啊，蓝的发黑，蓝的发黑，蓝的清澈，蓝的纯洁，像磨的一常光滑的蓝宝石。一丝丝凉风刮过，呼呼的直往人怀里钻，让人感觉既凉爽 ，又惬意 。星星，还眨着眼睛。月亮，还是那么皎洁。早晨的天空，依然是那么美。
-						</p>
-					</el-card>
-				</el-col>
-			</el-row>
-		</div>
-		
-		<div class="about">
-			<p class="p1">关于我们</p>
-			<br>
-			<p class="p2">英文说明</p>
-			<br><br><br><br>
-		</div>
-		
-		<div class="promotion">
-			<br>
-			<p class="p2">你们的宣传语blabla</p>
-			<br><br><br><br><br><br><br><br><br><br><br>
-			<p class="p2">宣传语blabla</p>
-			<br><br><br><br>
-			<p class="p2">@官方微博</p>
-			<br><br><br><br><br>
-		</div>
-
-
-	<div class="contact">
-		<p class="p1">联系我们</p>
-		<br><br><br><br><br><br><br>
-		<el-form ref="form" :model="form" label-width="80px">
-			<el-row  :gutter="20"> 
-			<el-col :span="6" :offset="6">
-			<el-form-item>
-				<el-input v-model="form.name" placeholder = "Your Name"></el-input>
-			</el-form-item>
-			</el-col>
-			<el-col :span="6" >
-			<el-form-item>
-				<el-input v-model="form.email" placeholder = "Your Email"></el-input>
-			</el-form-item>
-			</el-col>
-			</el-row>
-			<el-row>
-			<el-col :span="12" :offset="6">
-			<el-form-item>
-				<el-input type="textarea" v-model="form.desc" placeholder = "Your Message"></el-input>
-			</el-form-item>
-			</el-col>
-			</el-row>
-			<el-row :gutter="20">
-			<el-col :span="12" :offset="10">
-			<el-form-item>
-				<el-button type="primary" size="large" @click="onSubmit">send message</el-button>
-			</el-form-item>
-			</el-col>
-			</el-row>
-		</el-form>
-
-
-	</div>
-
-
-			<div class="promotion">
-			<br>
-			<p class="p2">超链接</p>
-			<br><br><br><br><br><br><br><br><br><br><br>
-			<br><br><br><br>
-			<p class="p2">超链接</p>
-			<br><br><br><br><br>
-		</div>
-
+		<footerBottom></footerBottom>
 	</div>
 </template>
 
 <script>
+	import footerBottom from '../components/footerBottom'
+	import api from '../api'
 	export default{
+
+		components:{
+			footerBottom,
+		},
 
 		data(){
 			return{
-				        form: {
-          name: '',
-          email: '',
-          desc: ''
-        }
+				form: {
+					name: '',
+					email: '',
+					desc: ''
+				},
+				index:1,
+				dialogVisible: false,
+				dialogFormVisible: false,
+				index1: 1,
+				index2: 1,
+				imgArr:[[require('../assets/pexels-photo-1.jpeg'), require('../assets/pexels-photo-2.jpeg'), require('../assets/pexels-photo-3.jpeg'),require('../assets/pexels-photo-4.jpeg')],
+						[require('../assets/pexels-photo-5.jpeg'), require('../assets/pexels-photo-6.jpeg'), require('../assets/pexels-photo-7.jpeg'),require('../assets/pexels-photo-8.jpeg')],
+						[require('../assets/pexels-photo-9.jpeg'), require('../assets/pexels-photo-10.jpeg'), require('../assets/pexels-photo-11.jpeg'),require('../assets/pexels-photo-12.jpeg')],
+						[require('../assets/pexels-photo-13.jpeg'), require('../assets/pexels-photo-14.jpeg'), require('../assets/pexels-photo-15.jpeg'),require('../assets/pexels-photo-16.jpeg')] ]
+			}
+		},
 
+		computed: {
+			title (){
+				return this.$store.state.login.title;
+			},
+			content (){
+				return this.$store.state.login.content;
+			},
+			time (){
+				return this.$store.state.login.time;
+			},
+			pictures (){
+				return ['../assets/pexels-photo-159888.jpeg', '']
+			}
+		},
+
+		mounted:function() {
+			for (var i = 1; i < 5; i++) {
+				this.$store.dispatch('News',{page_number: i})
+			}
+
+
+		},
+		methods:{
+			carouselChange:function(index){
+				console.log(index)
+				index++;
+				console.log(index)
+			},
+			bj:function(page, news){
+				this.dialogFormVisible = true;
+				this.index1 = page
+				this.index2 = news
+			},
+			buttongroup:function(){
+				this.$router.push({ path: '/login' })
+			}
 		}
 	}
-}
 
 </script>
 
 <style lang="less">
-@import '../style/common';
-.el-carousel img{
-	width:100%;
-}
-
-.el-carousel-item{
-	background-image: url("../assets/1.jpg");
-}
+	@import '../style/common';
+	.el-carousel img{
+		width:100%;
+		clear:both;
+	}
 
 
-  .el-carousel__item h3 {
-    color: #475669;
-    font-size: 14px;
-    opacity: 0.75;
-    line-height: 200px;
-    margin: 0;
-  }
-  
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-  
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
-  }
+	.Carousel1 .el-carousel__container{
+		height: 730px;
+	}
 
+	.Carousel2 .el-carousel__container{
+		height: 550px;
+	}
 
-.fillcontain{
-      height: 100%;
-    width: 100%;
-}
+	.el-carousel{
+		position:relative;
+	}
 
-.inner{
-	text-align: center;
-	position: fixed;
-	z-index: 4;
-	top: 38%;
-	left: 43%;
-	color:#fff;
-}
+	.news-card{
+		min-width: 200px;
+	}
 
-.p1{
-	font-size: 60px;
+	.news-text{
+		white-space: nowrap;
+		text-overflow:ellipsis;
+		overflow:hidden;
+
+	}
+
+	.news-btn{
+		width:100%;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+	}
+
+	.background1{
+		background-image: url("../assets/background1.jpeg");
+
+	}
+
+		.background2{
+		background-image: url("../assets/background2.jpeg");
+
+	}
+
+		.background3{
+		background-image: url("../assets/background3.jpeg");
+
+	}
+
+		.background4{
+		background-image: url("../assets/background4.jpeg");
+
+	}
+
+	.Carousel2 .el-carousel__item{
+		background-color: #FFFFFF;
+	}
+
+	.el-card{
+		background-color: #F3F3F3;
+	}
+
+	.news{
+		background-color: #FFFFFF;
+	}
+
+	.fillcontain{
+		height: 100%;
+		width: 100%;
+	}
+
+	.inner{
+		text-align: center;
+		z-index: 4;
+		margin:-150px auto;
+		top:50%;
+		color:#fff;
+		height:300px;
+		position:relative;
+
+	}
+	.H1{
+		text-align: center;
+		font-size: 20px;	
+	}
+
+	.el-card__body{
+		padding: 0px;
+	}
+
+	.news_container{
+		width: 80%;
+		margin: auto;
+		height: 400px;
+	}
+
+	.p1{
+		font-size: 60px;
 		text-align:center;
-}
-.p2{
+	}
+	.p2{
 
-	font-size: 30px;
+		font-size: 30px;
 		text-align:center;
-}
+	}
 
-.button1{
-	background-color: transparent;
-			color:#fff;
-}
-
-
-.promotion{
-	background-image: url("../assets/1.jpg");
-}
-
-.homepage{
-	background-color: #E8E8E8;
-}
-.pic1{
-	width: 600px;
-	height: 400px;
-	padding-top: 50px;
-}
-.pic2{
-	width: 600px;
-	height: 400px;
-	padding-bottom: 50px;
-	float: right;
-}
+	.button1{
+		background-color: transparent;
+		color:#fff;
 
 
+	}
+
+
+	.promotion{
+		background-image: url("../assets/1.jpg");
+	}
+
+	.homepage{
+		background-color: #E8E8E8;
+	}
+	.pic1{
+		width: 600px;
+		height: 400px;
+		padding-top: 50px;
+	}
+	.pic2{
+		width: 600px;
+		height: 400px;
+		padding-bottom: 50px;
+		float: right;
+	}
+
+	.news-btn{
+		margin-right: 200px;
+		text-align: center;
+	}
 
 </style>
