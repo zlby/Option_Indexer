@@ -15,7 +15,8 @@
               <el-menu-item :index="ite" v-for="(ite, index2) in value" v-if="ite!='-'" class="menu-item">
                 {{ite}}
                 <div class="add-btn">
-                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i></el-button>
+                <el-button type="primary" size="mini" @click="toggle($event)"><i class="el-icon-plus" ></i>
+                </el-button>
                 </div>
               </el-menu-item>
               
@@ -84,7 +85,6 @@
           removeClass(btn.children[0].children[0], 'el-icon-plus');
           addClass(btn.children[0].children[0], 'el-icon-minus');
           Bus.$emit('addNewOption', optionObj);
-          console.log(optionObj);
         } else {
           removeClass(btn, 'el-button--danger');
           addClass(btn, 'el-button--primary');

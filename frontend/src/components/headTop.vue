@@ -4,16 +4,39 @@
      <el-row>
       <el-menu class="el-menu-demo1" mode="horizontal" router>
 
-        <el-col :span="1" :offset="2">
+      <el-col :span="1" :offset="2">
          <el-menu-item index="/">
-          <img src="../assets/LOGOQ.png" class="touxiang">
+          <img src="../assets/未标题-1.png" class="touxiang">
         </el-menu-item>	
       </el-col>
 
       <el-col :span="7" :offset="8" :xs="7" :md="7" :lg="7" :sm="7" class="main-page-group">
-       <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>		
-       <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >策略套利</el-menu-item>
-     </el-col>
+       <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>	
+
+       <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >
+        <el-dropdown>
+          <span class="el-dropdown-link1">套期保值
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>
+            <el-button type="text" @click="toBeanGroup">豆粕资产组合套利保值</el-button>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button type="text" @click="toCrop">农作物跨品种套利保值</el-button>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button type="text" @click="toAccess">神经网络价值估计</el-button>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button type="text" @click="toCal">期权定价计算器</el-button>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
+      <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >策略套利</el-menu-item>
+    </el-col>
+  
 
 
      <el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6" v-if="loggedin==false">
@@ -31,6 +54,7 @@
       <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
 
       <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
+
         <el-dropdown>
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -50,35 +74,8 @@
               <el-button type="text" @click="logout">注销</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
-
-
-<!--           <el-dialog class="tanchu" title="信息修改" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :before-close="handleClose" style="z-index:999;">
-
-
-            <el-form :model="form">
-              <el-form-item>
-                <el-input v-model="form.old_password" type="password" id= "old_password" placeholder="Password"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-input v-model="form.new_password" type="password" id= "new_password" placeholder="newPassword"></el-input>
-              </el-form-item>
-        <el-form-item prop="email" class="input_form">
-          <div class="el-col el-col-12 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12">{{email}}</div>
-          <input v-model="form.email" class="el-input__inner" :value="email" type="email" placeholder="newEmail"></input>
-        </el-form-item>
-        <el-form-item prop="phone" class="input_form">
-          <div class="el-col el-col-12 el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12">{{phone}}</div>
-          <input v-model="form.phone" :value="phone" type="phone" class="el-input__inner" placeholder="newPhone"></input>
-        </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dj">确 定</el-button>
-            </div>
-
-
-          </el-dialog> -->
         </el-dropdown>
+
       </el-menu-item>
     </el-col>
 
@@ -137,6 +134,18 @@
       homepageIndividual: function(){
         this.$router.push({ path: '/homepageIndividual' })
       },
+      toBeanGroup: function(){
+        this.$router.push({ path: '/beanGroup'})
+      },
+      toCal: function(){
+        this.$router.push({ path: '/calculator'})
+      },
+      toCrop: function(){
+        this.$router.push({ path: '/crop'})
+      },
+      toAccess: function(){
+        this.$router.push({ path: '/assess'})
+      },
       watch: {
         dialogFormVisible: function(val){
           if(val===false){ // 要隐藏
@@ -168,6 +177,7 @@
   }
   .el-dropdown-link1{
     color:white;
+    font-size: 18px;
   }
 
   .el-menu--horizontal .el-menu-item:hover, .el-menu--horizontal .el-submenu__title:hover {
@@ -185,8 +195,8 @@
   }
 
   .touxiang{
-   width: 58px;
-   height: 58px;
+    width: 90px;
+    height: 60px;
  }
 
  .bigtouxiang{

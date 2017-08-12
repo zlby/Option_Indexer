@@ -7,6 +7,11 @@
     import echarts from 'echarts'
     import Bus from '../bus'
     export default{
+        created:function(){
+            Bus.$on('getMapData', optionObj=>{
+
+            })
+        },
         mounted:function(){
             this.myChart= echarts.init(document.getElementById('radar'));
             var saveThis=this; 
@@ -140,7 +145,6 @@
         this.originData=this.createRandomData()
         this.loadData(this.deepClone(this.originData));
         this.myChart.setOption(this.option);
- 
         this.setDefaultSelection();
         var current=0;
         window.legend_t=setInterval(function(){
@@ -219,13 +223,13 @@
                     var option1="M"+(Math.random()*1000+1000).toFixed(0);
                     var option2="M"+(Math.random()*1000+1000).toFixed(0);
                     var name=option1+"与"+option2;
-                    var random=(Math.random()*5000+5000).toFixed(0);
+                    var random=(Math.random()*1000*i+5000).toFixed(0);
                     data.push(random);
             //if(random>max) max=random;
             if(i==1){
                 indicator.push({
                     name:name,
-                    max:10000
+                    max:12000
                 });
             }
         }
