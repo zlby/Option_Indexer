@@ -9,13 +9,7 @@ class NewsSpider:
 
     @staticmethod
     def get_data():
-        try:
-            f = open('news_record', 'a')
-            f.write(datetime.now())
-            f.write('\n')
-        finally:
-            if f:
-                f.close()
+        print(datetime.now())
         res = requests.get(NewsSpider.index_url)
         res.encoding = 'gb2312'
         soup = BeautifulSoup(res.text.replace(u'\xa0', u' '), 'html.parser')
