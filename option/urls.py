@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^future/(\w+)/treading/$', views.get_future_treading_data),
     url(r'^option/(\w+)/possible_combo/$', views.get_possible_combo),
     url(r'^options/treading_data', views.get_option_treading_data),
+    url(r'^asset-evaluation/$', views.get_asset_evaluation),
     url(r'^news/$', views.get_news),
 ]
