@@ -1,5 +1,5 @@
-from datetime import timedelta
+import pymysql
 
-t = timedelta(hours=1)
+# 打开数据库链接
 
-print(t.days == 1)
+db = pymysql.connect(host="localhost", user="root", password="", database="option_indexer")

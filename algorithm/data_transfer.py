@@ -37,7 +37,7 @@ class FutureTD:
 def data_transfer(rootdir):
     for parent, dirnames, filenames in os.walk(rootdir):
         for filename in filenames:
-    #         filename = "m1708.csv"
+
             with open(rootdir + "/" + filename, 'r') as f:
                 data_list = f.read().split('\n')
                 data_list = data_list[1:-3]

@@ -1,6 +1,6 @@
 import csv
 # import algorithm.interval.net_run as net
-from algorithm.data_provider.data_provider_django import *
+# from algorithm.data_provider.data_provider_django import *
 from algorithm.data_provider.data import *
 from algorithm.interval.graph_build import GraphBuilder
 
@@ -10,8 +10,9 @@ from algorithm.interval.graph_build import GraphBuilder
 
 class CsvDataProvider(AbstractDataProvider):
     def __init__(self, code1, code2):
-        root = "./"
-
+        import os
+        root = os.path.split(os.path.realpath(__file__))[0] + "\\"
+        del os
         self.option_codes = (str(code1), str(code2))
         self.option_datas = {}
         with open(root + str(code1) + ".csv") as f_1:
@@ -26,9 +27,12 @@ class CsvDataProvider(AbstractDataProvider):
             ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
             return ls if "number" not in kwargs else ls[-kwargs["number"]:]
         elif kwargs["attribute"] == "option_price_list":
-            ls = [float(x["vol"]) for x in self.option_datas[kwargs["code"]]]
+            ls = [float(x["close"]) for x in self.option_datas[kwargs["code"]]]
             return ls if "number" not in kwargs else ls[-kwargs["number"]:]
 
+    @staticmethod
+    def getInstance():
+        return CsvDataProvider(code1="m1709-c-2500", code2="m1709-c-2600")
 
 def __get_regular_normality_test():
     optioncomb = CsvDataProvider("m1709c2500", "m1709c2600")
@@ -63,11 +67,13 @@ def __get_ratio_test():
 
 
 def __get_interval_test():
-    dataprovider = DjangoDataProvider()
+    dataprovider = CsvDataProvider("m1709-c-2500", "m1709-c-2600")
     cb = GraphBuilder(dataprovider)
     cb.prepare(code1='m1709-c-2500', code2='m1709-c-2600', number=2000)
     ratio = cb.get__spread_position_of_combined_options()
     print(ratio)
+    res = cb.find_max_benefit_intervals(ratio[0], 10.)
+    print(res)
 
 
 if __name__ == "__main__":
