@@ -1,7 +1,5 @@
 import csv
-# import algorithm.interval.net_run as net
-# from algorithm.data_provider.data_provider_django import *
-from algorithm.data_provider.data import *
+from algorithm.data_provider.data import AbstractDataProvider
 from algorithm.interval.graph_build import GraphBuilder
 
 
