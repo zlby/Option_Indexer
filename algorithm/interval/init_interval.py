@@ -1,7 +1,6 @@
 import itertools
 from algorithm.interval.graph_build import *
 from algorithm.data_provider.data_provider_django import *
-from django.db.models import Q
 
 
 def initialize_interval():

@@ -1,3 +1,3 @@
-from .normality_test import *
-def getData():
-    return CsvDataProvider.getInstance()
+print("package: algorithm importing")
+# from . import normality_test
+from . import prediction_test
