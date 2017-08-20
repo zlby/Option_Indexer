@@ -4,15 +4,16 @@ PYTHON_PATH = C:/Users/Alan/AppData/Local/Programs/Python/Python35
 
 LD_LIBRARY_PATH+="C:/Users/Alan/AppData/Local/Programs/Python/Python35/"
 
-ALL : $(AIM).pyd
+ALL : sim_spot_futures.pyd binomial_amer.pyd clean
 
-$(AIM).pyd: $(AIM).obj
-	gcc -fPIC $(AIM).obj -Wall -O3 -shared -o $(AIM).pyd -L$(LD_LIBRARY_PATH) -l python35
-	rm $(AIM).c
-	rm $(AIM).obj
+%.pyd: %.obj
+	gcc -fPIC $< -Wall -O3 -shared -o $@ -L$(LD_LIBRARY_PATH) -l python35
 
-$(AIM).obj: $(AIM).c
-	gcc -c $(AIM).c -o $(AIM).obj -I$(PYTHON_PATH)/include
+%.obj: %.c
+	gcc -c $< -o $@ -I$(PYTHON_PATH)/include
 
-$(AIM).c: $(AIM).pyx
-	cython -o $(AIM).c $(AIM).pyx
+%.c: %.pyx
+	cython -o $@ $<
+
+clean:
+	rm -rf *.c *.obj
