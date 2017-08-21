@@ -45,15 +45,15 @@ def get_ass(future_code_list, future_quantity_list, option_code_list, option_qua
         time_future = time_now + t_delta
 
         if option_vol_list == None:
-            option_price = get_option_price(option_code, time_future, 2000)
+            option_price = get_option_price(option_code, time_future, 2000, price=future_price)
         else:
-            option_price = get_option_price(option_code, time_future, 2000, option_vol_list[i])
+            option_price = get_option_price(option_code, time_future, 2000, price=future_price, volat=option_vol_list[i])
         option_dict[option_code] = [option_price]
 
     total_future = 0
     total_option = 0
     for i in range(len(future_code_list)):
-        total_future += future_quantity_list[i] * future_price_list
+        total_future += future_quantity_list[i] * future_price_list[i]
 
     for i in range(len(option_code_list)):
         total_option += option_quantity_list[i] * option_dict[option_code_list[i]]
