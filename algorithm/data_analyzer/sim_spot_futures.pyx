@@ -2,7 +2,6 @@ R"""Simulate the spot-futures prices function,
 
     F = (S + U) \dot \exp{ T(r-y) }
 """
-
 from libc cimport math
 
 # annual compound interest
