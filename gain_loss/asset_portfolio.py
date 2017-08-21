@@ -3,8 +3,8 @@ from gain_loss.option_price_cal import *
 from option.models import *
 import datetime
 
-def get_ass(future_code_list, future_quantity_list, option_code_list, option_quantity_list, spot_price, spot_quantity, t_delta: datetime.timedelta):
-    if (len(future_code_list) != len(future_quantity_list)) or (len(option_code_list) != len(option_quantity_list)):
+def get_ass(future_code_list, future_quantity_list, option_code_list, option_quantity_list, spot_price, spot_quantity, t_delta: datetime.timedelta, option_vol_list = None):
+    if (len(future_code_list) != len(future_quantity_list)) or (len(option_code_list) != len(option_quantity_list) or (len(option_code_list) != len(option_vol_list))):
         return None
 
     future_price_list = []
@@ -36,14 +36,18 @@ def get_ass(future_code_list, future_quantity_list, option_code_list, option_qua
 
 
     option_dict = {}
-    for option_code in option_code_list:
+    for i in len(option_code_list):
+        option_code = option_code_list[i]
         future_code = option_code.split('-')[0]
         future_price = future_dict[future_code]
 
         time_now = datetime.datetime.now()
         time_future = time_now + t_delta
 
-        option_price = get_option_price(option_code, time_future, 2000)
+        if option_vol_list == None:
+            option_price = get_option_price(option_code, time_future, 2000)
+        else:
+            option_price = get_option_price(option_code, time_future, 2000, option_vol_list[i])
         option_dict[option_code] = [option_price]
 
     total_future = 0
