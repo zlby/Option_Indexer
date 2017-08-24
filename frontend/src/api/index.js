@@ -33,4 +33,10 @@ export default {
   localOptionCombination:function(paramObj){
     return axios.get('/client/get_all_combo/',paramObj)
   }
+  localFutureListBalance:function(paramObj){
+    return axios.get("/market/future-list",paramObj)
+  }
+  localOptionListBalance:function(paramObj){
+    return axios.get("/market/futures",paramObj)
+  }
 }
