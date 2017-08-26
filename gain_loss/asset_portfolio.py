@@ -3,8 +3,12 @@ from gain_loss.option_price_cal import *
 from option.models import *
 import datetime
 
-def get_ass(future_code_list, future_quantity_list, option_code_list, option_quantity_list, spot_price, spot_quantity, t_delta: datetime.timedelta, option_vol_list = None):
-    if (len(future_code_list) != len(future_quantity_list)) or (len(option_code_list) != len(option_quantity_list) or (len(option_code_list) != len(option_vol_list))):
+
+def get_asset(future_code_list, future_quantity_list, option_code_list,
+              option_quantity_list, spot_price, spot_quantity,
+              t_delta: datetime.timedelta, option_vol_list=None):
+    if (len(future_code_list) != len(future_quantity_list)) or (
+            len(option_code_list) != len(option_quantity_list) or (len(option_code_list) != len(option_vol_list))):
         return None
 
     future_price_list = []
@@ -22,7 +26,7 @@ def get_ass(future_code_list, future_quantity_list, option_code_list, option_qua
         for i in range(len(query_set_spot)):
             spot_data_list.append(query_set_spot[i].price)
 
-        if (len(future_data_list) != len(spot_data_list)):
+        if len(future_data_list) != len(spot_data_list):
             return None
 
         t = t_delta.days / 365
@@ -34,9 +38,8 @@ def get_ass(future_code_list, future_quantity_list, option_code_list, option_qua
     for i in range(future_code_list):
         future_dict[future_code_list[i]] = future_price_list[i]
 
-
     option_dict = {}
-    for i in len(option_code_list):
+    for i in range(len(option_code_list)):
         option_code = option_code_list[i]
         future_code = option_code.split('-')[0]
         future_price = future_dict[future_code]
@@ -44,7 +47,7 @@ def get_ass(future_code_list, future_quantity_list, option_code_list, option_qua
         time_now = datetime.datetime.now()
         time_future = time_now + t_delta
 
-        if option_vol_list == None:
+        if option_vol_list is None:
             option_price = get_option_price(option_code, time_future, 2000)
         else:
             option_price = get_option_price(option_code, time_future, 2000, option_vol_list[i])

@@ -17,6 +17,17 @@ class Future(models.Model):
         return result
 
     @staticmethod
+    def get_future_and_delivery_day_list():
+        result = []
+        for future in Future.objects.filter(delivery_day__gte=date.today()):
+            item = {
+                'code': future.code,
+                'delivery_day': future.delivery_day.strftime('%Y-%m-%d'),
+            }
+            result.append(item)
+        return result
+
+    @staticmethod
     def get_future_option_list():
         result = []
         for future in Future.objects.filter(delivery_day__gte=date.today()):
