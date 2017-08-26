@@ -119,7 +119,7 @@ const mutations = {
         timetable[obj[i].code]=new Date(obj[i].deliver_time)-86400000
     }
     state.futureTimetable=timetable;
-  }
+  },
   getOptionListBalance(state,obj){
     var optionList=[];
     for(var i=0;i<obj.future_list.length;i++){

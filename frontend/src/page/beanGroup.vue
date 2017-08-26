@@ -124,32 +124,6 @@
 			        },
 				}
 			},
-			computed:{
-				futures: function(){
-					return this.$store.state.login.futureBalance;
-				},
-				options:function(){
-					return this.$store.state.login.optionBalance;
-				},
-				futureTimetable:function(){
-					return this.$store.state.login.futureBalanceTime
-				},
-				filteredFutures:function () {
-					var vm = this
-					return this.futures.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						return (futureTimetabel[item]>=chosenTime);
-					})
-				},
-				filteredOptions:function () {
-					var vm = this
-					return this.options.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						var futureCode=item.slice(0,5);
-						return (futureTimetable[futureCode]>=chosenTime);
-					})
-				},
-			},
 			mounted:function(){
 				myChart= echarts.init(document.getElementById('main'));
 			    template={
@@ -276,7 +250,7 @@
 			        ],
 			        yAxis: [
 			            {
-			            	name:"资产组合价值"
+			            	name:"资产组合价值",
 			                scale: true,
 			                gridIndex: 0,
 			                splitNumber: 10,
@@ -302,8 +276,33 @@
 			        animation:true,
 			        series: []
 			    };
-			}
+			},
 			methods:{
+								futures: function(){
+					return this.$store.state.login.futureBalance;
+				},
+				options:function(){
+					return this.$store.state.login.optionBalance;
+				},
+				futureTimetable:function(){
+					return this.$store.state.login.futureBalanceTime
+				},
+				filteredFutures:function () {
+					var vm = this
+					return vm.futures.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						return (futureTimetabel[item]>=chosenTime);
+					})
+				},
+				filteredOptions:function () {
+					var vm = this
+					return vm.options.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						var futureCode=item.slice(0,5);
+						return (futureTimetable[futureCode]>=chosenTime);
+					})
+				},
+
 				addFuture: function() {
 					this.comboFutures.push({'code': null, 'amount': 0})
 				},
@@ -341,7 +340,7 @@
 				    series.xAxisIndex=0;
 				    series.yAxisIndex=0;
 				    return {
-				    	name:data.name
+				    	name:data.name,
 				        series:series
 				    }
 				},

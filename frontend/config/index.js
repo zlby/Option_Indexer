@@ -29,11 +29,11 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/client': {//这里是我配置的名字
-            target: 'http://139.219.109.255', //这个路径是我代理到本地tp框架里面
+            target: 'http://127.0.0.1:8000/', //这个路径是我代理到本地tp框架里面
             changeOrigin: true
     　　 },
         '/market': {
-            target: 'http://139.219.109.255', //这个路径是我代理到本地tp框架里面
+            target: 'http://127.0.0.1:8000/', //这个路径是我代理到本地tp框架里面
             changeOrigin: true
         }
   },
