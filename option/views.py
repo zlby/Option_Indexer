@@ -212,14 +212,28 @@ def get_asset_evaluation(request):
                 status['code'] = -12
                 status['message'] = 'future list format not right'
                 return JsonResponse(result, status=400)
-            data = []
-            result['data'] = data
+            asset_evaluation_list = []
+            result['asset_evaluation_list'] = asset_evaluation_list
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
         else:
             status['code'] = -2
             status['message'] = 'need more argument'
             return JsonResponse(result, status=400)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_future_delivery_day_list(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        result['future_list'] = Future.get_future_and_delivery_day_list()
+        status['message'] = '获取成功'
+        return JsonResponse(result, status=200)
     else:
         # http方法不支持
         status['code'] = 405
