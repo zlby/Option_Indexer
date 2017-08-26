@@ -72,7 +72,8 @@ import numpy as np
 #
 # plt.show()
 
-def history_vol(code, day):
+
+def history_vol(code):
     option_code = code
     future_code = option_code.split('-')[0]
     query_set = DayFutureTreadingData.objects.filter(future=future_code).order_by('-time')

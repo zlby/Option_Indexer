@@ -174,3 +174,35 @@ export const getOptionCombo = ({ commit }, obj)=>{
       console.log(error)
     })
 };
+
+export const getFutureListBalance = ({ commit }, obj)=>{
+  api.localFutureList().then(function(res){
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getFutureListBalance',res.future_list)
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
+};
+export const getOptionListBalance = ({ commit }, obj)=>{
+  var future=[];
+  api.localFutureListbalance().then(function(res){
+    res=res.data;
+    future=res.future_list;
+  })
+  api.localFutureList().then(function(res){
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getOptionListBalance',{time:future,future_list:res.future_list})
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
+};
