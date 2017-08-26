@@ -98,7 +98,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
                 future_price = future['price']
                 break
     time_future_with_min = time_now + time_delt
-    if option_list[i]['volatility'] == None:
+    if option_list[i]['volatility'] is None:
         option_price = get_option_price(option_code, time_future, 2000, price=future_price)
     else:
         option_price = get_option_price(option_code, time_future, 2000, price=future_price, volat=option_list[i]['volatility'])

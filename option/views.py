@@ -2,6 +2,7 @@ from django.http import JsonResponse
 import json
 from datetime import datetime
 from option.models import Future, Option, News, Intervals
+from gain_loss import asset_portfolio
 
 # Create your views here.
 
@@ -212,7 +213,7 @@ def get_asset_evaluation(request):
                 status['code'] = -12
                 status['message'] = 'future list format not right'
                 return JsonResponse(result, status=400)
-            asset_evaluation_list = []
+            asset_evaluation_list = asset_portfolio.get_ass(t1, physicals, future_list, option_list)
             result['asset_evaluation_list'] = asset_evaluation_list
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
