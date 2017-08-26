@@ -54,8 +54,7 @@ class GraphBuilder(object):
         # Mean of list of difference of volatility
         self.mean_dif_vol = 0.
         pass
-    # 1 gb=graphbuilder
-    # gb.prepare(code1, code2, list_len)
+
     def prepare(self, code1: str, code2: str, number: int):
         self.__preprocessing_data(code1, code2, number)
 
@@ -190,8 +189,7 @@ class GraphBuilder(object):
 
         p_value = - dst.Chi2(2.).cdf(jb_value) + 1.
         return p_value
-    # 2 co_test return ratio , -abs, if not none
-    # find_max_..()
+
     def get__spread_position_of_combined_options(self):
         """
 
@@ -209,7 +207,8 @@ class GraphBuilder(object):
             y = tf.constant(rl2, tf.float32, [1, sample_size])
 
         with tf.name_scope('x_add_ay'):
-            gamma = tf.Variable(np.random.rand(), tf.float32)
+            # gamma = tf.Variable(np.random.rand())
+            gamma = tf.Variable(-1.)
             x_add_ay = tf.add(tf.multiply(gamma, y), x)
 
         with tf.name_scope('loss'):
@@ -228,7 +227,8 @@ class GraphBuilder(object):
             for _ in range(100):
                 sess.run(optimizer)
 
-            return sess.run([gamma])[0]
+            # more return @test
+            return sess.run([gamma, loss])
 
 
             # res = y = gamma * x
@@ -258,69 +258,97 @@ class GraphBuilder(object):
         return tf.reduce_mean(_sum)
 
     def find_max_benefit_intervals(self, gamma, sale_rate):
+
+        # config = tf.ConfigProto(device_count={"CPU": 3},  # limit to num_cpu_core CPU usage
+        #                         inter_op_parallelism_threads=1,
+        #                         intra_op_parallelism_threads=1,
+        #                         log_device_placement=False)
+        # tf.InteractiveSession(config=config)
+
         p1 = self.positive_option_price_list
         p2 = self.negative_option_price_list
         r1 = self.positive_option_rate_list
         r2 = self.negative_option_rate_list
 
-        # no err threshold
-        def get_data_normal_distribution_arguments():
-            try:
-                res = self.rm_dst
-            except:
-                mean = tf.reduce_mean(r1 + tf.multiply(gamma, r2))
-                scl = tf.sqrt(self.__get_variance(r1 + tf.multiply(gamma, r2)))
-                self.nm_dst = dst.Normal(loc=mean, scale=scl)
-                res = self.nm_dst
-            return  res
-            # over~
-            #
+        dp = p1 + tf.multiply(gamma, p2)
+        dr = r1 + tf.multiply(gamma, r2)
 
-        def get_thresholds(_nm_dst):
-            vrs = tf.Variable(np.random.rand(2))
-            max_raw = _nm_dst.prob(tf.reduce_mean(r1 + tf.multiply(gamma, r2)))
-            _threshold = vrs.value()
-            trd_nm = tf.cast(_threshold[0], tf.float32) * tf.cast(max_raw, tf.float32)
-            trd_hg = tf.cast(_threshold[1], tf.float32) * tf.cast(trd_nm, tf.float32)
-            return trd_nm, trd_hg
+        __loc = tf.reduce_mean(dr)
+        __scl = tf.sqrt(tf.reduce_mean(tf.square(dr - __loc)))
+        nm_dst = dst.Normal(loc=__loc, scale=__scl)
 
-        def interval_signs(ls: tf.Tensor, _trd_hg, _trd_nm):
-            # TODO: unit test
-            mr_nm_cvt = dst.Logistic(loc=_trd_nm, scale=0.05).cdf
+        __max_raw = nm_dst.prob(__loc)
+        __vrs0 = tf.Variable(np.random.rand())
+        __vrs1 = tf.Variable(np.random.rand())
+        trd_nm = __max_raw * dst.Logistic(0.,10.).cdf(__vrs0)
+        trd_hg = trd_nm * dst.Logistic(0.,10.).cdf(__vrs1)
 
-            def ls_hg_cvt(_ls):
-                _a = dst.Logistic(loc=_trd_hg, scale=0.05).cdf(_ls)
-                return tf.subtract(_a, 1.)
+        sgns_in_nm = dst.Logistic(trd_nm, 0.05).cdf(nm_dst.prob(dr)) - 1.
+        sgns_out_hg = dst.Logistic(trd_hg, 0.05).cdf(nm_dst.prob(dr))
 
-            return tf.add(ls_hg_cvt(ls), mr_nm_cvt(ls))
+        sign = dst.Logistic(0.,0.01).cdf
+        step_bene = sale_rate * dp * (sgns_in_nm + sgns_out_hg) * sign(dr) - 1. * sale_rate * (1 + gamma * sign(gamma))
 
-        def sign(_ls):
-            _a = dst.Logistic(loc=0., scale=0.05).cdf(_ls)
-            return 2. * _a - 1.
+        benefits = tf.reduce_sum(step_bene) - sale_rate * (p1[-1] * gamma * p2[-1]) * tf.reduce_sum((sgns_out_hg + sgns_in_nm) * sign(dr))
 
-        def normalize_loss(_step_bene):
-            return dst.Logistic(0., 30.).cdf(- tf.reduce_sum(_step_bene))
 
+        # # no err threshold
+        # def get_data_normal_distribution_arguments():
+        #     try:
+        #         res = self.nm_dst
+        #     except:
+        #         mean = tf.reduce_mean(r1 + tf.multiply(gamma, r2))
+        #         scl = tf.sqrt(self.__get_variance(r1 + tf.multiply(gamma, r2)))
+        #         self.nm_dst = dst.Normal(loc=mean, scale=scl)
+        #         res = self.nm_dst
+        #     return  res
+        #     # over~
+        #     #
+        #
+        # def get_thresholds(_nm_dst):
+        #     vrs0 = tf.Variable(np.random.rand())
+        #     vrs1 = tf.Variable(np.random.rand())
+        #     _max_raw = _nm_dst.prob(tf.reduce_mean(r1 + tf.multiply(gamma, r2)))
+        #     _trd_nm = _nm_dst.cdf(vrs0) * _max_raw
+        #     _trd_hg = _nm_dst.cdf(vrs1) * _trd_nm
+        #     return _trd_nm, _trd_hg, _max_raw
+        #
+        # def interval_signs(ls: tf.Tensor, _trd_hg, _trd_nm):
+        #     # TODO: unit test
+        #     mr_nm_cvt = dst.Logistic(loc=_trd_nm, scale=0.05).cdf
+        #
+        #     def ls_hg_cvt(_ls):
+        #         _a = dst.Logistic(loc=_trd_hg, scale=0.05).cdf(_ls)
+        #         return tf.subtract(_a, 1.)
+        #
+        #     return tf.add(ls_hg_cvt(ls), mr_nm_cvt(ls))
+        #
+        # def sign(_ls):
+        #     _a = dst.Logistic(loc=0., scale=0.05).cdf(_ls)
+        #     return 2. * _a - 1.
+        #
+        # def normalize_loss(_benefits):
+        #     return dst.Logistic(0., 3.).cdf(-_benefits)
+        #
         def find_interval(value, avg, scale):
             with tf.name_scope("find_interval_with_raw_value"):
                 min_of_interval = avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
                 max_of_interval = avg + tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
 
-            return sess.run([min_of_interval, max_of_interval])
-
-        nm_dst = get_data_normal_distribution_arguments()
-        trd_hg, trd_nm = get_thresholds(nm_dst)
-        sgns = interval_signs(r1 + tf.multiply(gamma, r2), trd_hg, trd_nm)
-        dp = p1 + tf.multiply(gamma, p2)
-        dr = r1 + tf.multiply(gamma, r2)
-
-        step_bene = sale_rate * (dp) * sgns * sign(dr) - 1. * sale_rate * (1 + gamma * sign(gamma))
-
-        loss = normalize_loss(step_bene)
+            return min_of_interval, max_of_interval
+        #
+        # nm_dst = get_data_normal_distribution_arguments()
+        # trd_hg, trd_nm, max_raw = get_thresholds(nm_dst)
+        # sgns = interval_signs(nm_dst.prob(r1 + tf.multiply(gamma, r2)), trd_hg, trd_nm)
+        #
+        #
+        # step_bene = sale_rate * dp * sgns * sign(dr) - 1. * sale_rate * (1 + gamma * sign(gamma))
+        # benefits = tf.reduce_sum(step_bene)
+        loss = dst.Logistic(0., 30.).cdf(-benefits)
         train_step = tf.train.AdamOptimizer(0.01).minimize(loss)
         init = tf.global_variables_initializer()
 
-        config = tf.ConfigProto(device_count={"CPU": 8},  # limit to num_cpu_core CPU usage
+        config = tf.ConfigProto(device_count={"CPU": 3},  # limit to num_cpu_core CPU usage
                                 inter_op_parallelism_threads=1,
                                 intra_op_parallelism_threads=1,
                                 log_device_placement=False)
@@ -330,4 +358,8 @@ class GraphBuilder(object):
             for i in range(200):
                 sess.run(train_step)
             values = sess.run([trd_hg, trd_nm])
-            return find_interval(values[0], nm_dst.loc, nm_dst.scale), find_interval(values[1], nm_dst.loc, nm_dst.scale)
+            b1, b2 = find_interval(values[0], nm_dst.loc, nm_dst.scale)
+            a1, a2 = find_interval(values[1], nm_dst.loc, nm_dst.scale)
+            print(sess.run(tf.reduce_sum(sgns_out_hg + sgns_in_nm)))
+            print(sess.run([trd_hg/__max_raw, trd_nm/__max_raw]))
+            return sess.run([b1, a1, a2, b2, benefits])

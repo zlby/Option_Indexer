@@ -81,7 +81,6 @@
 #         #     print(vol_value)
 
 from option.models import *
-from django.db.models import Q
 from algorithm.implied_volatility import *
 from datetime import datetime
 import algorithm.database_link as dl
