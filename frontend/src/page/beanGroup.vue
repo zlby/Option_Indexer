@@ -98,7 +98,6 @@
 
 	<script>
 		import headSecond from '../components/headSecond'
-		import footerBottom from '../components/footerBottom'
 		import echarts from 'echarts'
 		import axios from 'axios'
 		import {notifi} from '../notif'
@@ -124,7 +123,38 @@
 			        },
 				}
 			},
+			computed:{
+				futures: function(){
+					console.log(this.$store.state.login.futureBalance)
+					return this.$store.state.login.futureBalance;
+				},
+				options:function(){
+					return this.$store.state.login.optionBalance;
+					console.log(this.$store.state.login.futureTimetable)
+				},
+				futureTimetable:function(){
+					return this.$store.state.login.futureTimetable
+					console.log(this.$store.state.login.futureTimetable)
+				},
+				filteredFutures:function () {
+					var vm = this
+					return this.futures.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						return (vm.futureTimetable[item]<=chosenTime);
+					})
+				},
+				filteredOptions:function () {
+					var vm = this
+					return this.options.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						var futureCode=item.slice(0,6);
+						return (vm.futureTimetable[futureCode]<=chosenTime);
+					})
+				},
+			},
 			mounted:function(){
+  				this.$store.dispatch('getFutureListBalance'),
+  				this.$store.dispatch('getOptionListBalance')
 				myChart= echarts.init(document.getElementById('main'));
 			    template={
 			        "optionK":{
@@ -262,7 +292,7 @@
 			                splitLine: {show: true},
 			                axisPointer: {
 			                    label: {
-			                        formatter: function (params) {
+			                        formatter: function (params) {0
 			                            return params.value
 			                        }
 			                    }
@@ -278,31 +308,6 @@
 			    };
 			},
 			methods:{
-								futures: function(){
-					return this.$store.state.login.futureBalance;
-				},
-				options:function(){
-					return this.$store.state.login.optionBalance;
-				},
-				futureTimetable:function(){
-					return this.$store.state.login.futureBalanceTime
-				},
-				filteredFutures:function () {
-					var vm = this
-					return vm.futures.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						return (futureTimetabel[item]>=chosenTime);
-					})
-				},
-				filteredOptions:function () {
-					var vm = this
-					return vm.options.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						var futureCode=item.slice(0,5);
-						return (futureTimetable[futureCode]>=chosenTime);
-					})
-				},
-
 				addFuture: function() {
 					this.comboFutures.push({'code': null, 'amount': 0})
 				},
@@ -442,7 +447,7 @@
 				        color+=base[Math.floor(Math.random()*6)];
 				    }
 				    return color;
-				}
+				},
 			}
 		}
 

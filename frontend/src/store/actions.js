@@ -176,7 +176,8 @@ export const getOptionCombo = ({ commit }, obj)=>{
 };
 
 export const getFutureListBalance = ({ commit }, obj)=>{
-  api.localFutureList().then(function(res){
+  api.localFutureListBalance().then(function(res){
+    console.log(res)
     res = res.data
     if (res.status.code == '0'){
       commit('getFutureListBalance',res.future_list)
@@ -190,11 +191,14 @@ export const getFutureListBalance = ({ commit }, obj)=>{
 };
 export const getOptionListBalance = ({ commit }, obj)=>{
   var future=[];
-  api.localFutureListbalance().then(function(res){
+  api.localFutureListBalance().then(function(res){
+    console.log(res)
     res=res.data;
     future=res.future_list;
   })
+
   api.localFutureList().then(function(res){
+    console.log(res)
     res = res.data
     if (res.status.code == '0'){
       commit('getOptionListBalance',{time:future,future_list:res.future_list})

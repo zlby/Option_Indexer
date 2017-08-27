@@ -21,6 +21,9 @@ const state = {
   notification: [],
   OptionComboList: [],
   comboId: [],
+  // futureBalance: [],
+  // optionBalance: [],
+  // futureBalanceTime: '',
 };
 
 const mutations = {
@@ -116,9 +119,9 @@ const mutations = {
     })
     var timetable={};
     for(var i=0;i<obj.length;i++){
-        timetable[obj[i].code]=new Date(obj[i].deliver_time)-86400000
+        timetable[obj[i].code]=new Date(obj[i].delivery_day).getTime();
     }
-    state.futureTimetable=timetable;
+    state.futureBalanceTime=timetable;
   },
   getOptionListBalance(state,obj){
     var optionList=[];
