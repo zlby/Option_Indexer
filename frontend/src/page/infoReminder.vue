@@ -16,10 +16,15 @@
       <div>时间:{{notifs[key].time}}</div>
       <div>
         <div class="buyin">
-        买入股份：{{notifs[key].buy_option}} <el-tag color="#13ce66">{{notifs[key].buy_lot}}手</el-tag>
+        买入股份：{{notifs[key].buy_option}} 
         </div>
         <div class="soldout">
-        卖出股份：{{notifs[key].sell_option}} <el-tag color="#ff4949">{{notifs[key].sell_lot}}手</el-tag>
+        卖出股份：{{notifs[key].sell_option}} 
+        </div>
+        <div class="rate">
+          买入/卖出
+          <el-tag color="#13ce66">{{notifs[key].buy_lot}}手</el-tag>/
+          <el-tag color="#ff4949">{{notifs[key].sell_lot}}手</el-tag>
         </div>
       </div>
     </el-alert>

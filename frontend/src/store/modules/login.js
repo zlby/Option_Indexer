@@ -20,6 +20,7 @@ const state = {
   new_phone: '',
   notification: [],
   OptionComboList: [],
+  comboId: [],
 };
 
 const mutations = {
@@ -103,8 +104,30 @@ const mutations = {
     state.comboId=obj.map(function(o){
       return o.id;
     })
+  },
+  deleteCombo(state, obj){
+    var idx = obj.index
+    state.OptionComboList.splice(idx, 1)
+    state.comboId.splice(idx,1);
+  },
+  getFutureListBalance(state,obj){
+    state.futureBalance=obj.map(function(o){
+      return o.code
+    })
+    var timetable={};
+    for(var i=0;i<obj.length;i++){
+        timetable[obj[i].code]=new Date(obj[i].deliver_time)-86400000
+    }
+    state.futureTimetable=timetable;
+  },
+  getOptionListBalance(state,obj){
+    var optionList=[];
+    for(var i=0;i<obj.future_list.length;i++){
+      optionList=optionList.concat(obj.future_list[i].options)
+    }
+    state.optionBalance=optionList;
+    
   }
-
 
 };
 

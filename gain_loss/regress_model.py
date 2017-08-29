@@ -1,12 +1,13 @@
 import tensorflow as tf
 from algorithm.data_analyzer.sim_spot_futures import r
 
+
 def regress(spot_list, future_list, t):
     """\ln{F} = \ln{S+U} + T * (r - y)"""
     ln_f = tf.log(future_list, name="ln(F)")
 
-    u = tf.Variable(0.,name="discounted value")
-    y = tf.Variable(0.,name="convenience yield")
+    u = tf.Variable(0., name="discounted value")
+    y = tf.Variable(0., name="convenience yield")
     ln_s_p_u = tf.log(
         tf.add(
             x=spot_list,

@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import tensorflow as tf
 from .sim_spot_futures import r
 def regress(spot_list, future_list, t):

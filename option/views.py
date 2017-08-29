@@ -2,6 +2,7 @@ from django.http import JsonResponse
 import json
 from datetime import datetime
 from option.models import Future, Option, News, Intervals
+from gain_loss import asset_portfolio
 
 # Create your views here.
 
@@ -127,7 +128,7 @@ def get_option_treading_data(request):
                     return JsonResponse(result, status=400)
                 try:
                     option_list = list(json.loads(option_list))
-                except TypeError:
+                except (TypeError, json.JSONDecodeError):
                     status['code'] = -12
                     status['message'] = 'option list format not right'
                     return JsonResponse(result, status=400)
@@ -145,7 +146,7 @@ def get_option_treading_data(request):
                         option_data = option.get_day_treading_data(start_time, end_time)
                     if option_data:
                         data.append(option_data)
-                result['data'] = data_type
+                result['data'] = data
                 status['message'] = '获取成功'
                 return JsonResponse(result, status=200)
 
@@ -181,3 +182,61 @@ def get_possible_combo(request, option_code):
         status['message'] = 'http method not supported'
         return JsonResponse(result, status=405)
 
+
+def get_asset_evaluation(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        datetime_format = '%Y-%m-%d'
+        t1 = request.GET.get('t1')
+        physicals = request.GET.get('physicals')
+        option_list = request.GET.get('option_list')
+        future_list = request.GET.get('future_list')
+        if t1 and physicals\
+                and option_list\
+                and future_list:
+            try:
+                t1 = datetime.strptime(t1, datetime_format)
+            except ValueError:
+                status['code'] = -12
+                status['message'] = 'time_format_not_right'
+                return JsonResponse(result, status=400)
+            try:
+                option_list = list(json.loads(option_list))
+            except (TypeError, json.JSONDecodeError):
+                status['code'] = -12
+                status['message'] = 'option list format not right'
+                return JsonResponse(result, status=400)
+            try:
+                future_list = list(json.loads(future_list))
+            except (TypeError, json.JSONDecodeError):
+                status['code'] = -12
+                status['message'] = 'future list format not right'
+                return JsonResponse(result, status=400)
+            asset_evaluation_list = asset_portfolio.get_ass(t1, physicals, future_list, option_list)
+            result['asset_evaluation_list'] = asset_evaluation_list
+            status['message'] = '获取成功'
+            return JsonResponse(result, status=200)
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_future_delivery_day_list(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        result['future_list'] = Future.get_future_and_delivery_day_list()
+        status['message'] = '获取成功'
+        return JsonResponse(result, status=200)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)

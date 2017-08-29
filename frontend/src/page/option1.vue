@@ -1,10 +1,10 @@
 <template style="min-width:800px">
     <el-row>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:600px; margin:20px 0px;">
+            <div id="option" style="width:100%;height:600px; margin:20px 0px;">
             </div>
         </el-col>
-        <el-col :span="20">
+        <el-col :span="20" style="margin-top:20px">
             
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
@@ -13,15 +13,23 @@
                   align="right"
                   placeholder="选择日期范围"
                   :picker-options="pickerOption"
-                  style="margin-left:50px">
+                  style="margin-left:50px; width:60%">
                 </el-date-picker>
             </div>
-            <el-radio-group v-model="interval" :span="4">
-                <el-radio-button label="day">日</el-radio-button>
-                <el-radio-button label="hour">小时</el-radio-button>
+
+            <el-col :span="4">
+            <el-radio-group v-model="interval">
+                <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
             </el-radio-group>
+            </el-col>
+            
+            <el-col :span="4">
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
-            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="putCombination">添加期权组合</el-button>
+            </el-col>
+            <el-col :span="4">
+            <el-button type="success" size="large" style="position:relative;bottom:0px;margin-left:50px;" @click="putCombination">添加期权组合</el-button>
+            </el-col>
+
         </el-col>
     </el-row>
 </template>
@@ -75,7 +83,6 @@
                     res=res.data;
                     if(res.status.code===0){
                         if(saveThis.fewDataOptionSet.indexOf(optionObj.option)!==-1){
-                            console.log("notice")
                             saveThis.$notify({
                                 type:"warning",
                                 title:"提示",
@@ -87,7 +94,15 @@
                         saveThis.addFuture(optionObj.future);
                         saveThis.addOption(optionObj.future, optionObj.option);
                         saveThis.futureDataGet.push(optionObj.future);
-
+                        console.log(saveThis.readyCombinedOption.length)
+                        if(saveThis.readyCombinedOption.length==2){
+                            saveThis.showIVDifference(saveThis.readyCombinedOption);
+                            saveThis.myChart.setOption(saveThis.option,true)
+                        }else{
+                            saveThis.popSeries("隐含波动率之差");
+                            saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
+                            saveThis.myChart.setOption(saveThis.option,true)
+                        }
                     }else{
                         alert('出错')
                     }
@@ -96,6 +111,15 @@
                 saveThis.removeFuture();
                 saveThis.addFuture(optionObj.future);
                 saveThis.addOption(optionObj.future, optionObj.option);
+                if(saveThis.readyCombinedOption.length==2){
+                    var selected={};
+                    saveThis.showIVDifference(saveThis.readyCombinedOption);
+                    saveThis.myChart.setOption(saveThis.option,true)
+                }else{
+                    saveThis.popSeries("隐含波动率之差");
+                    saveThis.option.title[3].subtext="隐含波动率之差只在\n选中两个期权数据时显示"
+                    saveThis.myChart.setOption(saveThis.option,true)
+                }
             }
         })
         Bus.$on('removeOption', optionObj=>{
@@ -104,11 +128,15 @@
             if(index!=-1){
                 this.readyCombinedOption.splice(index,1);
             }
-            
+            if(this.readyCombinedOption.length==2){
+                var selected={};
+                this.showIVDifference(this.readyCombinedOption);
+                this.myChart.setOption(this.option,true)
+            }
         })
     },
     mounted:function(){
-        this.myChart=echarts.init(document.getElementById('main'));
+        this.myChart=echarts.init(document.getElementById('option'));
         this.mapData={};
         this.future={
             name:[]
@@ -116,6 +144,7 @@
         this.readyCombinedOption=[];
         this.dataFormat={
             start_time:"2017-06-01 09:00",
+            end_time:"2017-07-01 09:00",
             data_type:"hour"
         };
         this.futureDataGet=[];
@@ -227,7 +256,7 @@
     // for(var i=0;i<20;i++){
     //     dataK.push(splitData());
     // }
-    this.option= {
+    this.optionbackup= {
         title:[
         {
             text: '期货数据',
@@ -480,7 +509,7 @@
         };
         //this.createRandomFuture();
         //Bus.$emit("getData", this.mapData);
-    this.optionbackup=this.deepClone(this.option);
+    this.option=this.deepClone(this.optionbackup);
     //initFuture();
     // this.loadFuture(this.future["name"][0]);
     this.myChart.setOption(this.option);
@@ -488,7 +517,7 @@
     this.myChart.on("legendselectchanged",function(params){
         saveThis.option.legend[0].selected=saveThis.myChart.getOption().legend[0].selected;
         if(saveThis.checkSelection(params)==2){
-            var selectName=this.getSelectedName(params.selected);
+            var selectName=saveThis.getSelectedName(params.selected);
             saveThis.showIVDifference(selectName);
         }else{
             saveThis.popSeries("隐含波动率之差");
@@ -528,7 +557,10 @@ methods: {
 //     this.myChart.setOption(this.option);
 //   }
 resetChart:function(){
-    this.option=this.optionbackup;
+    this.myChart.clear();
+    console.log(this.option,this.optionbackup)
+    this.option=this.deepClone(this.optionbackup);
+    console.log(this.option,this.optionbackup)
     this.readyCombinedOption=[];
     this.futureDataGet=[];
     this.future={
@@ -546,12 +578,30 @@ changeDataFormat:function(){
     this.resetChart();
     var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
     var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
-    var dataType=this.data
+    
+    if(this.interval=="hour"){
+        var dataType="小时";
+    }else{
+        var dataType="日"
+    }
+    if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
+        this.$notify({
+            title: '警告',
+            message: '您似乎没有指定时间，请指定一个时间范围',
+            type: 'warning'
+        })
+        return ;
+    }
     this.dataFormat={
         start_time:startTime,
         end_time:endTime,
         data_type:this.interval
     }
+    this.$notify({
+        title: '当前数据范围',
+        message: '起始时间:'+startTime+"终止时间:"+endTime+"时间间隔:以"+dataType+"计",
+        type: 'success'
+    })
 },
 
 
@@ -683,7 +733,7 @@ deepClone:function(obj){
     if (Array.isArray(obj)) {
       var newarr = [];
       for (var i = 0; i < obj.length; i++) {
-        newarr.push(obj[i]);
+        newarr.push(this.deepClone(obj[i]));
     }
     return newarr;
 } else {
@@ -749,10 +799,10 @@ this.myChart.setOption(this.option);
 },
 //计算期权隐含波动率之差
 showIVDifference:function(selectName){
-
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
+  this.popSeries("隐含波动率之差");
   this.option.title[3].subtext=selectName[0]+"与"+selectName[1];
   for(var i=0;i<this.option.series.length;i++){
     var series=this.option.series[i];
@@ -884,12 +934,22 @@ removeFuture: function(){
 addOption: function(futureName,optionName){
     var currentFuture=this.deepClone(this.future[futureName]);
     var index=currentFuture.names.indexOf(optionName);
-    var series=currentFuture.datas[index].series;
-    var IVSeries=currentFuture.datas[index].IVSeries;
-    this.option.series.push(IVSeries);
-    this.option.series.push(series);
-    this.option.legend[0].data.push(optionName);
-    this.myChart.setOption(this.option,true);
+    if(index!=-1){
+        var series=currentFuture.datas[index].series;
+        var IVSeries=currentFuture.datas[index].IVSeries;
+        this.option.legend[0].data.push(optionName);
+        this.option.series.push(IVSeries);
+        this.option.series.push(series);
+        this.myChart.setOption(this.option,true);
+    }else{
+        var zeroSeries=this.createZeroDataSeries(currentFuture.dataK.xAxis,{name:optionName})
+        var series=zeroSeries.series;
+        var IVSeries=zeroSeries.IVSeries;
+        this.option.legend[0].data.push(optionName);
+        this.option.series.push(IVSeries);
+        this.option.series.push(series);
+        this.myChart.setOption(this.option,true);
+    }
 },
 popOption: function(optionName){
     this.popSeries(optionName);
@@ -969,7 +1029,8 @@ splitAppendData:function(res){
     var optionSeries=[];
     for(var i=0;i<tag.options.length;i++){
         var option=tag.options[i];
-        if(option.data.length<10){
+        if((option.data.length<40&&this.dataFormat.data_type=="hour")||
+            (option.data.length<3&&this.dataFormat.data_type=="day")){
             this.fewDataOptionSet.push(option.code);
             var optionProc=this.createZeroDataSeries(futureXAxis,{name:option.code});
         }else{
@@ -1079,4 +1140,8 @@ putCombination:function(){
 
 <style lang="less" scoped>
   @import '../style/common';
+.el-input__icon .el-icon-date{
+    padding-left: 200px;
+}
+
 </style>

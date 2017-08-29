@@ -15,8 +15,10 @@ const homepageIndividual = r => require.ensure([], () => r(require('@/page/homep
 const infoIndividual = r => require.ensure([], () => r(require('@/page/infoIndividual')), 'infoIndividual');
 const list = r => require.ensure([], () => r(require('@/page/list')), 'list');
 const infoReminder = r => require.ensure([], () => r(require('@/page/infoReminder')), 'infoReminder');
-
-
+const beanGroup = r => require.ensure([], () => r(require('@/page/beanGroup')), 'beanGroup');
+const crop = r => require.ensure([], () => r(require('@/page/crop')), 'crop');
+const assess = r => require.ensure([], () => r(require('@/page/assess')), 'assess');
+const calculator = r => require.ensure([], () => r(require('@/page/calculator')), 'calculator');
 
 
 const routes = [
@@ -86,14 +88,30 @@ const routes = [
 			name: 'homepageSecond'
 		}
 		]
-	}
+	},{
+		path: '/beanGroup',
+		component: beanGroup,
+		name: 'beanGroup',
+	},{
+		path: '/crop',
+		component: crop,
+		name: 'crop',
+	},{
+		path: '/assess',
+		component: assess,
+		name: 'assess',
+	},{
+		path: '/calculator',
+		component: calculator,
+		name: 'calculator',
+	},
+
 	]
 }
 ]
 
 
 export default new Router({
-	mode:'history',
 	routes
 })
 

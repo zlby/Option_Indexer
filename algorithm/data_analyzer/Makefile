@@ -1,18 +1,23 @@
-AIM = sim_spot_futures
+
+SHELL= powershell.exe
 
 PYTHON_PATH = C:/Users/Alan/AppData/Local/Programs/Python/Python35
 
+NUMPY_INCLUDE = "C:\Users\Alan\AppData\Local\Programs\Python\Python35\Lib\site-packages\numpy\core\include\"
+
 LD_LIBRARY_PATH+="C:/Users/Alan/AppData/Local/Programs/Python/Python35/"
 
-ALL : $(AIM).pyd
+ALL :sim_spot_futures.pyd
 
-$(AIM).pyd: $(AIM).obj
-	gcc -fPIC $(AIM).obj -Wall -O3 -shared -o $(AIM).pyd -L$(LD_LIBRARY_PATH) -l python35
-	rm $(AIM).c
-	rm $(AIM).obj
+%.pyd: %.obj
+	gcc -fPIC $< -Wall -O3 -shared -o $@ -L$(LD_LIBRARY_PATH) -l python35
 
-$(AIM).obj: $(AIM).c
-	gcc -c $(AIM).c -o $(AIM).obj -I$(PYTHON_PATH)/include
+%.obj: %.c
+	gcc -c $< -o $@ -I$(PYTHON_PATH)/include -I$(NUMPY_INCLUDE)
 
-$(AIM).c: $(AIM).pyx
-	cython -o $(AIM).c $(AIM).pyx
+%.c: %.pyx
+	cython -o $@ $<
+
+#clean:
+#	@rm *.c
+#	@rm *.obj

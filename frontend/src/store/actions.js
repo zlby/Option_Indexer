@@ -1,5 +1,6 @@
 import api from '../api'
 import router from '../router'
+import Bus from '../bus'
 
 export const UserNewpassword = ({ commit }, data) =>{
   return new Promise((resolve, reject) => {
@@ -144,6 +145,13 @@ export const getNotification = ({ commit }, obj)=>{
     res = res.data
     if (res.status.code == '0'){
       commit('getNotification',res.notification_list)
+      var count = 0
+      for (var i = res.notification_list.length - 1; i >= 0; i--) {
+        if (res.notification_list[i].if_read) {
+          count++
+        }
+      }
+      Bus.$emit("getno-read", {count:count});
     }else{
       alert('获取消息失败 code不为0')
       }
@@ -158,6 +166,38 @@ export const getOptionCombo = ({ commit }, obj)=>{
     res = res.data
     if (res.status.code == '0'){
       commit('getOptionCombo',res.combo_list)
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
+};
+
+export const getFutureListBalance = ({ commit }, obj)=>{
+  api.localFutureList().then(function(res){
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getFutureListBalance',res.future_list)
+    }else{
+      alert('获取消息失败 code不为0')
+      }
+    }).catch(function (error){
+      alert('获取消息失败！ ')
+      console.log(error)
+    })
+};
+export const getOptionListBalance = ({ commit }, obj)=>{
+  var future=[];
+  api.localFutureListbalance().then(function(res){
+    res=res.data;
+    future=res.future_list;
+  })
+  api.localFutureList().then(function(res){
+    res = res.data
+    if (res.status.code == '0'){
+      commit('getOptionListBalance',{time:future,future_list:res.future_list})
     }else{
       alert('获取消息失败 code不为0')
       }

@@ -7,7 +7,7 @@
 				</div>
 				<el-col :span="6" :offset="9"   :xs="6" :md="6" :lg="6" :sm="6">
 					<el-card class="box-card" style="margin-top:40px">
-						<el-form ref="form" :model="form" action="" role="form" :rules="rules2" class="demo-ruleForm">
+						<el-form ref="form" :model="form" action="" role="form" :rules="rules2" class="demo-ruleForm" @keyup.enter.native="dj('form')">
 							<el-col :span="24" :xs="24" :md="24" :lg="24" :sm="24">
 								<el-form-item prop="username">
 									<el-input v-model="form.username" class="input_op" style="margin-top:20px" placeholder="Username"></el-input>
@@ -22,7 +22,7 @@
 
 							<el-col :span="24"  :xs="24" :md="24" :lg="24" :sm="24">
 								<el-form-item>
-									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"   @click="dj('form')">登陆</el-button>
+									<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" type="primary"  @click="dj('form')">登陆</el-button>
 								</el-form-item>
 							</el-col>
 						</el-form>
@@ -73,6 +73,7 @@
   					.then(function success(){
 			        	notifi('登录成功', '欢迎您，'+context.$store.state.login.username, 'success', context)
 			        	context.$store.dispatch('UpdateUserInfo')
+			        	context.$store.dispatch('getNotification')
 			        }, function fail(){
 			        	notifi('登录失败', '用户名或密码错误', 'error', context)
 			        })

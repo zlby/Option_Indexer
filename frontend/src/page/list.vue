@@ -1,11 +1,32 @@
 <template style="min-width:800px">
     <div>
         <el-col :span="20">
-            <div id="main" style="width:100%;height:300px; margin-bottom:20px;"></div>
+            <div id="list" style="width:100%;height:300px; margin-bottom:20px; margin-top:20px"></div>
         </el-col>
-        <el-col :span="20" >
+        <el-col :span="20" style="margin-top:30px">
+            <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
+                <el-date-picker
+                  v-model="daypicker"
+                  type="daterange"
+                  align="right"
+                  placeholder="选择日期范围"
+                  :picker-options="pickerOption"
+                  style="margin-left:50px; width:60%;">
+                </el-date-picker>
+            </div>
+
+            <el-col :span="7">
+            <el-radio-group v-model="interval">
+                <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
+            </el-radio-group>
+            </el-col>
+            <el-col :span="8">
+            <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
+            </el-col>
+        </el-col>
+        <el-col :span="20" style="margin-top:30px; margin-left:50px">
             <el-card class="box-card">
-              <el-input v-model="query" placeholder="请输入内容"></el-input>
+              <el-input v-model="query" placeholder="搜索所需组合"></el-input>
 
               <div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
                     <el-col :span="9" style="vertical-align:center">
@@ -27,10 +48,10 @@
                      <el-tag color="#13ce66">{{computedList[key].negative_option}}</el-tag>
                   </el-col>
                   <el-col :span="6">
-                        <el-button size="mini" type="success"  style="vertical-align:center" @click="updateCombo" :comboid="computedList[key].id">
+                        <el-button size="mini" type="success"  style="vertical-align:center" @click="updateCombo($event)" :comboid="computedList[key].id">
                             查看
                         </el-button>
-                        <el-button size="mini" type="danger" style="vertical-align:center" @click="deleteCombo" :comboid="computedList[key].id">
+                        <el-button size="mini" type="danger" style="vertical-align:center" @click="deleteCombo($event)" :comboid="computedList[key].id">
                             删除
                         </el-button>
                   </el-col>
@@ -47,6 +68,7 @@
   import Bus from '../bus'
   import axios from 'axios'
   import radarCharts from '../components/radarCharts'
+  import {notifi} from '../notif'
 
   export default{
       data(){
@@ -54,8 +76,37 @@
         console.log(this.$store.state.login.comboId)
         return{
             query: '',
-            list:this.$store.state.login.OptionComboList,
-            comboid:this.$store.state.login.comboId
+            // list:this.$store.state.login.OptionComboList,
+            // comboid:this.$store.state.login.comboId,
+            interval: 'hour',
+            pickerOption: {
+              shortcuts: [{
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近一个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                  picker.$emit('pick', [start, end]);
+                }
+              }, {
+                text: '最近三个月',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
+            daypicker: ''
         }
     },
     components:{
@@ -63,10 +114,16 @@
     },
 
     computed: {
-    computedList: function () {
-        var vm = this
-        return this.list.filter(function (item) {
-            return (item.positive_option.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1)||(item.negative_option.toLowerCase().indexOf(vm.query.toLowerCase())!==-1)
+        comboid: function() {
+            return this.$store.state.login.comboId
+        },
+        list: function() {
+            return this.$store.state.login.OptionComboList
+        },
+        computedList: function () {
+            var vm = this
+            return this.list.filter(function (item) {
+                return (item.positive_option.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1)||(item.negative_option.toLowerCase().indexOf(vm.query.toLowerCase())!==-1)
         })
     },
 
@@ -83,19 +140,27 @@
     })
 },
 mounted:function(){
+    this.$store.dispatch('getOptionCombo')
     this.future={
     }
+    this.combinations=[];
+    this.mapData=[];
+    this.dataFormat={
+            start_time:"2017-06-01 09:00",
+            end_time:"2017-07-01 09:00",
+            data_type:"hour"
+        };
     this.option= {
         title:[
         {
             text: '期权数据',
-            subtext:"",
+            subtext:"请查看期权组合",
             left:"5%",
             top:"0%"
         },
         {
             text: '期权隐含波动率',
-            subtext:"",
+            subtext:"请查看期权组合",
             left:"55%",
             top:"0%"
         }
@@ -327,20 +392,12 @@ mounted:function(){
             }
         }
     }
-    this.myChart=echarts.init(document.getElementById('main'));
-    this.combinations=this.createRandomCombination();
-    this.mapData=this.createCombinationMap();
-    this.addCombination(this.mapData[0][0],this.mapData[0][1]);
-    this.$store.dispatch('getOptionCombo')
-    
-
-
+    this.optionbackup=this.deepClone(this.option);
+    this.myChart=echarts.init(document.getElementById('list'));
     // var dataK=[];
     // for(var i=0;i<20;i++){
     //     dataK.push(splitData());
     // }
-    
-        
         this.myChart.setOption(this.option);
         window.store=this
     /*var saveThis=this;
@@ -387,24 +444,127 @@ methods: {
 //     this.myChart.setOption(this.option);
 //   }
 
-
-
-addCombination:function(optionName1,optionName2){
-    var index=this.getCombinationIndex(optionName1,optionName2)
-    this.option.series.push(this.combinations[index][0].series);
-    this.option.series.push(this.combinations[index][0].IVSeries);
-    this.option.series.push(this.combinations[index][1].series);
-    this.option.series.push(this.combinations[index][1].IVSeries);
-    this.option.xAxis[0].data=this.combinations[index][0].xAxis;
-    this.option.xAxis[1].data=this.combinations[index][0].xAxis;
-    this.option.title[0].subtext=optionName1+"与"+optionName2
-    this.option.title[1].subtext=optionName1+"与"+optionName2
-    this.myChart.setOption(this.option);
+resetChart:function(){
+    this.myChart.clear();
+    this.combinations=[];
+    this.mapData=[];
+    this.option=this.deepClone(this.optionbackup);
+    this.myChart.setOption(this.option,true);
 },
-removeCombination:function(optionName1,optionName2){
-    this.popSeries(optionName1);
-    this.popSeries(optionName2);
-    this.myChart.setOption(option);
+
+changeDataFormat:function(){
+    this.resetChart();
+    var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
+    var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
+    if(this.interval=="hour"){
+        var dataType="小时";
+    }else{
+        var dataType="日"
+    }
+    if(startTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"||endTime.toUpperCase()=="NAN-NAN-NAN NAN:NAN"){
+        this.$notify({
+            title: '警告',
+            message: '您似乎没有指定时间，请指定一个时间范围',
+            type: 'warning'
+        })
+        return ;
+    }
+    var dataType=this.interval;
+    this.dataFormat={
+        start_time:startTime,
+        end_time:endTime,
+        data_type:this.interval
+    }
+    this.$notify({
+        title: '当前数据范围',
+        message: '起始时间:'+startTime+"终止时间:"+endTime+"时间间隔:以"+dataType+"计",
+        type: 'success'
+    })
+},
+addCombination:function(optionName1,optionName2){
+    console.log(this.dataFormat)
+    var reqparams=this.deepClone(this.dataFormat)
+    console.log(reqparams,this.dataFormat)
+    reqparams.option_list="[\""+optionName1+"\",\""+optionName2+"\"]";
+    var saveThis=this
+    if(this.getCombinationIndex(optionName1,optionName2)==-1){
+        axios.get('/market/options/treading_data/',{params:reqparams}).then(function(res){
+        res=res.data;
+        if(res.status.code===0){
+            saveThis.combinations.push(saveThis.splitAppendCombination(res,[optionName1,optionName2]));
+            saveThis.mapData.push([optionName1,optionName2]);
+            saveThis.changeDisplayCombination(optionName1,optionName2);
+        }else{
+            alert('出错')
+        }
+    })
+    }else{
+        this.changeDisplayCombination(optionName1,optionName2)
+    }
+},
+changeDisplayCombination:function(optionName1,optionName2){
+    var index=this.getCombinationIndex(optionName1,optionName2);
+    if(index!==-1){
+        this.option.series.push(this.combinations[index][0].series);
+        this.option.series.push(this.combinations[index][0].IVSeries);
+        this.option.series.push(this.combinations[index][1].series);
+        this.option.series.push(this.combinations[index][1].IVSeries);
+        this.option.xAxis[0].data=this.combinations[index][0].xAxis;
+        this.option.xAxis[1].data=this.combinations[index][0].xAxis;
+        this.option.title[0].subtext=optionName1+"与"+optionName2
+        this.option.title[1].subtext=optionName1+"与"+optionName2
+        this.myChart.setOption(this.option);
+    }
+},
+removeCombination:function(){
+    var optionNames=this.option.title[0].subtext.split("与")
+    this.popSeries(optionNames[0]);
+    this.popSeries(optionNames[1]);
+    this.myChart.setOption(this.option,true);
+},
+splitAppendCombination:function(res,optionNames){
+    var combine=[];
+    var xAxis=[];
+    for(var i=0;i<res.data.length;i++){
+        var option=res.data[i];
+        var optionValues=option.data.map(function(o){
+            return [o.open_price,o.close_price,o.max_price,o.min_price]
+        });
+        var optionXAxis=option.data.map(function(o){
+            return o.time
+        });
+        var optionIVData=option.data.map(function(o){
+            return o.volatility.toFixed(4);
+        });
+        var optionProc=this.createSeries({
+            name:option.code,
+            values:optionValues,
+            IVData:optionIVData,
+            categoryData:optionXAxis
+        })
+        //optionProc.series.data=this.alignTimeAxis(dataK.xAxis,optionProc.xAxis,optionProc.series.data);
+        combine.push(optionProc);
+    }
+    return combine;
+},
+alignTimeAxis:function(futureXAxis,optionXAxis,optionData){
+    var index=futureXAxis.indexOf(optionXAxis[0]);
+    if(index==-1){
+        return [];
+    }
+    var fill=["-","-","-","-"];
+    var rtn=[]
+    var no_datas=[];
+    for(var i=0;i<index;i++){
+        no_datas.push(fill);
+    }
+    rtn=no_datas.concat(optionData);
+    for(var i=index,j=0;i<futureXAxis.length;i++,j++){
+        if(futureXAxis[i]!=optionXAxis[j]){
+            rtn.splice(i,0,fill);
+        }
+    }
+    return rtn
 },
 getCombinationIndex:function(optionName1,optionName2){
     for(var i=0;i<this.mapData.length;i++){
@@ -425,6 +585,26 @@ createRandomCombination:function(){
         combinations.push(optionSet);
     }
     return combinations;
+},
+createSeries:function(data){
+    var series = this.deepClone(this.template.optionK);
+    series.name = data.name;
+    series.data = data.values;
+    series.xAxisIndex=0;
+    series.yAxisIndex=0;
+    if(data.IVData.length!=0){
+        var IVSeries = this.deepClone(this.template.optionIV);
+        IVSeries.data = data.IVData;
+        IVSeries.name = data.name;
+        IVSeries.itemStyle.normal.color = this.randomGenWebSafeColor();
+        IVSeries.xAxisIndex=1;
+        IVSeries.yAxisIndex=1;
+    }
+    return {
+        series:series,
+        IVSeries:IVSeries,
+        xAxis:data.categoryData
+    }
 },
 createCombinationMap:function(){
     return this.combinations.map(function(o){
@@ -480,6 +660,8 @@ popSeries:function(seriesName){
 }
 },
 
+
+
 getSelectedName:function(selected){
   if(!selected){
     selected=this.option.legend[0].selected;
@@ -524,7 +706,6 @@ return newobj
 },
 //计算期权隐含波动率之差
 showIVDifference:function(selected){
-  var selectName=this.getSelectedName(selected);
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
@@ -620,8 +801,21 @@ date.setTime(date.getTime()+64800000);
 }
 return data
 },
-updateCombo:function(comboid){
-    var index=this.comboid.indexOf(comboid);
+updateCombo:function(event){
+    if(event.target.tagName=="SPAN"){
+        var comboid=event.target.parentNode.getAttribute("comboid")
+    }else{
+        var comboid=event.target.getAttribute("comboid")
+    }
+    console.log(this.comboid,comboid);
+    var index=this.comboid.indexOf(parseInt(comboid));
+    console.log(this.list[index],index)
+    var pOption=this.list[index].positive_option;
+    var nOption=this.list[index].negative_option;
+    if(this.option.title[0].subtext!=""){
+        this.removeCombination();
+    }
+    this.addCombination(pOption,nOption);
 },
 deleteCombo:function(event){
         if(event.target.tagName=="SPAN"){
@@ -631,14 +825,22 @@ deleteCombo:function(event){
         }
         var id=e.getAttribute("comboid");
         var saveThis=this
-        axios.put('/client/delete_combo/',{id:id}).then(function(res){
-          console.log(res);
+        axios.put('/client/delete_combo/',{id:id})
+        .then(function(res){
+            console.log(res);
             if(res.data.status.code=="0"){
-                var index=saveThis.comboid.indexOf(id);
-                saveThis.list.splice(index,1);
+                var index=saveThis.comboid.indexOf(parseInt(id));
+                console.log(index,saveThis.list,saveThis.comboid)
+                // console.log(saveThis.list[index].id,saveThis.comboid[index])
+                // saveThis.list.splice(index,1);
+                saveThis.$store.commit("deleteCombo", {index: index})
             }else{
-               alert("网络问题")
+               notifi("删除失败", "网络问题", "error", saveThis)
             }
+        })
+        .catch(function(error){
+            console.log(error)
+            notifi("删除失败", "请检查网络连接", "error", saveThis)
         })
       }
 //期货切换的函数
