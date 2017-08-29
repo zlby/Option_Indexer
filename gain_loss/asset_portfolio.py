@@ -68,27 +68,35 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
     time_now_with_seconds = datetime.datetime.now()
     time_now = datetime.datetime(year=time_now_with_seconds.year, month=time_now_with_seconds.month, day=time_now_with_seconds.day
                                  , hour=time_now_with_seconds.hour, minute=time_now_with_seconds.minute)
+    # time_now = datetime.datetime(2017, 7, 12, 11, 32)
     time_today = datetime.datetime(year=time_now.year, month=time_now.month, day=time_now.day)
     time_delt = time_future - time_today
     time_future_with_min = time_now + time_delt
-    spot_price_now = Spot.objects.get(time=time_now)
+    try:
+        spot_price_now = Spot.objects.get(time=time_now).price
+    except:
+        return None
+
 
     for i in range(len(future_list)):
         future_data_list = []
         query_set_future = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:500]
         future_time_start = query_set_future[len(query_set_future) - 1].time
-        for i in range(len(query_set_future)):
+        for j in range(len(query_set_future)):
             future_data_list.insert(0, query_set_future[i].close_price)
+
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
         query_set_spot = Spot.objects.filter(time__gte=spot_time_start).order_by('time')[:500]
-        for i in range(len(query_set_spot)):
-            spot_data_list.append(query_set_spot[i].price)
+        for j in range(len(query_set_spot)):
+            spot_data_list.append(query_set_spot[j].price)
+
 
         t = time_delt.days / 365
         u, y = regress(spot_data_list, future_data_list, t)
         future_price = (spot_price_now + u) * np.exp((np.log(1.03) - y) * t)
         future_list[i]['price'] = future_price
+
 
     for i in range(len(option_list)):
         option_code = option_list[i]['code']
