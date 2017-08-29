@@ -317,17 +317,16 @@
 				confirmCombo:function(){
 					var params={
 						physicals:this.currentHold,
-						future_list:this.comboFutures,
-						option_list:this.comboOptions,
+						future_list:JSON.stringify(this.comboFutures),
+						option_list:JSON.stringify(this.comboOptions),
 						t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
 					};
-					console.log(params);
 					var saveThis=this
-					axios.get('/market/asset_evaluation/',params).then(function(res){
+					axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
 						res=res.data;
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
-							saveThis.addChartOption({name:"资产组合",data:res.data})
+							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.data}))
 							saveThis.comboFutures=[];
 							saveThis.comboOptions=[];
 						}else{
@@ -374,6 +373,7 @@
 					}
 				},
 				popSeries:function(seriesName){
+					console.log(this.option.series)
 					for(var i=0;i<this.option.series.length;i++){
 						var series=this.option.series[i];
 						if(series.name.indexOf(seriesName)!=-1){
