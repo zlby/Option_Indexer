@@ -77,7 +77,6 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
     except:
         return None
 
-
     for i in range(len(future_list)):
         future_data_list = []
         query_set_future = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:500]
@@ -91,12 +90,10 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         for j in range(len(query_set_spot)):
             spot_data_list.append(query_set_spot[j].price)
 
-
         t = time_delt.days / 365
         u, y = regress(spot_data_list, future_data_list, t)
         future_price = (spot_price_now + u) * np.exp((np.log(1.03) - y) * t)
         future_list[i]['price'] = future_price
-
 
     for i in range(len(option_list)):
         option_code = option_list[i]['code']
@@ -107,7 +104,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
                 future_price = future['price']
                 break
 
-        if option_list[i]['volatility'] == None:
+        if option_list[i]['volatility'] is None:
             option_price = get_option_price(option_list[i]['code'], time_future_with_min, 2000, price=future_price)
         else:
             option_price = get_option_price(option_list[i]['code'], time_future_with_min, 2000, price=future_price, volat=option_list[i]['volatility'])
@@ -120,7 +117,6 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         total_future += future_list[i]['price'] * future_list[i]['amount']
     for i in range(len(option_list)):
         total_option += option_list[i]['price'] * option_list[i]['amount']
-
 
     spot_price_low = 0.5 * spot_price_now
     spot_price_high = 1.5 * spot_price_now
