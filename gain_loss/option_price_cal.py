@@ -57,8 +57,6 @@ def get_option_price(code, time, steps, price = -1, volat = -1):
     option_code = code
     future_code = option_code.split('-')[0]
 
-
-
     d_day = Future.objects.get(code=future_code).delivery_day
     maturity_date = ql.Date(d_day.day, d_day.month, d_day.year)
     calculation_date = ql.Date(time.day, time.month, time.year)
