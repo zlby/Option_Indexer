@@ -326,7 +326,7 @@
 						res=res.data;
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
-							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.data}))
+							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
 							saveThis.comboFutures=[];
 							saveThis.comboOptions=[];
 						}else{
