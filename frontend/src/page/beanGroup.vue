@@ -320,6 +320,7 @@
 						future_list:JSON.stringify(this.comboFutures),
 						option_list:JSON.stringify(this.comboOptions),
 						t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
+						time_now:"2017-07-12 15:00:00"
 					};
 					var saveThis=this
 					axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
