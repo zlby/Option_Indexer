@@ -63,12 +63,13 @@ import datetime
 #     return total_asset
 
 
-def get_ass(time_future: datetime.datetime, physicals: float, future_list, option_list):
-
-    time_now_with_seconds = datetime.datetime.now()
-    time_now = datetime.datetime(year=time_now_with_seconds.year, month=time_now_with_seconds.month, day=time_now_with_seconds.day
+def get_ass(time_future: datetime.datetime, physicals: float, future_list, option_list, time_now = None):
+    # 若time_now取默认值None，则计算当前时间，若传入历史时间，则计算历史时间
+    if time_now == None:
+        time_now_with_seconds = datetime.datetime.now()
+        time_now = datetime.datetime(year=time_now_with_seconds.year, month=time_now_with_seconds.month, day=time_now_with_seconds.day
                                  , hour=time_now_with_seconds.hour, minute=time_now_with_seconds.minute)
-    # time_now = datetime.datetime(2017, 7, 12, 11, 32)
+        # time_now = datetime.datetime(2017, 7, 12, 11, 32)
     time_today = datetime.datetime(year=time_now.year, month=time_now.month, day=time_now.day)
     time_delt = time_future - time_today
     time_future_with_min = time_now + time_delt
