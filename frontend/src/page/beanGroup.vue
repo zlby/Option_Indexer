@@ -83,13 +83,13 @@
 					</div>
 
 					<div class="partThree">
-						<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;">
+						<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" @click="confirmCombo">
 							<div style="color: #656565;font-size: 24px">开&nbsp&nbsp&nbsp始</div></el-button>
 						</div>
 					</div>
 				</el-col>
 				<el-col :span="14">
-					<div class="graph" id="chart">
+					<div class="graph" id="chart" style="width:600px;height:1200px;margin-left:50px;margin-top:20px">
 					</div>
 				</el-col>
 			</div>
@@ -98,7 +98,6 @@
 
 	<script>
 		import headSecond from '../components/headSecond'
-		import footerBottom from '../components/footerBottom'
 		import echarts from 'echarts'
 		import axios from 'axios'
 		import {notifi} from '../notif'
@@ -113,7 +112,7 @@
 					comboFutures:[],
 					comboOptions:[],
 					currentHold:0,
-					daypicker:new Date(),
+					daypicker: new Date(),
 					pickerOption: {
 			          shortcuts: [{
 			            text: '今天',
@@ -124,9 +123,37 @@
 			        },
 				}
 			},
+			computed:{
+				futures: function(){
+					return this.$store.state.login.futureBalance;
+				},
+				options:function(){
+					return this.$store.state.login.optionBalance;
+				},
+				futureTimetable:function(){
+					return this.$store.state.login.futureTimetable
+				},
+				filteredFutures:function () {
+					var vm = this
+					return this.futures.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						return (vm.futureTimetable[item]>=chosenTime);
+					})
+				},
+				filteredOptions:function () {
+					var vm = this
+					return this.options.filter(function (item) {
+						var chosenTime=new Date(vm.daypicker).getTime();
+						var futureCode=item.slice(0,5);
+						return (vm.futureTimetable[futureCode]>=chosenTime);
+					})
+				},
+			},
 			mounted:function(){
-				myChart= echarts.init(document.getElementById('main'));
-			    template={
+  				this.$store.dispatch('getFutureListBalance'),
+  				this.$store.dispatch('getOptionListBalance')
+				this.myChart= echarts.init(document.getElementById('chart'));
+			    this.template={
 			        "optionK":{
 			            name: null,
 			            type: 'line',
@@ -153,12 +180,12 @@
 			            gridIndex:null,
 			        },
 			    }
-			    option={
+			    this.option={
 			        title:[
 			            {
 			                text: '损益图',
 			                subtext:"",
-			                left:"5%",
+			                left:"0%",
 			                top:"0%"
 			            }
 			        ],
@@ -225,9 +252,9 @@
 			        grid: [
 			            //
 			            {
-			                left: '5%',
+			                left: '0%',
 			                height: '40%',
-			                top: "10%",
+			                top: "5%",
 			                width: "100%"
 			            }
 			        ],
@@ -262,7 +289,7 @@
 			                splitLine: {show: true},
 			                axisPointer: {
 			                    label: {
-			                        formatter: function (params) {
+			                        formatter: function (params) {0
 			                            return params.value
 			                        }
 			                    }
@@ -273,36 +300,14 @@
 			        animationDelay: function (idx) {
 			            return idx * 10;
 			        },
+
+
 			        animation:true,
 			        series: []
 			    };
+			    this.myChart.setOption(this.option)
 			},
 			methods:{
-								futures: function(){
-					return this.$store.state.login.futureBalance;
-				},
-				options:function(){
-					return this.$store.state.login.optionBalance;
-				},
-				futureTimetable:function(){
-					return this.$store.state.login.futureBalanceTime
-				},
-				filteredFutures:function () {
-					var vm = this
-					return vm.futures.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						return (futureTimetabel[item]>=chosenTime);
-					})
-				},
-				filteredOptions:function () {
-					var vm = this
-					return vm.options.filter(function (item) {
-						var chosenTime=new Date(vm.daypicker).getTime();
-						var futureCode=item.slice(0,5);
-						return (futureTimetable[futureCode]>=chosenTime);
-					})
-				},
-
 				addFuture: function() {
 					this.comboFutures.push({'code': null, 'amount': 0})
 				},
@@ -314,10 +319,11 @@
 						physicals:this.currentHold,
 						future_list:this.comboFutures,
 						option_list:this.comboOptions,
-						t1:this.daypicker
-					}
+						t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
+					};
+					console.log(params);
 					var saveThis=this
-					axios.get('/market/asset-evaluation/',params).then(function(res){
+					axios.get('/market/asset_evaluation/',params).then(function(res){
 						res=res.data;
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
@@ -442,7 +448,7 @@
 				        color+=base[Math.floor(Math.random()*6)];
 				    }
 				    return color;
-				}
+				},
 			}
 		}
 
