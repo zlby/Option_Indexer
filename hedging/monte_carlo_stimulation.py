@@ -24,3 +24,6 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, time_n
     total_asset_tv0 = 10 * (spot_price_now * physicals) + 10 * total_future_tv0 + 10 * total_option_tv0
 
 
+def choose_combos(max_cost=50000, fmax=50, omax=50):
+
+    query_set_future = Future.objects.all()

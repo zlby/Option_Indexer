@@ -206,7 +206,6 @@ def data_transfer(rootdir):
 
 def physicals_data_transfer(file_path):
     with open(file_path, 'r', encoding='utf8') as f:
-        print(f.read())
         data_list = f.read().split('\n')
 
         data_list = data_list[2:-3]
@@ -216,7 +215,10 @@ def physicals_data_transfer(file_path):
             [p_time, price] = data.split(',')
             p_time = datetime.datetime.strptime(p_time, datetime_format)
             price = float(price)
+            print(price)
             physical = Spot(time=p_time, price=price)
             physicals_group.append(physical)
 
         Spot.objects.bulk_create(physicals_group)
+
+    print('finish')
