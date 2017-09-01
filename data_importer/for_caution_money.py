@@ -1,8 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
-res=requests.get('http://www.dce.com.cn/publicweb/notificationtips/queryDayTradParaByVariety.html?variety=m')
-soup=BeautifulSoup(res.text,'html.parser')
-trs= soup.find_all('tr')
+from option.models import *
+
+
+def update_deposite():
+     res=requests.get('http://www.dce.com.cn/publicweb/notificationtips/queryDayTradParaByVariety.html?variety=m')
+     soup=BeautifulSoup(res.text,'html.parser')
+     trs= soup.find_all('tr')
+
+
+
 for i in range(2,len(trs)):
      tds=trs[i].find_all('td')
      name=tds[0].text.strip() #期权或者期货的名称

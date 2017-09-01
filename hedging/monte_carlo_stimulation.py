@@ -1,4 +1,5 @@
 from option.models import *
+import itertools
 
 def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, time_now = None, max_cost = 50000, fmax = 50, omax = 50):
     if time_now == None:
@@ -27,3 +28,15 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, time_n
 def choose_combos(max_cost=50000, fmax=50, omax=50):
 
     query_set_future = Future.objects.all()
+    query_set_option = Option.objects.all()
+    fo_list_all = []
+    fo_list_combo = []
+    for future in query_set_future:
+        fo_list_all.append(future.code)
+    for option in query_set_option:
+        fo_list_all.append(option.code)
+    for i in range(1, 6):
+        iter = itertools.combinations(fo_list_all, i)
+        fo_list_combo.append(list(iter))
+
+
