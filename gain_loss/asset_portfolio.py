@@ -65,6 +65,8 @@ import datetime
 
 
 def get_ass(time_future: datetime.datetime, physicals: float, future_list, option_list, time_now = None):
+
+    physicals = float(physicals)
     # 若time_now取默认值None，则计算当前时间，若传入历史时间，则计算历史时间
     if time_now == None:
         time_now_with_seconds = datetime.datetime.now()
@@ -82,16 +84,16 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
     for i in range(len(future_list)):
         future_data_list = []
-        query_set_future = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:500]
+        query_set_future = HourFutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:20]
         future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
             future_data_list.insert(0, query_set_future[i].close_price)
 
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
-        query_set_spot = Spot.objects.filter(time__gte=spot_time_start).order_by('time')[:500]
-        if len(query_set_spot) < 500:
-            query_set_spot = Spot.objects.all().order_by('-time')[:500]
+        query_set_spot = Spot.objects.filter(time__gte=spot_time_start).order_by('time')[:20]
+        if len(query_set_spot) < 20:
+            query_set_spot = Spot.objects.all().order_by('-time')[:20]
             for j in range(len(query_set_spot)):
                 spot_data_list.insert(0, query_set_spot[j].price)
         else:

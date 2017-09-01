@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # 2017.7.11 by Joey
+from datetime import datetime
+from queue import Queue
+
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+
+from algorithm.others.vol_update import cal_vol_direct
 from option.models import Future, FutureTreadingData, Option, OptionTreadingData, Intervals
-from algorithm.vol_update import cal_vol_direct
-from threading import Thread
-from queue import Queue
 
 
 def clean_data(current_data, last_treading_data, attr='close_price'):

@@ -1,10 +1,11 @@
 import datetime
-import numpy as np
-import algorithm.database_link as dl
 import time
+
+import numpy as np
+
+import algorithm.others.database_link as dl
 # from datetime import datetime
 from option.models import *
-import threading
 
 
 def operation(interval_a_lt, interval_a_rt, interval_b_lt, interval_b_rt, interval_c_lt, interval_c_rt, option_code_1,
