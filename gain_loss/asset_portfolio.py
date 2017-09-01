@@ -65,6 +65,8 @@ import datetime
 
 
 def get_ass(time_future: datetime.datetime, physicals: float, future_list, option_list, time_now = None):
+
+    physicals = float(physicals)
     # 若time_now取默认值None，则计算当前时间，若传入历史时间，则计算历史时间
     if time_now == None:
         time_now_with_seconds = datetime.datetime.now()
