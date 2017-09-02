@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 from option.models import News
+import logging
+
+log = logging.getLogger('option')
 
 
 class NewsSpider:
@@ -9,7 +12,7 @@ class NewsSpider:
 
     @staticmethod
     def get_data():
-        print(datetime.now())
+        log.info(datetime.now())
         res = requests.get(NewsSpider.index_url)
         res.encoding = 'gb2312'
         soup = BeautifulSoup(res.text.replace(u'\xa0', u' '), 'html.parser')
