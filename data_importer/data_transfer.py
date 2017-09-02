@@ -3,7 +3,8 @@ import datetime
 import time
 import copy
 import os
-from option.models import FutureTreadingData, OptionTreadingData, Future, Option
+import codecs
+from option.models import FutureTreadingData, OptionTreadingData, Future, Option, Spot
 
 
 class FutureTD:
@@ -200,6 +201,22 @@ def data_transfer(rootdir):
                             else:
                                 iterate_time += datetime.timedelta(minutes=1)
 
-
                     OptionTreadingData.objects.bulk_create(option_threading_groups)
-    # print("complete!")
+
+
+def physicals_data_transfer(file_path):
+    with open(file_path, 'r', encoding='utf8') as f:
+        print(f.read())
+        data_list = f.read().split('\n')
+
+        data_list = data_list[2:-3]
+        datetime_format = '%Y-%m-%d'
+        physicals_group = []
+        for data in data_list:
+            [p_time, price] = data.split(',')
+            p_time = datetime.datetime.strptime(p_time, datetime_format)
+            price = float(price)
+            physical = Spot(time=p_time, price=price)
+            physicals_group.append(physical)
+
+        Spot.objects.bulk_create(physicals_group)
