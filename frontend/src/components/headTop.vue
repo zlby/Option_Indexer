@@ -14,10 +14,10 @@
        <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>	
 
        <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >
-        <el-dropdown>
+        <el-dropdown menu-align="start">
           <span class="el-dropdown-link1">套期保值
           </span>
-          <el-dropdown-menu slot="dropdown">
+          <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
             <el-button type="text" @click="toBeanGroup">豆粕资产组合套利保值</el-button>
             </el-dropdown-item>
@@ -39,38 +39,35 @@
   
 
 
-     <el-col :span="6" :xs="6" :md="6" :lg="6" :sm="6" v-if="loggedin==false">
+     <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-if="loggedin==false">
        <el-menu-item index= "/login" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">登录</el-menu-item>
        <el-menu-item index="/register" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">注册</el-menu-item>	
      </el-col>
 
-     <el-col :span="6"  :xs="6" :md="6" :lg="6" :sm="6" v-else>
-      <el-menu-item  index="/homepageIndividual/infoReminder"  class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
+     <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-else>
+      <el-menu-item  index="/homepageIndividual/infoReminder"  class="el-col  main-page-btn" style="width:40%;">
       <el-badge :value="no_readCount" class="item">
         <i class="el-icon-message"></i>
       </el-badge>
       </el-menu-item>
 
-      <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn"><img style="width: 60px; height: 60px;" src="../assets/bigtouxiang.png"></el-menu-item>
-
-      <el-menu-item  index="/" class="el-col el-col-xs-8 el-col-sm-8 el-col-md-8 el-col-lg-8 main-page-btn">
-
-        <el-dropdown>
+      <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
+      <img style="width: 50px; height: 50px;margin-top:5px" src="../assets/bigtouxiang.png">
+      </el-menu-item>
+      <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
+        <el-dropdown style="margin-left:10px">
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><i class="el-icon-document"></i>
+          <el-dropdown-menu slot="dropdown" style="background-color:#404040; border:0px;margin-left:40px">
+            <el-dropdown-item><i class="el-icon-document" style="color:white"></i>
               <el-button type="text" @click="homepageIndividual">个人主页</el-button>
             </el-dropdown-item>
-  <!--           <el-dropdown-item><i class="el-icon-setting"></i>
-              <el-button type="text" @click="dialogFormVisible = true">个人信息设置</el-button>
-            </el-dropdown-item> -->
-            <el-dropdown-item><i class="el-icon-edit"></i>
+            <el-dropdown-item><i class="el-icon-edit" style="color:white"></i>
               <el-button type="text" @click="change">切换账号</el-button>
             </el-dropdown-item>
-            <el-dropdown-item><i class="el-icon-arrow-left"></i>
+            <el-dropdown-item><i class="el-icon-arrow-left" style="color:white"></i>
               <el-button type="text" @click="logout">注销</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -160,7 +157,7 @@
 <style lang="less">
 
 	@import '../style/common';
-
+  
 	.el-menu-demo1{
 		width:100%;
     background-repeat:no-repeat; 
@@ -189,6 +186,10 @@
     max-width:120px;
     text-align: center;
   }
+  .main-page-btn:hover{
+    color:#3476C8
+  }
+
 
   .main-page-group{
     //min-width:400px;

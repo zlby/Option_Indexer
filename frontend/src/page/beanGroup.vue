@@ -2,14 +2,14 @@
 	<div>
 		<head-second></head-second>
 		<div class="beangroup">
-			<el-col :span="9" :offset="1">
+			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card style="height:60px;padding-top:20px;padding-left:15px">
+						<el-card style="height:60px;padding-top:15px">
 							<el-row :gutter="20">
-								<el-col :span="12">
+								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center; margin-top:8px">
+										<span style="vertical-align:center;margin-left:8px; margin-top:8px;">
 											时间
 										</span>
 										<el-date-picker v-model="daypicker" 
@@ -17,11 +17,12 @@
 											placeholder="选择日期时间" 
 											align="right" 
 											:picker-options="pickerOption" 
-											format="yyyy-MM-dd">
+											format="yyyy-MM-dd"
+											style="width:80%">
 										</el-date-picker>
 									</div>
 								</el-col>
-								<el-col :span="12">
+								<el-col :span="10">
 									<div style="">
 										<span style="vertical-align:center; margin-top:8px">
 											现货
@@ -89,7 +90,7 @@
 					</div>
 				</el-col>
 				<el-col :span="14">
-					<div class="graph" id="chart" style="width:600px;height:1200px;margin-left:50px;margin-top:20px">
+					<div class="graph" id="chart" style="width:100%;height:600px;margin-top:20px；margin_left:50px">
 					</div>
 				</el-col>
 			</div>
@@ -185,8 +186,8 @@
 			            {
 			                text: '损益图',
 			                subtext:"",
-			                left:"0%",
-			                top:"0%"
+			                left:"10%",
+			                top:"4%"
 			            }
 			        ],
 			        tooltip: {
@@ -204,7 +205,7 @@
 			            position: function (pos, params, el, elRect, size) {
 			                var obj = {
 			                    top: 10,
-			                    right:-170
+			                    right:100
 			                };
 			                //obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
 			                return obj;
@@ -245,17 +246,17 @@
 			                start: 0,
 			                end: 100,
 			                xAxisIndex: [0],
-			                bottom: "50%",
-			                left:"center"
+			                bottom: "10%",
+			                left:"15%"
 			            }
 			        ],
 			        grid: [
 			            //
 			            {
-			                left: '0%',
-			                height: '40%',
-			                top: "5%",
-			                width: "100%"
+			                left: '15%',
+			                height: '60%',
+			                top: "20%",
+			                width: "60%"
 			            }
 			        ],
 			        xAxis: [
@@ -322,14 +323,15 @@
 						t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
 						time_now:"2017-07-12 15:00:00"
 					};
+					console.log(params)
 					var saveThis=this
 					axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
 						res=res.data;
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
 							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
-							saveThis.comboFutures=[];
-							saveThis.comboOptions=[];
+							saveThis.comboFutures=comboFutures;
+							saveThis.comboOptions=comboFutures;
 						}else{
 							saveThis.$notify({
 								type:"danger",
@@ -490,8 +492,8 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			padding-left: 12px;
-		  width: 100%;
-		height: 500px;
+		  width: 95%;
+		height: 370px;
 		border-radius: 5px;
 		border: 2px solid #2C2E3B;
 		overflow: auto;
