@@ -287,6 +287,7 @@ class News(models.Model):
             newses.append(news.get_detail())
         return newses, total_page
 
+
 class Spot(models.Model):
     time = models.DateTimeField(verbose_name=u'时间', db_index=True)
     price = models.FloatField(verbose_name=u'价格', default=0)
