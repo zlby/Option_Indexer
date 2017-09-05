@@ -137,6 +137,41 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
     # x_list=[]
     # y_list=[]
 
+    future_list_all = []
+
+    query_set_future_all = Future.objects.all()
+    for future in query_set_future_all:
+        dict = {}
+        dict['code'] = future.code
+        future_list_all.append(dict)
+
+    for i in range(len(future_list_all)):
+        future_data_list = []
+        query_set_future = HourFutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
+        future_time_start = query_set_future[len(query_set_future) - 1].time
+        for j in range(len(query_set_future)):
+            future_data_list.insert(0, query_set_future[i].close_price)
+
+        spot_time_start = future_time_start - time_delt
+        spot_data_list = []
+        query_set_spot = Spot.objects.filter(time__gte=spot_time_start).order_by('time')[:20]
+        if len(query_set_spot) < 20:
+            query_set_spot = Spot.objects.all().order_by('-time')[:20]
+            for j in range(len(query_set_spot)):
+                spot_data_list.insert(0, query_set_spot[j].price)
+        else:
+            for j in range(len(query_set_spot)):
+                spot_data_list.append(query_set_spot[j].price)
+
+
+        u, y = regress(spot_data_list, future_data_list, t)
+        # future_price = (spot_price_now + u) * np.exp((np.log(1.03) - y) * t)
+        # future_list[i]['price'] = future_price
+        future_list_all[i]['u'] = u
+        future_list_all[i]['y'] = y
+
+
+
     for i in range(100):
         total_future = 0
         total_option = 0
@@ -145,10 +180,12 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         for i in range(len(future_list)):
             future_list[i]['price'] = (stimulate_price + future_list[i]['u']) * np.exp((np.log(1.03) - future_list[i]['y']) * t)
             total_future += future_list[i]['price'] * future_list[i]['amount']
+        for i in range(len(future_list_all)):
+            future_list_all[i]['price'] = (stimulate_price + future_list_all[i]['u']) * np.exp((np.log(1.03) - future_list_all[i]['y']) * t)
         for i in range(len(option_list)):
             option_code = option_list[i]['code']
             future_code = option_code.split('-')[0]
-            for future in future_list:
+            for future in future_list_all:
                 if future['code'] == future_code:
                     option_list[i]['future_price'] = future['price']
                     break

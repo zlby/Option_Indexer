@@ -31,18 +31,27 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
     query_set_option = Option.objects.all()
     fo_list_all = []
     fo_list_combo = []
+
+    combo_all = []
+    combo_chosen = []
+
     for future in query_set_future:
         fo_list_all.append(future.code)
     for option in query_set_option:
         fo_list_all.append(option.code)
-    for i in range(1, 5):
+    for i in range(1, 4):
         iter = itertools.combinations(fo_list_all, i)
         fo_list_combo.append(list(iter))
 
-    i = 0
     for combo_list in fo_list_combo:
         for combo in combo_list:
-            i+=1
-            print(combo)
-    print(i)
-
+            dict_combo = {}
+            dict_combo['future_list'] = []
+            dict_combo['option_list'] = []
+            for code in combo:
+                dict_code = {}
+                dict_code['code'] = code
+                if code.find('-') == -1:
+                    dict_combo['future_list'].append(dict_code)
+                else:
+                    dict_combo['option_list'].append(dict_code)
