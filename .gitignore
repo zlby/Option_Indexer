@@ -4,7 +4,6 @@
 
 optionindexer/settings.py
 
-data
 
 # binary files
 *.pyc
@@ -14,7 +13,7 @@ data
 /*.json
 
 .DS_Store
-
+.gitignore
 
 frontend/node_modules/
 
@@ -47,3 +46,4 @@ option/migrations/__pycache__/
 /algorithm/interval/nothing/
 /test/algorithm/logs/
 /algorithm/interval/test_input_code
+/algorithm/prediction/forward.py
