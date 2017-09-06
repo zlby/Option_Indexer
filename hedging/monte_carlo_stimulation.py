@@ -4,7 +4,8 @@ import random
 import time
 
 def get_hedge_cost(future_list, option_list):
-    pass
+
+    return 5000
 
 def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, time_now = None, max_cost = 50000, fmax = 50, omax = 50):
     if time_now == None:
@@ -85,5 +86,7 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
             combo_chosen.append(combo)
 
     return combo_chosen
+
+
 
 
