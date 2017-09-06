@@ -1,4 +1,4 @@
-from algorithm.data_analyzer.regress_model import *
+from algorithm.prediction.data_analyzer.regress_model import *
 from gain_loss.option_price_cal import *
 from option.models import *
 import datetime
