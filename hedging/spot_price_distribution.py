@@ -25,6 +25,10 @@ def show_triangle_distribution(a, c, b):
     x = np.arange(a, b, 0.01 * (b - a))
     y = stats.triang.pdf(x, sigma, loc, scale)
 
+    result = []
+    for a in zip(x, y):
+        result.append(a)
+
     # pl.plot(x, y)
     # pl.show()
 
@@ -36,4 +40,8 @@ def show_uniform_distribution(u1, u2):
     # pl.plot(x, y)
     # pl.show()
 
-print(show_normal_distribution(0, 1))
+    result = []
+    for a in zip(x, y):
+        result.append(a)
+
+# print(show_normal_distribution(0, 1))
