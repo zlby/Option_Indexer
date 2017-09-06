@@ -47,3 +47,4 @@ option/migrations/__pycache__/
 /test/algorithm/logs/
 /algorithm/interval/test_input_code
 /algorithm/prediction/forward.py
+/algorithm/prediction/data_analyzer/sim_spot_futures.pyd

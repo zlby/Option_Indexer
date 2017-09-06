@@ -1,5 +1,5 @@
 import tensorflow as tf
-from algorithm.data_analyzer.sim_spot_futures import r
+from algorithm.prediction.data_analyzer.sim_spot_futures import r
 
 
 def regress(spot_list, future_list, t):
