@@ -290,7 +290,7 @@
 			                splitLine: {show: true},
 			                axisPointer: {
 			                    label: {
-			                        formatter: function (params) {0
+			                        formatter: function (params) {
 			                            return params.value
 			                        }
 			                    }
