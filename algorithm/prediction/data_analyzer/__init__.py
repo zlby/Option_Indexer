@@ -1,5 +1,6 @@
 import os
-ext=["calculate_hedge_cost", "sim_spot_futures.pyx"]
+
+ext = ["calculate_hedge_cost", "sim_spot_futures"]
 ls = os.listdir(".")
 
 for i in ext:
@@ -8,7 +9,7 @@ for i in ext:
         break
 for i in ls:
     if i.endswith(".c"):
+        os.chdir(".")
         os.remove(i)
-del os
 
-# fixme : 基本上弄完了 你CYTHON 没装
+del os
