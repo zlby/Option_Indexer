@@ -13,7 +13,7 @@ DEPOSIT = 2
 PRICE = 3
 
 cdef:
-    float _calculate_sum_cost(int* lots, float* deposit, int size):
+    float _calculate_sum_cost(list lots, list deposit, int size):
         cdef float _sum = 0.
         for i in range(0,size):
             _sum += lots[i] * deposit[i]
@@ -26,8 +26,8 @@ cdef:
         return (call_option_long_total_lots + call_option_short_total_lots
                + put_option_long_total_lots + put_option_short_total_lots) * 1.0
 
-    float _calculate_call_option_trade_lots_cost(int* call_option_lots_amount, float* recent_call_option_price,
-                                                 int* put_option_lots_amount, float* recent_put_option_price, int size):
+    float _calculate_call_option_trade_lots_cost(list call_option_lots_amount, list recent_call_option_price,
+                                                 list put_option_lots_amount, list recent_put_option_price, int size):
         cdef float _sum = 0.
         for i in range(0, size):
             _sum += (call_option_lots_amount[i] * recent_call_option_price[i]
