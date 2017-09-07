@@ -1,18 +1,9 @@
-# HEDGE COST=
-# Σ （各看涨期权空头持有手数*对应看涨期权空头保证金）
-# +Σ（各看跌期权空头持有手数*对应看跌期权保证金）
-# + （看涨期权空头总手数+看涨期权多头总手数+看跌期权空头总手数+看跌期权多头总手数）*1
-# -Σ （看涨期权空头手数*数据库中对应看涨期权的最近价格 +看跌期权空头手数*数据库中对应看跌期权的最近价格）*10
-# +Σ  (看涨期权多头手数*数据库中对应看涨期权最近价格+看跌期权多头手数*数据库中对应看跌期权最近价格）*10
-# +Σ（豆粕期货空头持有手数*对应的豆粕期货保证金）
-# +Σ（豆粕期货多头持有手数*对应的豆粕期货保证金）
-# + （豆粕期货空头手数+豆粕期货多头手数）*1.5
-CODE = 0
-AMOUNT = 1
-DEPOSIT = 2
-PRICE = 3
-
+# encoding = utf-8
 cdef:
+    int CODE = 0
+    int AMOUNT = 1
+    int DEPOSIT = 2
+    int PRICE = 3
     float _calculate_sum_cost(list lots, list deposit, int size):
         cdef float _sum = 0.
         for i in range(0,size):
@@ -65,3 +56,5 @@ cdef:
         _sum += _calculate_future_cost(sum([x[AMOUNT] for x in f_s]), sum(x[AMOUNT] for x in f_l))
         return _sum
 
+def hedge_cost(list c_l, list c_s, list p_l, list p_s, list f_l, list f_s):
+    return _hedge_cost( c_l,  c_s,  p_l,  p_s,  f_l,  f_s)
