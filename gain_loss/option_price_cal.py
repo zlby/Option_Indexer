@@ -54,6 +54,8 @@ from gain_loss.history_vol import *
 #     return option.NPV()
 
 def get_option_price(code, time, steps, price = -1, volat = -1):
+    #time: 未来时间
+    #price: 未来期货价格
     option_code = code
     future_code = option_code.split('-')[0]
 

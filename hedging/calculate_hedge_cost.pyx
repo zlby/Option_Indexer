@@ -65,3 +65,5 @@ cdef:
         _sum += _calculate_future_cost(sum([x[AMOUNT] for x in f_s]), sum(x[AMOUNT] for x in f_l))
         return _sum
 
+def hedge_cost(list c_l, list c_s, list p_l, list p_s, list f_l, list f_s):
+    return _hedge_cost( c_l,  c_s,  p_l,  p_s,  f_l,  f_s)
