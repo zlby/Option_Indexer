@@ -87,7 +87,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         query_set_future = HourFutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:20]
         future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
-            future_data_list.insert(0, query_set_future[i].close_price)
+            future_data_list.insert(0, query_set_future[j].close_price)
 
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
@@ -126,7 +126,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         query_set_future = HourFutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
         future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
-            future_data_list.insert(0, query_set_future[i].close_price)
+            future_data_list.insert(0, query_set_future[j].close_price)
 
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
@@ -153,7 +153,6 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
         for i in range(len(future_list)):
             future_list[i]['price'] = (stimulate_price + future_list[i]['u']) * np.exp((np.log(1.03) - future_list[i]['y']) * t)
-            print(future_list[i]['amount'])
             total_future += future_list[i]['price'] * future_list[i]['amount']
         for i in range(len(future_list_all)):
             future_list_all[i]['price'] = (stimulate_price + future_list_all[i]['u']) * np.exp((np.log(1.03) - future_list_all[i]['y']) * t)
