@@ -146,13 +146,14 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
 
 
-    for i in range(100):
+    for j in range(100):
         total_future = 0
         total_option = 0
-        stimulate_price = spot_price_low + i * step_forward
+        stimulate_price = spot_price_low + j * step_forward
 
         for i in range(len(future_list)):
             future_list[i]['price'] = (stimulate_price + future_list[i]['u']) * np.exp((np.log(1.03) - future_list[i]['y']) * t)
+            print(future_list[i]['amount'])
             total_future += future_list[i]['price'] * future_list[i]['amount']
         for i in range(len(future_list_all)):
             future_list_all[i]['price'] = (stimulate_price + future_list_all[i]['u']) * np.exp((np.log(1.03) - future_list_all[i]['y']) * t)

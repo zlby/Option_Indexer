@@ -5,6 +5,7 @@ import time
 from algorithm.prediction.data_analyzer.regress_model import *
 import numpy as np
 from gain_loss.option_price_cal import get_option_price
+import algorithm.prediction.data_analyzer.calculate_hedge_cost as chc
 
 
 
@@ -140,12 +141,29 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
         fo_list_all.append(future.code)
     for option in query_set_option:
         fo_list_all.append(option.code)
-    for i in range(1, 3):
+    for i in range(1, 4):
         iter = itertools.combinations(fo_list_all, i)
         fo_list_combo.append(list(iter))
-    print(fo_list_combo)
 
+    option_code_price_deposit_list = []
+    future_code_price_deposit_list = []
+    query_o = Option.objects.all()
+    query_f = Future.objects.all()
+    for item in query_o:
+        dict_ocp = {}
+        dict_ocp['code'] = item.code
+        dict_ocp['current_price'] = HourOptionTreadingData.objects.filter(option=dict_ocp['code']).order_by('-time')[0].close_price
+        dict_ocp['deposit_today'] = Option.objects.get(code=dict_ocp['code']).deposit_today
+        option_code_price_deposit_list.append(dict_ocp)
 
+    for item in query_f:
+        dict_fcp = {}
+        dict_fcp['code'] = item.code
+        dict_fcp['current_price'] = FutureTreadingData.objects.filter(future=dict_fcp['code']).order_by('-time')[0].close_price
+        dict_fcp['deposit_today'] = Future.objects.get(code=dict_fcp['code']).deposit_today
+        future_code_price_deposit_list.append(dict_fcp)
+
+    time3 = time.clock()
     for combo_list in fo_list_combo:
         for combo in combo_list:
             dict_combo = {}
@@ -158,6 +176,8 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
                     dict_combo['future_list'].append(dict_code)
                 else:
                     dict_combo['option_list'].append(dict_code)
+
+
             for _ in range(10):
                 new_combo = {}
                 new_combo['future_list'] = []
@@ -166,21 +186,37 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
                     fu = {}
                     fu['code'] = future_dict['code']
                     fu['amount'] = random.randint(1, fmax)
+                    for item in future_code_price_deposit_list:
+                        if fu['code'] == item['code']:
+                            fu['price'] = item['current_price']
+                            fu['deposit'] = item['deposit_today']
+                            break
                     new_combo['future_list'].append(fu)
                 for option_dict in dict_combo['option_list']:
                     op = {}
                     op['code'] = option_dict['code']
                     op['amount'] = random.randint(1, omax)
+                    for item in option_code_price_deposit_list:
+                        if op['code'] == item['code']:
+                            op['price'] = item['current_price']
+                            op['deposit'] = item['deposit_today']
+                            break
                     new_combo['option_list'].append(op)
                 combo_all.append(new_combo)
+    time4 = time.clock()
+
+    print(time4 - time3)
+    print(len(combo_all))
 
 
-    for combo in combo_all:
-        hedge_cost = 1
-        if 0 < hedge_cost < max_cost:
-            combo_chosen.append(combo)
-
-    return combo_chosen
+    # for combo in combo_all:
+    #     hedge_cost = chc.hedge_cost(combo['option_list'], [], [], [], combo['future_list'], [])
+    #     print(hedge_cost)
+    #     if 0 < hedge_cost < max_cost:
+    #         combo_chosen.append(combo)
+    #
+    # return combo_chosen
+    return combo_all
 
 
 
