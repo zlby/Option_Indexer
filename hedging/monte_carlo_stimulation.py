@@ -1,7 +1,7 @@
 from option.models import *
 import itertools
 import random
-import time
+import datetime
 from algorithm.prediction.data_analyzer.regress_model import *
 import numpy as np
 from gain_loss.option_price_cal import get_option_price
@@ -9,7 +9,7 @@ import algorithm.prediction.data_analyzer.calculate_hedge_cost as chc
 
 
 
-def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, dist, time_now = None, max_cost = 50000, fmax = 50, omax = 50):
+def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, time_future:datetime.datetime, dist, time_now = None, max_cost:float = 50000, fmax:int = 50, omax:int = 50):
     if time_now == None:
         time_now_with_seconds = datetime.datetime.now()
         time_now = datetime.datetime(year=time_now_with_seconds.year, month=time_now_with_seconds.month, day=time_now_with_seconds.day
@@ -21,23 +21,39 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, dist, 
     time_future_with_min = time_now + time_delt
 
     for i in range(len(future_list)):
-        future_list[i]['current_price'] = FutureTreadingData.objects.get(time=time_now, future=future_list[i]['code'])
+        try:
+            future_list[i]['current_price'] = FutureTreadingData.objects.get(time=time_now, future=future_list[i]['code']).close_price
+        except:
+            future_list[i]['current_price'] = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[0].close_price
     for i in range(len(option_list)):
-        option_list[i]['current_price'] = OptionTreadingData.objects.get(time=time_now, option=option_list[i]['code'])
+        try:
+            option_list[i]['current_price'] = OptionTreadingData.objects.get(time=time_now, option=option_list[i]['code']).close_price
+        except:
+            option_list[i]['current_price'] = OptionTreadingData.objects.filter(option=option_list[i]['code']).order_by('-time')[0].close_price
 
     total_future_tv0 = 0
     total_option_tv0 = 0
 
     for i in range(len(future_list)):
-        total_future_tv0 += future_list[i]['price'] * future_list[i]['amount']
+        total_future_tv0 += future_list[i]['current_price'] * future_list[i]['amount']
     for i in range(len(option_list)):
-        total_option_tv0 += option_list[i]['price'] * option_list[i]['amount']
+        total_option_tv0 += option_list[i]['current_price'] * option_list[i]['amount']
 
-    spot_price_now = Spot.objects.get(time=time_now)
+    spot_price_now = 0
+    try:
+        spot_price_now = Spot.objects.get(time=time_now).price
+    except:
+        spot_price_now = Spot.objects.all().order_by('-time')[0].price
 
     total_asset_tv0 = 10 * (spot_price_now * physicals) + 10 * total_future_tv0 + 10 * total_option_tv0
 
+
     combo_list = choose_combos(max_cost, fmax, omax)
+
+    for combo in combo_list:
+        combo['v_list'] = []
+        combo['v0_minus_v_list'] = []
+
 
     futures_in_list = []
     options_in_list = []
@@ -68,7 +84,9 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, dist, 
 
     for i in range(len(futures_in_list)):
         future_data_list = []
-        query_set_future = HourFutureTreadingData.objects.filter(future=futures_in_list[i]['code']).order_by('-time')[:20]
+        query_set_future = FutureTreadingData.objects.filter(future=futures_in_list[i]['code']).order_by('-time')[:20]
+        if len(query_set_future) != 20:
+            return None
         future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
             future_data_list.insert(0, query_set_future[i].close_price)
@@ -99,10 +117,10 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, dist, 
         for _ in range(100):
             spot_price_list.append(np.random.triangular(dist['argv'][0], dist['argv'][1], dist['argv'][2]))
     if dist['type'] == 'uniform':
-        for _ in range(100):
+        for _ in range(20):
             spot_price_list.append(np.random.uniform(dist['argv'][0], dist['argv'][1]))
 
-    if len(spot_price_list) != 100:
+    if len(spot_price_list) != 20:
         return None
 
     for spot_price in spot_price_list:
@@ -123,12 +141,71 @@ def monte_carlo(future_list, option_list, physicals, w1, w2, time_future, dist, 
                                                 volat=options_in_list[i]['volatility'])
             options_in_list[i]['price'] = option_price
 
+        # 计算vi
+        for combo in combo_list:
+            total_future_tv = 0
+            total_option_tv = 0
+
+            combo['future_together'] = combo['future_list']
+            combo['option_together'] = combo['option_list']
+
+            for future in future_list:
+                combo['future_together'].append(future)
+            for option in option_list:
+                combo['option_together'].append(option)
+
+            for future in combo['future_together']:
+                for item in futures_in_list:
+                    if future['code'] == item['code']:
+                        # future['price'] = item['price']
+                        total_future_tv += item['price']
+                        break
+            for option in combo['option_together']:
+                for item in options_in_list:
+                    if option['code'] == item['code']:
+                        # option['price'] = item['price']
+                        total_option_tv += item['price']
+
+            total_asset_tv = 10 * (spot_price_now * physicals) + 10 * total_future_tv + 10 * total_option_tv
+            combo['v_list'].append(total_asset_tv)
+            combo['v0_minus_v_list'].append(total_asset_tv0 - total_asset_tv)
+
+    P1_list = []
+    P2_list = []
+    for combo in combo_list:
+        combo['P2_add_value'] = 0
+        for value in combo['v0_minus_v_list']:
+            combo['P2_add_value'] += value
+        combo['P2_value'] = max(combo['P2_value'], 0)
+        P1_list.append(combo['hedge_cost'])
+        P2_list.append(combo['P2_value'])
+
+    P1_list.sort()
+    P2_list.sort()
+    for combo in combo_list:
+        for i1 in range(len(P1_list)):
+            if P1_list[i1] == combo['hedge_cost']:
+                combo['P1'] = (i1 + 1) / len(P1_list)
+                break
+        for i2 in range(len(P2_list)):
+            if P2_list[i2] == combo['P2_value']:
+                combo['P2'] = (i2 + 1) / len(P2_list)
+                break
+
+        combo['score'] = combo['P1'] * w1 + combo['P2'] * w2
+
+    result_combo = combo_list[0]
+
+    for combo in combo_list:
+        if combo['score'] > result_combo['score']:
+            result_combo = combo
+
+    print(result_combo['score'])
+    return result_combo
 
 
+def choose_combos(max_cost:float=50000, fmax=50, omax=50):
 
-def choose_combos(max_cost=50000, fmax=50, omax=50):
-
-    time1 = time.clock()
     query_set_future = Future.objects.all()
     query_set_option = Option.objects.all()
     fo_list_all = []
@@ -141,7 +218,7 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
         fo_list_all.append(future.code)
     for option in query_set_option:
         fo_list_all.append(option.code)
-    for i in range(1, 4):
+    for i in range(1, 3):
         iter = itertools.combinations(fo_list_all, i)
         fo_list_combo.append(list(iter))
 
@@ -163,7 +240,6 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
         dict_fcp['deposit_today'] = Future.objects.get(code=dict_fcp['code']).deposit_today
         future_code_price_deposit_list.append(dict_fcp)
 
-    time3 = time.clock()
     for combo_list in fo_list_combo:
         for combo in combo_list:
             dict_combo = {}
@@ -203,18 +279,15 @@ def choose_combos(max_cost=50000, fmax=50, omax=50):
                             break
                     new_combo['option_list'].append(op)
                 combo_all.append(new_combo)
-    time4 = time.clock()
-
-    print(time4 - time3)
-    print(len(combo_all))
 
 
-    # for combo in combo_all:
-    #     hedge_cost = chc.hedge_cost(combo['option_list'], [], [], [], combo['future_list'], [])
-    #     print(hedge_cost)
-    #     if 0 < hedge_cost < max_cost:
-    #         combo_chosen.append(combo)
-    #
+    for combo in combo_all:
+        # hedge_cost = chc.hedge_cost(combo['option_list'], [], [], [], combo['future_list'], [])
+        # print(hedge_cost)
+        # if 0 < hedge_cost < max_cost:
+        #     combo_chosen.append(combo)
+        hedge_cost = 1
+        combo['hedge_cost'] = hedge_cost
     # return combo_chosen
     return combo_all
 
