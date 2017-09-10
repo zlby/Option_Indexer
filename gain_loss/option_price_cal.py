@@ -86,6 +86,7 @@ def get_option_price(code, time, steps, price = -1, volat = -1):
     payoff = ql.PlainVanillaPayoff(option_type, strike_price)
     settlement = calculation_date
 
+
     am_exercise = ql.AmericanExercise(settlement, maturity_date)
     american_option = ql.VanillaOption(payoff, am_exercise)
 

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from option.models import *
 
 
-def update_deposite():
+def update_deposit():
      res=requests.get('http://www.dce.com.cn/publicweb/notificationtips/queryDayTradParaByVariety.html?variety=m')
      soup=BeautifulSoup(res.text,'html.parser')
      trs= soup.find_all('tr')
