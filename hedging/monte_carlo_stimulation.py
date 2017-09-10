@@ -198,17 +198,23 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
 
         combo['score'] = combo['P1'] * w1 + combo['P2'] * w2
 
-    result_combo = combo_list[0]
+    result_combo = {}
+    result_combo['socre'] = combo_list[0]['score']
 
     for combo in combo_list:
         if combo['score'] > result_combo['score']:
-            result_combo = combo
+            result_combo['future_list'] = []
+            result_combo['option_list'] = []
+            for fut in combo['future_list']:
+                result_combo['future_list'].append(fut)
+            for opt in combo['option_list']:
+                result_combo['option_list'].append(opt)
 
     time_com = time.clock()
 
     print(time_com - time_bg)
 
-    return result_combo['future_list'], result_combo['option_list'], result_combo['score']
+    return result_combo['future_list'], result_combo['option_list']
 
 
 
