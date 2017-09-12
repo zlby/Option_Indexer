@@ -54,6 +54,8 @@ from gain_loss.history_vol import *
 #     return option.NPV()
 
 def get_option_price(code, time, steps, price = -1, volat = -1):
+    #time: 未来时间
+    #price: 未来期货价格
     option_code = code
     future_code = option_code.split('-')[0]
 
@@ -83,6 +85,7 @@ def get_option_price(code, time, steps, price = -1, volat = -1):
 
     payoff = ql.PlainVanillaPayoff(option_type, strike_price)
     settlement = calculation_date
+
 
     am_exercise = ql.AmericanExercise(settlement, maturity_date)
     american_option = ql.VanillaOption(payoff, am_exercise)

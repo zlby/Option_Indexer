@@ -9,7 +9,7 @@
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center;margin-left:8px; margin-top:8px;">
+										<span style="vertical-align:center; margin-top:8px;">
 											时间
 										</span>
 										<el-date-picker v-model="daypicker" 
@@ -27,7 +27,7 @@
 									<span style="vertical-align:center; margin-top:8px">
 										现货
 									</span>
-									<el-input placeholder="请输入现货量(吨)" style="width:75%" v-model="currentHold"></el-input>
+									<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
 						</el-row>
@@ -102,7 +102,7 @@
 					<el-row>
 					<el-col :span="24">
 						<div class="partThree">
-						<el-button class="el-col el-col-xs-12 el-col-md-12 el-col-sm-12 el-col-lg-12" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" disabled="true">
+						<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" disabled="true">
 						<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
 						</el-button>
 						</div>
@@ -160,26 +160,39 @@
 					</el-row>
 				</el-col>
 				
-				<el-col :span="24">
+				<el-row>
+				<el-col :span="22" :offset="2">
 						<div class="partThree">
-						<el-button class="el-col el-col-xs-5 el-col-md-5 el-col-sm-5 el-col-lg-5" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-left:63px" disabled="true">
-						<div style="color: #656565;font-size: 18px">套期保值方式偏好</div></el-button>
+						<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" disabled="true">
+						<div style="color: #656565;font-size: 18px">套期保值方式偏好</div>
+						</el-button>
 					</div>
 				</el-col>
+				</el-row>
 
-				<el-col :span="24">
-					<div style="margin-left:63px">
+				<el-col :span="22" :offset="2">
+					<div>
 						<el-row style="margin-top:10px">
 							<el-col :span="6">
-								<span>套期保持初始成本尽量小</span>
+								<span>套期保持成本尽量小</span>
 							</el-col>
 							<el-col :span="18">
 								<el-radio-group v-model="radio2">
+								<el-col :span="4" :offset="0">
 									<el-radio :label="1">很不重要</el-radio>
-									<el-radio :label="2" style="margin-left:50px">不重要</el-radio>
-									<el-radio :label="3" style="margin-left:50px">一般</el-radio>
-									<el-radio :label="4" style="margin-left:50px">重要</el-radio>
-									<el-radio :label="5" style="margin-left:50px">非常重要</el-radio>
+								</el-col>
+									<el-col :span="1" :offset="4">
+									<el-radio :label="2">不重要</el-radio>
+									</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="3">一般</el-radio>
+								</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="4">重要</el-radio>
+								</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="5">非常重要</el-radio>
+								</el-col>
 								</el-radio-group>
 							</el-col>
 						</el-row>
@@ -189,12 +202,22 @@
 								<span>亏损风险尽量小</span>
 							</el-col>
 							<el-col :span="18">
-								<el-radio-group v-model="radio1" fill="#314057">
+								<el-radio-group v-model="radio1">
+								<el-col :span="4" :offset="0">
 									<el-radio :label="1">很不重要</el-radio>
-									<el-radio :label="2" style="margin-left:50px">不重要</el-radio>
-									<el-radio :label="3" style="margin-left:50px">一般</el-radio>
-									<el-radio :label="4" style="margin-left:50px">重要</el-radio>
-									<el-radio :label="5" style="margin-left:50px">非常重要</el-radio>
+								</el-col>
+									<el-col :span="1" :offset="4">
+									<el-radio :label="2">不重要</el-radio>
+									</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="3">一般</el-radio>
+								</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="4">重要</el-radio>
+								</el-col>
+								<el-col :span="1" :offset="4">
+									<el-radio :label="5">非常重要</el-radio>
+								</el-col>
 								</el-radio-group>
 							</el-col>
 						</el-row>
