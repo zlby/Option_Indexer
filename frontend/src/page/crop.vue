@@ -114,12 +114,12 @@
 						</el-col>
 						<el-col :span="6">
 							<span>μ&nbsp&nbsp</span>
-							<el-input size="small" style="width:50%"></el-input>
+							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="12">
 							<span>σ&nbsp&nbsp</span>
-							<el-input size="small" style="width:25%"></el-input>
+							<el-input v-model="dist.argv[1]" size="small" style="width:25%"></el-input>
 						</el-col>
 
 					</el-row>
@@ -131,17 +131,17 @@
 
 						<el-col :span="6">
 							<span>a&nbsp&nbsp</span>
-							<el-input size="small" style="width:50%"></el-input>
+							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="6">
 							<span>b&nbsp&nbsp</span>
-							<el-input size="small" style="width:50%"></el-input>
+							<el-input v-model="dist.argv[2]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="6">
 							<span>c</span>
-							<el-input size="small" style="width:50%"></el-input>
+							<el-input v-model="dist.argv[1]" size="small" style="width:50%"></el-input>
 						</el-col>
 					</el-row>
 
@@ -151,11 +151,11 @@
 						</el-col>
 						<el-col :span="6">
 							<span>u1</span>
-							<el-input size="small" style="width:50%"></el-input>
+							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 						<el-col :span="12">
 							<span>u2</span>
-							<el-input size="small" style="width:25%"></el-input>
+							<el-input v-model="dist.argv[1]" size="small" style="width:25%"></el-input>
 						</el-col>
 					</el-row>
 				</el-col>
@@ -227,7 +227,7 @@
 								<span>套期保值成本上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input style="width:20%;"></el-input>
+								<el-input v-model="max_cost" style="width:20%;"></el-input>
 							</el-col>
 						</el-row>
 
@@ -236,7 +236,7 @@
 								<span>豆粕期货单边持仓上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input style="width:20%"></el-input>
+								<el-input v-model="fmax" style="width:20%"></el-input>
 							</el-col>
 						</el-row>
 
@@ -245,7 +245,7 @@
 								<span>豆粕期权单边持仓下限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input style="width:20%"></el-input>
+								<el-input v-model="omax" style="width:20%"></el-input>
 							</el-col>
 						</el-row>
 
@@ -279,8 +279,14 @@
 				comboFutures:[],
 				comboOptions:[],
 				currentHold:0,
-				radio2: 5,
-				radio1: 5,
+				w2: 5,
+				w1: 5,
+				max_cost:0,
+				fmax:0,
+				omax:0,
+				tri_dist:[null,null,null],
+				norm_dist:[null,null],
+				uni_dist:[null,null],
 				daypicker: new Date(),
 				pickerOption: {
 					shortcuts: [{
@@ -352,7 +358,7 @@
 			this.option={
 				title:[
 				{
-					text: '损益图',
+					text: '概率密度函数',
 					subtext:"",
 					left:"10%",
 					top:"4%"
@@ -401,23 +407,7 @@
 			        	gridIndex:1,
 			        }
 			        ],
-			        dataZoom: [
-			        {
-			        	type: "inside",
-			        	start: 0,
-			        	end: 100,
-			        	xAxisIndex: [0]
-			        },
-			        {
-			        	type: "slider",
-			        	show: true,
-			        	start: 0,
-			        	end: 100,
-			        	xAxisIndex: [0],
-			        	bottom: "10%",
-			        	left:"15%"
-			        }
-			        ],
+			        
 			        grid: [
 			            //
 			            {
@@ -430,7 +420,7 @@
 			            xAxis: [
 			            {
 			            	type: "value",
-			            	name:"当前豆粕现货价格",			               
+			            	name:"",			               
 			            	data: null,
 			            	scale: true,
 			            	boundaryGap: true,
@@ -446,7 +436,7 @@
 			            ],
 			            yAxis: [
 			            {
-			            	name:"资产组合价值",
+			            	name:"",
 			            	scale: true,
 			            	gridIndex: 0,
 			            	splitNumber: 10,
@@ -477,6 +467,26 @@
 			        this.myChart.setOption(this.option)
 			    },
 			    methods:{
+			    	checkNull:function(array){
+			    		var isNull=true;
+			    		for(var i=0;i<array.length;i++){
+			    			if(array[i]===null||array[i]===""){
+			    			}else{
+			    				isNull=false;
+			    			}
+			    		}
+			    		return isNull;
+			    	},
+			    	checkFull:function(array){
+			    		var isFull=true;
+			    		for(var i=0;i<array.length;i++){
+			    			if(array[i]!==null||array[i]!==""){
+			    			}else{
+			    				isFull=false;
+			    			}
+			    		}
+			    		return isFull;
+			    	},
 			    	addFuture: function() {
 			    		this.comboFutures.push({'code': null, 'amount': 0})
 			    	},
@@ -489,18 +499,84 @@
 			    			future_list:JSON.stringify(this.comboFutures),
 			    			option_list:JSON.stringify(this.comboOptions),
 			    			t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
-			    			time_now:"2017-07-12 15:00:00"
+			    			w1:this.w1,
+			    			w2:this.w2,
+			    			max_cost:this.max_cost,
+			    			fmax:this.fmax,
+			    			omax:this.omax,
+			    			dist:{
+			    				type:"",
+			    				argv:[]
+			    			}
 			    		};
+			    		var onedistMessage={
+			    			type:"danger",
+			    			title:"注意",
+			    			message:"一次显示只能选择一种分布，请删除别的分布的参数"
+			    		}
+			    		if(!checkNull(this.tri_dist)&&checkFull(this.tri_dist)){
+			    			if(checkNull(this.norm_dist)||checkNull(this.uni_dist)){
+			    				params.dist.type="triangle";
+			    				params.dist.argv=JSON.stringify(this.tri_dist);
+			    			}
+			    			else{
+			    				this.$notify(onedistMessage)
+			    			}
+			    		}
+			    		else if(!checkNull(this.norm_dist)&&checkFull(this.norm_dist)){
+			    			if(checkNull(this.tri_dist)||checkNull(this.uni_dist)){
+			    				params.dist.type="normal";
+			    				params.dist.argv=JSON.stringify(this.norm_dist);
+			    			}
+			    			else{
+			    				this.$notify(onedistMessage)
+			    			}
+			    			
+			    		}
+			    		else if(!checkNull(this.uni_dist)&&checkFull(this.uni_dist)){
+			    			if(checkNull(this.tri_dist)||checkNull(this.norm_dist)){
+			    				params.dist.type="uniform";
+			    				params.dist.argv=JSON.stringify(this.uni_dist)
+			    			}
+			    			else{
+			    				this.$notify(onedistMessage)
+			    			}
+			    		}else{
+			    			this.$notify({
+			    				type:"danger",
+			    				title:"注意",
+			    				message:"需要完整填写任意一种分布的全部参数"
+			    			})
+			    			return ;
+			    		}
 			    		console.log(params)
+			    		if(typeof(params.max_cost)!="number"){
+			    			params.max_cost=null;
+			    		}
+			    		if(typeof(params.fmax)!="number"){
+			    			params.fmax=null;
+			    		}
+			    		if(typeof(params.omax)!="number"){
+			    			params.omax=null;
+			    		}
 			    		var saveThis=this
-			    		axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
+			    		axios.get('/market/monto_carlo/',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
-			    				saveThis.popOption("资产组合")
-			    				saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
-			    				saveThis.comboFutures=comboFutures;
-			    				saveThis.comboOptions=comboFutures;
-			    			}else{
+			    				saveThis.$notify({
+			    					type:"success",
+			    					title:"成功",
+			    					message:"我们的服务器正在为您计算套保策略，这可能会需要几分钟，我们会将结果发送至您的邮箱中"
+			    				})
+			    			}
+			    			else if(res.status.code===-6){
+			    				saveThis.$notify({
+			    					type:"danger",
+			    					title:"错误",
+			    					message:"您的参数似乎输入的不够"
+			    				})
+			    			}
+			    			else{
 			    				saveThis.$notify({
 			    					type:"danger",
 			    					title:"错误",

@@ -191,6 +191,9 @@ mounted:function(){
             feature: {
                 dataZoom: {
                     yAxisIndex: false
+                },
+                saveAsImage:{
+                    type:"png"
                 }
             }
         },
