@@ -8,7 +8,9 @@
 						<br>
 						<p class="p2">最前沿的豆粕期货期权资讯</p>
 						<br><br><br><br>
-						<el-button class="button1" v-on:click="buttongroup">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="main" v-else>个人中心</el-button>
+
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -18,7 +20,8 @@
 						<br>
 						<p class="p2">最精确的豆粕期货期权预测</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="main" v-else>个人中心</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -28,7 +31,9 @@
 						<br>
 						<p class="p2">最权威的豆粕期权交易策略</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="main" v-else>个人中心</el-button>
+
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -38,7 +43,9 @@
 						<br>
 						<p class="p2">最准时的豆粕期权交易提醒</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="main" v-else>个人中心</el-button>
+
 					</div>
 					<!-- <img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -134,7 +141,10 @@
 			},
 			pictures (){
 				return ['../assets/pexels-photo-159888.jpeg', '']
-			}
+			},
+			loggedin () {
+          return this.$store.state.login.loggedin;
+        	},
 		},
 
 		mounted:function() {
@@ -157,6 +167,9 @@
 			},
 			buttongroup:function(){
 				this.$router.push({ path: '/login' })
+			},
+			main:function(){
+				this.$router.push({ path: '/homepageIndividual/list'})
 			}
 		}
 	}

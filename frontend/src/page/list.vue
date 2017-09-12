@@ -30,10 +30,10 @@
 
               <div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
                     <el-col :span="9" style="vertical-align:center">
-                     正期权                  
+                     期权一号                  
                      </el-col>
                   <el-col :span="9">
-                     负期权
+                     期权二号
                   </el-col>
                   <el-col :span="6">
                         操作

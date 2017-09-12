@@ -1,3 +1,4 @@
+
 <template>
   <div class="manage_page fillcontain">
       <headSecond></headSecond>
@@ -8,7 +9,7 @@
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
 
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-menu"></i>金融</template>
+            <template slot="title"><i class="el-icon-menu"></i>期权列表</template>
             <el-submenu :index="key" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
