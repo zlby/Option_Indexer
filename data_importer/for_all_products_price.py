@@ -33,12 +33,20 @@ def get_all_pages_data():
     for i in range(1,get_page_number()+1):
         page_number=str(i)
         get_one_page_data(page_number)
+def get_newest_date(): #获取最新日期，不一定是当前日期的前一天
+    res = requests.get('http://www.xibeiap.com/template/xibei/jghq.jsp?market_id=27&iStart=1')
+    soup = BeautifulSoup(res.text, 'html.parser')
+    table = soup.find('table', class_='ba')  #
+    trs = table.find_all('tr')
+    tds=trs[1].find_all('td')
+    newest_date=tds[7].text.strip()
+    return newest_date
 
 def daily_update():
-    today= datetime.date.today()
-    newest_date=today+datetime.timedelta(days=-1) #能获取到的最新的数据为当前日期的前一天
-    newest_date=str(newest_date)
-    for i in range(1,100): #暂时设定99，每天最多更新的页数应该不会超过19
+    # today= datetime.date.today()
+    # newest_date=today+datetime.timedelta(days=-1) #能获取到的最新的数据为当前日期的前一天
+    newest_date=get_newest_date()
+    for i in range(1,100): #暂时设定99，每天最多更新的页数应该不会超过99
         res = requests.get('http://www.xibeiap.com/template/xibei/jghq.jsp?market_id=27&iStart=' + str(i))
         soup = BeautifulSoup(res.text, 'html.parser')
         table = soup.find('table', class_='ba')
@@ -61,5 +69,5 @@ def daily_update():
                     break
 
 if __name__=="__main__":
-    get_all_pages_data()
+    daily_update()
 
