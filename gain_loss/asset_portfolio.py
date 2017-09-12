@@ -128,7 +128,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         future_data_list = []
         query_set_future = FutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
         if len(query_set_future) != 20:
-            return None
+            break
         else:
             future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
