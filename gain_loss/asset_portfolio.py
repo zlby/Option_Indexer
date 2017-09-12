@@ -86,7 +86,9 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         future_data_list = []
         query_set_future = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:20]
         if len(query_set_future) != 20:
-            return None
+            future_list[i]['u'] = 1
+            future_list[i]['y'] = 1
+            continue
         else:
             future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
@@ -128,7 +130,9 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         future_data_list = []
         query_set_future = FutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
         if len(query_set_future) != 20:
-            return None
+            future_list_all[i]['u'] = 1
+            future_list_all[i]['y'] = 1
+            continue
         else:
             future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
