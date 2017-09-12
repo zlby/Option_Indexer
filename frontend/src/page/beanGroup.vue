@@ -193,7 +193,12 @@
 			        tooltip: {
 			            trigger: "axis",
 			            axisPointer: {
-			                type: "cross"
+			                type: "cross",
+			                label: {
+			                	formatter: function (params) {
+			                		return params.value.toFixed(4);
+			                	}
+			                }
 			            },
 			            backgroundColor: 'rgba(245, 245, 245, 0.8)',
 			            borderWidth: 1,
@@ -216,7 +221,10 @@
 			            feature: {
 			                dataZoom: {
 			                    yAxisIndex: false
-			                }
+			                },
+			                saveAsImage:{
+                    			type:"png"
+                			}
 			            }
 			        },
 			        axisPointer: {
@@ -291,7 +299,7 @@
 			                axisPointer: {
 			                    label: {
 			                        formatter: function (params) {
-			                            return params.value
+			                            return params.value.toFixed(4);
 			                        }
 			                    }
 			                }
@@ -330,8 +338,8 @@
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
 							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
-							saveThis.comboFutures=comboFutures;
-							saveThis.comboOptions=comboFutures;
+							saveThis.comboFutures=[];
+							saveThis.comboOptions=[];
 						}else{
 							saveThis.$notify({
 								type:"danger",

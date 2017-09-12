@@ -307,8 +307,11 @@
         },
         toolbox: {
             feature: {
-                dataZoom: {
+                dataZoom:{
                     yAxisIndex: false
+                },
+                saveAsImage:{
+                    type:"png"
                 }
             }
         },
