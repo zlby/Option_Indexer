@@ -46,7 +46,7 @@ export const UserLogin = ({ commit }, data) => {
     api.localLogin(data).then(function (res) {
       res = res.data
       if (res.status.code == '0') {
-        router.push({path:'/'})
+        router.push({path:'/homepageIndividual'})
         commit('login', {username: data.username});
         resolve()
       } else {

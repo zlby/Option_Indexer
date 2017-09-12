@@ -35,27 +35,32 @@
 					</el-col>
 				</el-row>
 
-				<el-row style="margin-top:10px">
-					<el-col :span="21" :offset="3">
-					<el-button class="el-col el-col-xs-22 el-col-md-22 el-col-sm-22 el-col-lg-22" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;margin-left:20px">
-						<div style="color: #656565;font-size: 24px">套保组合</div>
-					</el-button>
-					</el-col>
-				</el-row>
-
-
 				<el-row>
 					<el-col :span="22" :offset="2">
-					<el-col :span="3" style="margin-top:10px">
+					<el-col :span="2" style="margin-top:10px">
 						<span>期货</span>
 					</el-col>
-					<el-col :span="21" style="margin-top:10px">
+					<el-col :span="22" style="margin-top:10px">
 						<el-card style="height:200px; width:95%">
 						</el-card>
 					</el-col>
 					</el-col>
 				</el-row>
-			
+				
+				<el-row style="margin-top:10px">
+					<el-col :span="20" :offset="4">
+					<el-button class="el-col el-col-xs-22 el-col-md-22 el-col-sm-22 el-col-lg-22" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;">
+						<div style="color: #656565;font-size: 24px">套保组合</div>
+					</el-button>
+					</el-col>
+				</el-row>
+
+				<el-row style="margin-top:10px">
+					<el-col :span="20" :offset="4">
+						<el-card style="height:200px;width:93%">
+						</el-card>
+					</el-col>
+				</el-row>
 
 
 				</el-col>

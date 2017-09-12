@@ -1,6 +1,10 @@
 <template style="min-width:800px">
     <el-row>
-        <el-col :span="20" style="margin-top:50px">
+        <el-col :span="20">
+            <div id="option" style="width:100%;height:600px; margin:20px 0px;">
+            </div>
+        </el-col>
+        <el-col :span="20" style="margin-top:20px">
             
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
@@ -26,11 +30,6 @@
             <el-button type="success" size="large" style="position:relative;bottom:0px;margin-left:50px;" @click="putCombination">添加期权组合</el-button>
             </el-col>
 
-        </el-col>
-
-                <el-col :span="20" :offset="4">
-            <div id="option" style="width:100%;height:600px; margin-top:30px">
-            </div>
         </el-col>
     </el-row>
 </template>
