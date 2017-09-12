@@ -88,7 +88,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         if len(query_set_future) != 20:
             future_list[i]['u'] = 1
             future_list[i]['y'] = 1
-            break;
+            continue
         else:
             future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
@@ -132,7 +132,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
         if len(query_set_future) != 20:
             future_list_all[i]['u'] = 1
             future_list_all[i]['y'] = 1
-            break
+            continue
         else:
             future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
