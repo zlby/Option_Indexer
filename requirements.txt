@@ -1,3 +1,4 @@
+Cython
 Django == 1.11.3
 beautifulsoup4 == 4.6.0
 ipython == 5.3.0

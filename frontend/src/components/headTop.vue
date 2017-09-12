@@ -19,13 +19,13 @@
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="toBeanGroup">豆粕资产组合套利保值</el-button>
+            <el-button type="text" @click="toBeanGroup">豆粕资产组合损益图</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toCrop">农作物跨品种套利保值</el-button>
+              <el-button type="text" @click="toCrop">豆粕资产组合套期保值</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toAccess">神经网络价值估计</el-button>
+              <el-button type="text" @click="toAccess">农作物跨品种套期保值</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
               <el-button type="text" @click="toCal">期权定价计算器</el-button>

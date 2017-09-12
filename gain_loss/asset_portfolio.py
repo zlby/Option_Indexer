@@ -84,10 +84,15 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
     for i in range(len(future_list)):
         future_data_list = []
-        query_set_future = HourFutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:20]
-        future_time_start = query_set_future[len(query_set_future) - 1].time
+        query_set_future = FutureTreadingData.objects.filter(future=future_list[i]['code']).order_by('-time')[:20]
+        if len(query_set_future) != 20:
+            future_list[i]['u'] = 1
+            future_list[i]['y'] = 1
+            continue
+        else:
+            future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
-            future_data_list.insert(0, query_set_future[i].close_price)
+            future_data_list.insert(0, query_set_future[j].close_price)
 
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
@@ -102,34 +107,10 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
 
         u, y = regress(spot_data_list, future_data_list, t)
-        # future_price = (spot_price_now + u) * np.exp((np.log(1.03) - y) * t)
-        # future_list[i]['price'] = future_price
         future_list[i]['u'] = u
         future_list[i]['y'] = y
         
-    # for i in range(len(option_list)):
-    #     option_code = option_list[i]['code']
-    #     future_code = option_code.split('-')[0]
-    #     future_price = 0
-    #     for future in future_list:
-    #         if future['code'] == future_code:
-    #             future_price = future['price']
-    #             break
-    #
-    #     if option_list[i]['volatility'] is None:
-    #         option_price = get_option_price(option_list[i]['code'], time_future_with_min, 2000, price=future_price)
-    #     else:
-    #         option_price = get_option_price(option_list[i]['code'], time_future_with_min, 2000, price=future_price, volat=option_list[i]['volatility'])
-    #     option_list[i]['price'] = option_price
 
-    # total_future = 0
-    # total_option = 0
-    #
-    # for i in range(len(future_list)):
-    #     total_future += future_list[i]['price'] * future_list[i]['amount']
-    # for i in range(len(option_list)):
-    #     total_option += option_list[i]['price'] * option_list[i]['amount']
-    #
     spot_price_low = 0.5 * spot_price_now
     spot_price_high = 1.5 * spot_price_now
     step_forward = (spot_price_high - spot_price_low) / 99
@@ -147,10 +128,15 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
     for i in range(len(future_list_all)):
         future_data_list = []
-        query_set_future = HourFutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
-        future_time_start = query_set_future[len(query_set_future) - 1].time
+        query_set_future = FutureTreadingData.objects.filter(future=future_list_all[i]['code']).order_by('-time')[:20]
+        if len(query_set_future) != 20:
+            future_list_all[i]['u'] = 1
+            future_list_all[i]['y'] = 1
+            continue
+        else:
+            future_time_start = query_set_future[len(query_set_future) - 1].time
         for j in range(len(query_set_future)):
-            future_data_list.insert(0, query_set_future[i].close_price)
+            future_data_list.insert(0, query_set_future[j].close_price)
 
         spot_time_start = future_time_start - time_delt
         spot_data_list = []
@@ -165,17 +151,15 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
 
 
         u, y = regress(spot_data_list, future_data_list, t)
-        # future_price = (spot_price_now + u) * np.exp((np.log(1.03) - y) * t)
-        # future_list[i]['price'] = future_price
         future_list_all[i]['u'] = u
         future_list_all[i]['y'] = y
 
 
 
-    for i in range(100):
+    for j in range(100):
         total_future = 0
         total_option = 0
-        stimulate_price = spot_price_low + i * step_forward
+        stimulate_price = spot_price_low + j * step_forward
 
         for i in range(len(future_list)):
             future_list[i]['price'] = (stimulate_price + future_list[i]['u']) * np.exp((np.log(1.03) - future_list[i]['y']) * t)

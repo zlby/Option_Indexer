@@ -295,3 +295,7 @@ class Spot(models.Model):
     price = models.FloatField(verbose_name=u'价格', default=0)
 
 
+class Crop(models.Model):
+    time = models.DateTimeField(verbose_name=u'时间')
+    type = models.CharField(verbose_name=u'种类', max_length=20)
+    price = models.FloatField(verbose_name=u'价格')

@@ -9,7 +9,7 @@
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center;margin-left:8px; margin-top:8px;">
+										<span style="vertical-align:center;margin-top:8px;">
 											时间
 										</span>
 										<el-date-picker v-model="daypicker" 
@@ -27,7 +27,7 @@
 										<span style="vertical-align:center; margin-top:8px">
 											现货
 										</span>
-										<el-input placeholder="请输入现货量(吨)" style="width:75%" v-model="currentHold"></el-input>
+										<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
 							</el-row>
