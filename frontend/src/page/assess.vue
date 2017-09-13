@@ -4,7 +4,7 @@
 		<div style="margin-top:30px">
 			<el-row>	
 
-			<el-col :span="10" :offset="1" class="assess">
+				<el-col :span="10" :offset="1" class="assess">
 					<el-row>
 						<el-col :span="22" :offset="2" style="margin-top:10px">
 							<span>时间&nbsp&nbsp&nbsp</span>
@@ -34,13 +34,44 @@
 						<el-input style="width:50%"></el-input>
 					</el-col>
 				</el-row>
-
+				
+				<el-row>
+					<el-col :span="22" :offset="2" style="margin-top:10px">
+					<span>搜索&nbsp&nbsp&nbsp</span>
+					<el-input v-model="query" placeholder="搜索所需期货" style="width:50%;"></el-input>
+					</el-col>
+				</el-row>
 
 				<el-row>
 					<el-col :span="22" :offset="2">
 						<el-col :span="24" style="margin-top:10px">
-							<el-card style="height:350px; width:95%">
-								期货
+							<el-card style="height:335px; width:95%">
+								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
+								<el-row style="margin-top:10px">
+									<el-col :span="16" :offset="4" style="vertical-align:center">
+										期权内容                  
+									</el-col>
+									<el-col :span="4">
+										操作
+									</el-col>
+								</el-row>
+									<el-col :span="24" class="div-divider"></el-col>
+									<div v-for="(value,key,index) in computedList" class="item" >
+
+										<el-col :span="9" style="vertical-align:center">
+											<el-tag color="#ff4949">{{ computedList[key].positive_option }}</el-tag>
+										</el-col>
+										<el-col :span="9">
+											<el-tag color="#13ce66">{{computedList[key].negative_option}}</el-tag>
+										</el-col>
+										<el-col :span="6">
+											<el-button size="mini" type="success"  style="vertical-align:center" :comboid="computedList[key].id">
+												查看
+											</el-button>
+										</el-col>
+										<el-col :span="24" class="div-divider"></el-col>
+									</div>
+								</div>
 							</el-card>
 						</el-col>
 					</el-col>
@@ -58,12 +89,12 @@
 
 			<el-col :span="12" :offset="1">
 				<el-row>
-				<div class="graph" id="chart" style="width:95%;height:260px;border: 4px solid #F9D481;">
+					<div class="graph" id="chart" style="width:95%;height:270px;border: 4px solid #F9D481;">
 					</div>
 				</el-row>
 
 				<el-row>
-					<div class="graph" id="chart" style="width:95%;height:260px;margin-top:18px;border: 4px solid #F9D481;">
+					<div class="graph" id="chart" style="width:95%;height:270px;margin-top:18px;border: 4px solid #F9D481;">
 					</div>
 				</el-row>
 			</el-col>
@@ -438,7 +469,7 @@
 			border-radius: 6px;
 			border: 3px solid #F9D481;
 			background:rgba(0, 0, 0, 0);
-			height:550px;
+			height:575px;
 		}
 		span{
 			font-size: 14px;
