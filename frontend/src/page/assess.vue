@@ -4,20 +4,20 @@
 		<div style="margin-top:30px">
 			<el-row>	
 
-				<el-col :span="10" :offset="1" class="assess">
+			<el-col :span="10" :offset="1" class="assess">
 					<el-row>
-					<el-col :span="22" :offset="2" style="margin-top:10px">
-						<span>时间&nbsp&nbsp&nbsp</span>
-						<el-date-picker v-model="daypicker" 
-						type="date" 
-						placeholder="选择日期时间" 
-						align="right" 
-						:picker-options="pickerOption" 
-						format="yyyy-MM-dd"
-						style="width:50%">
-					</el-date-picker>
+						<el-col :span="22" :offset="2" style="margin-top:10px">
+							<span>时间&nbsp&nbsp&nbsp</span>
+							<el-date-picker v-model="daypicker" 
+							type="date" 
+							placeholder="选择日期时间" 
+							align="right" 
+							:picker-options="pickerOption" 
+							format="yyyy-MM-dd"
+							style="width:50%">
+						</el-date-picker>
 					</el-col>
-					</el-row>
+				</el-row>
 				<el-row>
 					<el-col :span="11" :offset="2" style="margin-top:10px">
 						<span>现货&nbsp&nbsp&nbsp</span>
@@ -35,37 +35,41 @@
 					</el-col>
 				</el-row>
 
-				<el-row style="margin-top:10px">
-					<el-col :span="21" :offset="3">
-					<el-button class="el-col el-col-xs-22 el-col-md-22 el-col-sm-22 el-col-lg-22" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;margin-left:20px">
-						<div style="color: #656565;font-size: 24px">套保组合</div>
-					</el-button>
-					</el-col>
-				</el-row>
-
 
 				<el-row>
 					<el-col :span="22" :offset="2">
-					<el-col :span="3" style="margin-top:10px">
-						<span>期货</span>
-					</el-col>
-					<el-col :span="21" style="margin-top:10px">
-						<el-card style="height:200px; width:95%">
-						</el-card>
-					</el-col>
+						<el-col :span="24" style="margin-top:10px">
+							<el-card style="height:350px; width:95%">
+								期货
+							</el-card>
+						</el-col>
 					</el-col>
 				</el-row>
-			
 
+				<el-row style="margin-top:10px">
+					<el-col :span="22" :offset="2">
+						<el-button class="el-col el-col-xs-23 el-col-md-23 el-col-sm-23 el-col-lg-23" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;">
+							<div style="color: #656565;font-size: 24px">套保组合</div>
+						</el-button>
+					</el-col>
+				</el-row>
 
-				</el-col>
+			</el-col>
 
-				<el-col :span="11">
-					2
-				</el-col>
-			</el-row>
-		</div>
+			<el-col :span="12" :offset="1">
+				<el-row>
+				<div class="graph" id="chart" style="width:95%;height:260px;border: 4px solid #F9D481;">
+					</div>
+				</el-row>
+
+				<el-row>
+					<div class="graph" id="chart" style="width:95%;height:260px;margin-top:18px;border: 4px solid #F9D481;">
+					</div>
+				</el-row>
+			</el-col>
+		</el-row>
 	</div>
+</div>
 </template>
 
 <script>
@@ -434,7 +438,7 @@
 			border-radius: 6px;
 			border: 3px solid #F9D481;
 			background:rgba(0, 0, 0, 0);
-			height:600px;
+			height:550px;
 		}
 		span{
 			font-size: 14px;
