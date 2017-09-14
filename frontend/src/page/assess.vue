@@ -2,17 +2,17 @@
 	<div>
 		<head-second></head-second>
 		<div style="margin-top:30px">
-			<el-row>	
+			<el-row>
 
 				<el-col :span="10" :offset="1" class="assess">
 					<el-row>
 						<el-col :span="22" :offset="2" style="margin-top:10px">
 							<span>时间&nbsp&nbsp&nbsp</span>
-							<el-date-picker v-model="daypicker" 
-							type="date" 
-							placeholder="选择日期时间" 
-							align="right" 
-							:picker-options="pickerOption" 
+							<el-date-picker v-model="daypicker"
+							type="date"
+							placeholder="选择日期时间"
+							align="right"
+							:picker-options="pickerOption"
 							format="yyyy-MM-dd"
 							style="width:50%">
 						</el-date-picker>
@@ -47,10 +47,10 @@
 								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
 								<el-row style="margin-top:10px">
 									<el-col :span="7" style="vertical-align:center">
-										现货名称                  
+										现货名称
 									</el-col>
 									<el-col :span="7" style="vertical-align:center">
-										买入卖出比                  
+										买入卖出比
 									</el-col>
 									<el-col :span="7" style="vertical-align:center">
 										相关系数
@@ -82,7 +82,7 @@
 						</el-col>
 					</el-col>
 				</el-row>
-				
+
 			</el-col>
 
 			<el-col :span="12" :offset="1">
@@ -192,7 +192,7 @@
 						},
 						]
 					},
-				}
+				},
 				"optionIV":{
 					name:null,
 					type:"line",
@@ -314,7 +314,7 @@
 			            xAxis: [
 			            {
 			            	type: "value",
-			            	name:"时间",			               
+			            	name:"时间",
 			            	data: null,
 			            	scale: true,
 			            	boundaryGap: true,
@@ -330,7 +330,7 @@
 			            },
 			            {
 			            	type: "value",
-			            	name:"时间",			               
+			            	name:"时间",
 			            	data: null,
 			            	scale: true,
 			            	boundaryGap: true,
