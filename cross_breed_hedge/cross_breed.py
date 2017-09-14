@@ -43,7 +43,7 @@ def choose_futures(type:str, time_future:datetime.datetime):
         co = abs(get_coherence_rate(crop_list, future_list))
         rate = abs(OLS(diffx=get_diff(future_list), diffy=get_diff(crop_list)))
         result_set.append((code, rate, co))
-        result_set.sort(key=lambda co : co[1])
+        result_set.sort(key=lambda co : co[1], reverse=True)
     return result_set
 
 def show_error_diagram(type:str, code:str):
