@@ -6,22 +6,22 @@
 
 				<el-col :span="10" :offset="1" class="assess">
 					<el-row>
-					<el-col :span="22" :offset="2" style="margin-top:10px">
-						<span>时间&nbsp&nbsp&nbsp</span>
-						<el-date-picker v-model="daypicker" 
-						type="date" 
-						placeholder="选择日期时间" 
-						align="right" 
-						:picker-options="pickerOption" 
-						format="yyyy-MM-dd"
-						style="width:50%">
-					</el-date-picker>
+						<el-col :span="22" :offset="2" style="margin-top:10px">
+							<span>时间&nbsp&nbsp&nbsp</span>
+							<el-date-picker v-model="daypicker" 
+							type="date" 
+							placeholder="选择日期时间" 
+							align="right" 
+							:picker-options="pickerOption" 
+							format="yyyy-MM-dd"
+							style="width:50%">
+						</el-date-picker>
 					</el-col>
-					</el-row>
+				</el-row>
 				<el-row>
 					<el-col :span="11" :offset="2" style="margin-top:10px">
 						<span>现货&nbsp&nbsp&nbsp</span>
-						<el-select v-model="value" style="width:73%">
+						<el-select v-model="choose_agri" style="width:73%">
 							<el-option
 							v-for="item in filteredFutures"
 							:key="item.value"
@@ -30,47 +30,70 @@
 						</el-select>
 					</el-col>
 					<el-col :span="10" :offset="1" style="margin-top:10px">
-						<span>持有数量</span>
-						<el-input style="width:50%"></el-input>
+						<el-input v-model="query" placeholder="在农产品中搜索" style="width:50%"></el-input>
 					</el-col>
 				</el-row>
-
+				<el-row style="margin-top:10px">
+					<el-col :span="22" :offset="2">
+						<el-button class="el-col el-col-xs-23 el-col-md-23 el-col-sm-23 el-col-lg-23" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" @click="confirmCombo">
+							<div style="color: #656565;font-size: 24px">套保组合</div>
+						</el-button>
+					</el-col>
+				</el-row>
 				<el-row>
 					<el-col :span="22" :offset="2">
-					<el-col :span="2" style="margin-top:10px">
-						<span>期货</span>
-					</el-col>
-					<el-col :span="22" style="margin-top:10px">
-						<el-card style="height:200px; width:95%">
-						</el-card>
-					</el-col>
+						<el-col :span="24" style="margin-top:10px">
+							<el-card style="height:335px; width:95%">
+								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
+								<el-row style="margin-top:10px">
+									<el-col :span="7" style="vertical-align:center">
+										现货名称                  
+									</el-col>
+									<el-col :span="7" style="vertical-align:center">
+										买入卖出比                  
+									</el-col>
+									<el-col :span="7" style="vertical-align:center">
+										相关系数
+									</el-col>
+									<el-col :span="3">
+										操作
+									</el-col>
+								</el-row>
+									<el-col :span="24" class="div-divider"></el-col>
+									<div v-for="(value,key,index) in optionList" class="item" >
+										<el-col :span="7" style="vertical-align:center">
+											<el-tag color="#ff4949">{{ optionList[key].code }}</el-tag>
+										</el-col>
+										<el-col :span="7" style="vertical-align:center">
+											<el-tag color="#ff4949">{{ optionList[key].rate }}</el-tag>
+										</el-col>
+										<el-col :span="7" style="vertical-align:center">
+											<el-tag color="#ff4949">{{ optionList[key].coherence }}</el-tag>
+										</el-col>
+										<el-col :span="3">
+											<el-button size="mini" type="success"  style="vertical-align:center" :comboid="optionList[key].code" @click="updateGraph($event)">
+												查看
+											</el-button>
+										</el-col>
+										<el-col :span="24" class="div-divider"></el-col>
+									</div>
+								</div>
+							</el-card>
+						</el-col>
 					</el-col>
 				</el-row>
 				
-				<el-row style="margin-top:10px">
-					<el-col :span="20" :offset="4">
-					<el-button class="el-col el-col-xs-22 el-col-md-22 el-col-sm-22 el-col-lg-22" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;">
-						<div style="color: #656565;font-size: 24px">套保组合</div>
-					</el-button>
-					</el-col>
+			</el-col>
+
+			<el-col :span="12" :offset="1">
+				<el-row>
+					<div class="graph" id="chart" style="width:95%;height:600px;border: 4px solid #F9D481;">
+					</div>
 				</el-row>
-
-				<el-row style="margin-top:10px">
-					<el-col :span="20" :offset="4">
-						<el-card style="height:200px;width:93%">
-						</el-card>
-					</el-col>
-				</el-row>
-
-
-				</el-col>
-
-				<el-col :span="11">
-					2
-				</el-col>
-			</el-row>
-		</div>
+			</el-col>
+		</el-row>
 	</div>
+</div>
 </template>
 
 <script>
@@ -86,9 +109,11 @@
 
 		data(){
 			return{
-				comboFutures:[],
-				comboOptions:[],
+				optionList:[],
 				currentHold:0,
+				query:"",
+				choose_agri:"",
+				combo_agri:"",
 				daypicker: new Date(),
 				pickerOption: {
 					shortcuts: [{
@@ -110,35 +135,64 @@
 			futureTimetable:function(){
 				return this.$store.state.login.futureTimetable
 			},
-			filteredFutures:function () {
-				var vm = this
-				return this.futures.filter(function (item) {
-					var chosenTime=new Date(vm.daypicker).getTime();
-					return (vm.futureTimetable[item]>=chosenTime);
+			filteredAgris:function(){
+				var agris=["小白菜", "生菜", "菠菜", "大包菜", "大白菜", "油菜", "茼蒿", "娃娃菜", "生葱", "胡萝卜", "番薯", "白萝卜", "莴笋", "洋葱", "藕", "土豆", "红薯", "黄瓜", "南瓜", "苦瓜", "冬瓜", "西兰花", "西红柿", "丝瓜", "青椒", "圆茄", "西葫芦", "茄子", "尖椒", "小黄瓜", "豆角", "芹菜", "香菜", "姜", "蒜苗", "大蒜", "香菇", "蘑菇", "韭菜", "黄豆芽", "绿豆芽", "玉米", "菜花", "蒜苔", "沙糖桔", "脐橙", "蜜柚", "蜜桔", "柠檬", "红柚", "小木瓜", "珍珠瓜", "无籽西瓜", "黑美人西瓜", "哈密瓜", "黄河蜜瓜", "西瓜", "皇帝香蕉", "海南香蕉", "皇冠梨", "蜜梨", "香梨", "青苹果", "进口蛇果", "贡梨", "花牛", "红富士", "梨", "鸭梨", "苹果", "国产青提", "无籽红提", "红提", "葡萄", "水仙芒果", "牛油果", "甜石榴", "圣女果", "进口山竹", "泰国榴莲", "进口奇异果", "黑甘蔗", "草莓", "菠萝", "柿子", "石榴", "人参果", "火龙果", "青枣", "山楂", "猕猴桃", "芒果", "枣", "板栗", "白香瓜", "木瓜", "鲜枣", "进口青提子", "金奇异果", "韭黄", "芦柑", "进口木瓜", "巨峰葡萄", "进口火龙果", "柿饼", "进口西柚", "进口柠檬", "红桔", "红江橙", "澳橙", "金桔", "胡柚", "贡桔", "甜瓜", "白兰瓜", "香蕉", "水晶红富士", "椰青", "进口龙眼", "进口红芒", "樱桃", "伊丽莎白", "杨梅", "桂圆", "梨枣", "杨桃", "进口红李", "黑布林", "贡柑", "甜橙", "杏", "四川水蜜桃","油桃","红樱桃"];
+				return agris.filter(function(item){
+					return (item.indexOf(vm.query) !== -1)||(item.indexOf(vm.query)!==-1)
 				})
-			},
-			filteredOptions:function () {
-				var vm = this
-				return this.options.filter(function (item) {
-					var chosenTime=new Date(vm.daypicker).getTime();
-					var futureCode=item.slice(0,5);
-					return (vm.futureTimetable[futureCode]>=chosenTime);
-				})
-			},
+			}
 		},
 		mounted:function(){
-			this.$store.dispatch('getFutureListBalance'),
-			this.$store.dispatch('getOptionListBalance')
+			//this.$store.dispatch('getFutureListBalance'),
+			//this.$store.dispatch('getOptionListBalance')
 			this.myChart= echarts.init(document.getElementById('chart'));
 			this.template={
-				"optionK":{
+				"optionPrice":{
 					name: null,
 					type: 'line',
 					step:false,
 					smooth:false,
 					data:null,
 					gridIndex:null,
+					itemStyle:{
+						normal:{
+							color:null
+						}
+					}
 				},
+				"optionError":{
+					name: null,
+					type: 'line',
+					step:false,
+					smooth:false,
+					data:null,
+					gridIndex:null,
+					itemStyle:{
+						normal:{
+							color:null
+						}
+					},
+					markLine: {
+						symbol: ['none', 'arrow'],
+						data: [
+						{
+							name: 'min line',
+							type: 'min',
+							label:'Min'
+						},
+						{
+							name: 'max line',
+							type: 'max',
+							label:'Max'
+						},
+						{
+							name: 'Avg line',
+							type: 'average',
+							label:'Avg'
+						},
+						]
+					},
+				}
 				"optionIV":{
 					name:null,
 					type:"line",
@@ -160,10 +214,16 @@
 			this.option={
 				title:[
 				{
-					text: '损益图',
+					text: '期货与现货价格曲线',
 					subtext:"",
-					left:"10%",
-					top:"4%"
+					left:"5%",
+					top:"2%"
+				},
+				{
+					text: 'Error序列图',
+					subtext:"",
+					left:"5%",
+					top:"57%"
 				}
 				],
 				tooltip: {
@@ -195,11 +255,6 @@
 			        		}
 			        	}
 			        },
-			        axisPointer: {
-			        	link: {
-			        		xAxisIndex: 'all',
-			        	}
-			        },
 			        legend: [
 			        {
 			        	data:[],
@@ -222,23 +277,44 @@
 			        	start: 0,
 			        	end: 100,
 			        	xAxisIndex: [0],
-			        	bottom: "10%",
+			        	top: "50%",
 			        	left:"15%"
-			        }
+			        },
+			        {
+			        	type: "inside",
+			        	start: 0,
+			        	end: 100,
+			        	xAxisIndex: [1]
+			        },
+			        {
+			        	type: "slider",
+			        	show: true,
+			        	start: 0,
+			        	end: 100,
+			        	xAxisIndex: [1],
+			        	bottom: "3%",
+			        	left:"15%"
+			        },
 			        ],
 			        grid: [
 			            //
 			            {
-			            	left: '15%',
-			            	height: '60%',
-			            	top: "20%",
-			            	width: "60%"
+			            	left: '5%',
+			            	height: '40%',
+			            	top: "5%",
+			            	width: "90%"
+			            },
+			            {
+			            	left: '5%',
+			            	height: '40%',
+			            	top: "55%",
+			            	width: "90%"
 			            }
 			            ],
 			            xAxis: [
 			            {
 			            	type: "value",
-			            	name:"当前豆粕现货价格",			               
+			            	name:"时间",			               
 			            	data: null,
 			            	scale: true,
 			            	boundaryGap: true,
@@ -247,6 +323,23 @@
 			            	splitNumber: 4,
 			            	min: 'dataMin',
 			            	max: 'dataMax',
+			            	gridIndex:0,
+			            	axisPointer: {
+			            		z: 100
+			            	}
+			            },
+			            {
+			            	type: "value",
+			            	name:"时间",			               
+			            	data: null,
+			            	scale: true,
+			            	boundaryGap: true,
+			            	axisLine: {onZero: false},
+			            	splitLine: {show: false},
+			            	splitNumber: 4,
+			            	min: 'dataMin',
+			            	max: 'dataMax',
+			            	gridIndex:1,
 			            	axisPointer: {
 			            		z: 100
 			            	}
@@ -254,9 +347,28 @@
 			            ],
 			            yAxis: [
 			            {
-			            	name:"资产组合价值",
+			            	name:"价格",
 			            	scale: true,
 			            	gridIndex: 0,
+			            	splitNumber: 10,
+			            	axisLabel: {
+			            		show: true,
+			            	},
+			            	axisLine: {show: true},
+			            	axisTick: {show: true},
+			            	splitLine: {show: true},
+			            	axisPointer: {
+			            		label: {
+			            			formatter: function (params) {
+			            				return params.value
+			            			}
+			            		}
+			            	}
+			            },
+			            {
+			            	name:"错误率",
+			            	scale: true,
+			            	gridIndex: 1,
 			            	splitNumber: 10,
 			            	axisLabel: {
 			            		show: true,
@@ -285,29 +397,29 @@
 			        this.myChart.setOption(this.option)
 			    },
 			    methods:{
-			    	addFuture: function() {
-			    		this.comboFutures.push({'code': null, 'amount': 0})
-			    	},
-			    	addOption: function() {
-			    		this.comboOptions.push({'code': null, 'volatility':0, 'amount': 0})
-			    	},
-			    	confirmCombo:function(){
+			    	updateGraph:function(event){
+			    		if(event.target.tagName=="SPAN"){
+			    			var comboid=event.target.parentNode.getAttribute("comboid")
+			    		}else{
+			    			var comboid=event.target.getAttribute("comboid")
+			    		}
+			    		var agri=this.choose_agri;
+			    		if(this.choose_agri!=this.combo_agri){
+			    			agri=this.combo_agri;
+			    		}
 			    		var params={
-			    			physicals:this.currentHold,
-			    			future_list:JSON.stringify(this.comboFutures),
-			    			option_list:JSON.stringify(this.comboOptions),
-			    			t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
-			    			time_now:"2017-07-12 15:00:00"
-			    		};
-			    		console.log(params)
-			    		var saveThis=this
-			    		axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
+			    			agri_type:agri,
+			    			code:comboid
+			    		}
+			    		axios.get('/market/cross_breed_hedge/',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
-			    				saveThis.popOption("资产组合")
-			    				saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
-			    				saveThis.comboFutures=comboFutures;
-			    				saveThis.comboOptions=comboFutures;
+			    				saveThis.popSeries("期货曲线");
+			    				saveThis.popSeries("现货曲线");
+			    				saveThis.popSeries("error序列曲线");
+			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"期货曲线",data:res.crop_list}))
+			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"现货曲线",data:res.future_list}))
+			    				saveThis.addChartOption(saveThis.createErrorSeries({name:"error序列曲线",data:res.error_list}))
 			    			}else{
 			    				saveThis.$notify({
 			    					type:"danger",
@@ -317,12 +429,55 @@
 			    			}
 			    		})
 			    	},
-			    	createSeries:function(data){
-			    		var series = this.deepClone(this.template.optionK);
+			    	confirmCombo:function(){
+			    		var params={
+			    			agri_type:this.choose_agri,
+			    			time_future:echarts.format.formatTime("yyyy-MM-dd",this.daypicker)
+			    		};
+			    		console.log(params)
+			    		var saveThis=this
+			    		axios.get('/market/choose_future/',{params:params}).then(function(res){
+			    			res=res.data;
+			    			if(res.status.code===0){
+			    				saveThis.optionList=[];
+			    				for(var item in res.future_return){
+			    					saveThis.optionList.push(item);
+			    				}
+			    				saveThis.combo_agri=this.choose_agri
+			    			}else{
+			    				saveThis.$notify({
+			    					type:"danger",
+			    					title:"错误",
+			    					message:"似乎出了一些问题"
+			    				})
+			    			}
+			    		})
+			    	},
+			    	createPriceSeries:function(data){
+			    		var series = this.deepClone(this.template.optionPrice);
 			    		series.name = data.name;
-			    		series.data = data.data;
+			    		series.data = data.data.map(function(o){
+			    			return [o[0].toFixed(4),o[1].toFixed(4)];
+			    		});
 			    		series.xAxisIndex=0;
 			    		series.yAxisIndex=0;
+			    		series.gridIndex=0;
+			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
+			    		return {
+			    			name:data.name,
+			    			series:series
+			    		}
+			    	},
+			    	createErrorSeries:function(data){
+			    		var series = this.deepClone(this.template.optionError);
+			    		series.name = data.name;
+			    		series.data = data.data.map(function(o){
+			    			return [o[0].toFixed(4),o[1].toFixed(4)];
+			    		});;
+			    		series.xAxisIndex=1;
+			    		series.yAxisIndex=1;
+			    		series.gridIndex=1;
+			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		return {
 			    			name:data.name,
 			    			series:series
@@ -439,7 +594,7 @@
 			border-radius: 6px;
 			border: 3px solid #F9D481;
 			background:rgba(0, 0, 0, 0);
-			height:600px;
+			height:575px;
 		}
 		span{
 			font-size: 14px;
