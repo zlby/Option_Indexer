@@ -146,5 +146,6 @@ class LstmModel:
                 if self.cursor % 20 == 0:
                     print("run %s times: %s" % (self.cursor, loss))
 
+    @staticmethod
     def get_prediction_list(self):
         return self.predication
