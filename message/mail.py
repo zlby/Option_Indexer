@@ -15,7 +15,7 @@ class MailSender(object):
     AccountName = 'service@optionindexer.com'
     ReplyToAddress = False
     AddressType = 1
-    FromAlias = 'INDEXER智能⾦金融咨询公司'
+    FromAlias = 'INDEXER智能金融咨询公司'
     Version = '2015-11-23'
     text_message_base = '尊敬的客户%s您好！\n' \
                 '基于您的选择和市场行情的变动，给您建议如下：\n' \
@@ -23,14 +23,14 @@ class MailSender(object):
                 '\t卖出期权代码：%s \n' \
                 '\t买入\卖出手数比：%s \n' \
                 '\t套利区间：%s \n' \
-                '希望我们的建议为您带来收益。INDEXER智能⾦金融咨询公司竭诚为您服务。 \n'
-    text_hedging_base = '尊敬的客户%s您好！\n' \
-                '基于您的选择和市场行情的变动，给您建议如下：\n' \
-                '\t买入期权代码：%s \n' \
-                '\t买入手数：%s \n'  \
-                '\t卖出期权代码：%s \n' \
-                '\t买入\卖出手数比：%s \n' \
-                '希望我们的建议为您带来收益。INDEXER智能⾦金融咨询公司竭诚为您服务。 \n'
+                '希望我们的建议为您带来收益。INDEXER智能金融咨询公司竭诚为您服务。 \n'
+
+    text_hedging_base_title = '尊敬的客户%s您好！\n' \
+                '基于您的已有资产和市场行情的变动，给您套期保值建议如下：\n'
+    text_hedging_base_content = '\t期货/期权代码：%s \n' \
+                '\t操作：%s \n'  \
+                '\t手数：%s \n\n'
+    text_hedging_base_end = '希望我们的建议为您带来收益。INDEXER智能金融咨询公司竭诚为您服务。 \n'
 
     @staticmethod
     def send_message(email, name, buy_option, sell_option, rate, interval):
@@ -58,8 +58,23 @@ class MailSender(object):
         print(response.text)
 
     @staticmethod
-    def send_hedging_result(email, name, buy_option, sell_option, rate, interval):
-        text = MailSender.text_hedging_base % (name, buy_option, sell_option, rate, interval)
+    def send_hedging_result(email, name, future_list, option_list):
+        # text = MailSender.text_hedging_base % (name, buy_option, sell_option, rate, interval
+        text = MailSender.text_hedging_base_title % (name)
+        for item in future_list:
+            if item['amount'] > 0:
+                item['operation'] = '买入'
+            else:
+                item['operation'] = '卖出'
+            text += MailSender.text_hedging_base_content % (item['code'], item['operation'], abs(item['amount']))
+        for item in option_list:
+            if item['amount'] > 0:
+                item['operation'] = '买入'
+            else:
+                item['operation'] = '卖出'
+            text += MailSender.text_hedging_base_content % (item['code'], item['operation'], abs(item['amount']))
+        text += MailSender.text_hedging_base_end
+
         params = {
             'Action': MailSender.Action,
             'AccountName': MailSender.AccountName,
@@ -67,7 +82,7 @@ class MailSender(object):
             'AddressType': MailSender.AddressType,
             'ToAddress': email,
             'FromAlias': MailSender.FromAlias,
-            'Subject': '期权套利提醒',
+            'Subject': '套期保值结果',
             'Version': MailSender.Version,
             'TextBody': text,
             'AccessKeyId': MailSender.ACCESS_KEY_ID,
@@ -99,7 +114,5 @@ class MailSender(object):
         h = hmac.new((MailSender.ACCESS_KRY_SECRET + '&').encode(), string_to_sign.encode(), hashlib.sha1)
         signature = base64.encodebytes(h.digest()).strip()
         return signature
-
-
 
 
