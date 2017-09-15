@@ -558,7 +558,7 @@
 			    			params.omax=null;
 			    		}
 			    		var saveThis=this
-			    		axios.get('/market/monto_carlo/',{params:params}).then(function(res){
+			    		axios.get('/market/hedging/',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
 			    				saveThis.$notify({
