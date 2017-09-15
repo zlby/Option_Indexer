@@ -99,15 +99,7 @@
 
 
 				<el-col :span="12">
-					<el-row>
-					<el-col :span="24">
-						<div class="partThree">
-						<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" disabled="true">
-						<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
-						</el-button>
-						</div>
-					</el-col>
-					</el-row>
+					
 					<el-row style="margin-top:10px">
 						<el-col :span="6" style="margin-top:8px;">
 							<p>正态分布</p>
@@ -156,6 +148,24 @@
 						<el-col :span="12">
 							<span>u2</span>
 							<el-input v-model="uni_dist[1]" size="small" style="width:25%"></el-input>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<div class="partThree">
+							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraph">
+								<div style="color: #656565;font-size: 18px">使用所选分布预测</div>
+							</el-button>
+							</div>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<div class="partThree">
+							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px">
+							<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
+							</el-button>
+							</div>
 						</el-col>
 					</el-row>
 				</el-col>
@@ -465,6 +475,54 @@
 			        this.myChart.setOption(this.option)
 			    },
 			    methods:{
+			    	sendDispReq:function(params){
+			    		var saveThis=this
+			    		var dis_name=" "
+			    		if(params.type=="triangle"){
+			    			dis_name="三角分布"
+			    		}
+			    		if(params.type=="normal"){
+			    			dis_name="正态分布"
+			    		}
+			    		if(params.type=="uniform"){
+			    			dis_name="均匀分布"
+			    		}
+			    		axios.get('/distribution',{params:params}).then(function(res){
+			    			res=res.data;
+			    			if(res.status.code===0){
+			    				saveThis.popSeries(dis_name);
+			    				saveThis.addChartOption(saveThis.createSeries({name:dis_name,data:res.distribution}))
+			    			}
+			    			else{
+			    				saveThis.$notify({
+			    					type:"danger",
+			    					title:"错误",
+			    					message:"似乎出了一些问题"
+			    				})
+			    			}
+			    		})
+			    	}
+			    	updateGraph:function(){
+			    		var full=[this.checkFull(this.tri_dist),this.checkFull(this.norm_dist),this.checkFull(this.uni_dist)];
+			    		if(full[0]){
+			    			sendDispReq({
+			    				type:"triangle",
+			    				argv:JSON.stringify(this.tri_dist)
+			    			})
+			    		}
+						if(full[1]){
+							sendDispReq({
+			    				type:"normal",
+			    				argv:JSON.stringify(this.norm_dist)
+			    			})
+						}
+						if(full[2]){
+							sendDispReq({
+			    				type:"uniform",
+			    				argv:JSON.stringify(this.uni_dist)
+			    			})
+						}
+			    	}
 			    	checkNull:function(array){
 			    		var isNull=true;
 			    		for(var i=0;i<array.length;i++){
