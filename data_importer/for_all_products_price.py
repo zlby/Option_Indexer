@@ -24,13 +24,14 @@ def get_one_page_data(pageNumber):
     for i in range(1,len(trs)):
         tds=trs[i].find_all('td')          #数据都在这
         product_name=tds[0].text.strip()
-        middle_price=tds[1].text.strip()
+        middle_price=float(tds[1].text.strip())
+        # print(middle_price)
         # change=tds[2].text.strip()
         # highest_price=tds[3].text.strip()
         # lowest_price=tds[4].text.strip()
         # trading_amount=tds[5].text.strip()
         date=tds[7].text.strip()
-        crop = Crop(time=date, type=product_name, price=(middle_price * 10000))
+        crop = Crop(time=date, type=product_name, price=float(middle_price * 1000))
         crop_data_list.append(crop)
 
         # print(product_name,middle_price,change,highest_price,lowest_price,trading_amount,date)
@@ -55,7 +56,7 @@ def daily_update():
     # today= datetime.date.today()
     # newest_date=today+datetime.timedelta(days=-1) #能获取到的最新的数据为当前日期的前一天
     newest_date=get_newest_date()
-    for i in range(1,100): #暂时设定99，每天最多更新的页数应该不会超过99
+    for i in range(1,20): #暂时设定19，每天最多更新的页数应该不会超过19
         res = requests.get('http://www.xibeiap.com/template/xibei/jghq.jsp?market_id=27&iStart=' + str(i))
         soup = BeautifulSoup(res.text, 'html.parser')
         table = soup.find('table', class_='ba')
@@ -68,8 +69,8 @@ def daily_update():
                 date = tds[7].text.strip()
                 if date == newest_date:
                     product_name = tds[0].text.strip()  # 最新的数据在这
-                    middle_price = tds[1].text.strip()
-                    crop = Crop(time=date, type=product_name, price=(middle_price * 10000))
+                    middle_price = float(tds[1].text.strip())
+                    crop = Crop(time=date, type=product_name, price=float(middle_price * 1000))
                     crop_data_list.append(crop)
                     # change = tds[2].text.strip()
                     # highest_price = tds[3].text.strip()
@@ -79,7 +80,7 @@ def daily_update():
                 else:
                     continue_page=False
                     break
-
+        Crop.objects.bulk_create(crop_data_list)
 
 if __name__=="__main__":
     daily_update()
