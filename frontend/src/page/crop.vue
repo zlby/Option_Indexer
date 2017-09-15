@@ -12,11 +12,11 @@
 										<span style="vertical-align:center; margin-top:8px;">
 											时间
 										</span>
-										<el-date-picker v-model="daypicker" 
-										type="date" 
-										placeholder="选择日期时间" 
-										align="right" 
-										:picker-options="pickerOption" 
+										<el-date-picker v-model="daypicker"
+										type="date"
+										placeholder="选择日期时间"
+										align="right"
+										:picker-options="pickerOption"
 										format="yyyy-MM-dd"
 										style="width:80%">
 									</el-date-picker>
@@ -32,7 +32,7 @@
 							</el-col>
 						</el-row>
 					</el-card>
-				</div> 
+				</div>
 
 				<div class="partTwo">
 					<el-row :gutter="20">
@@ -61,7 +61,7 @@
 								<div class="wrapper" v-for="comboOption in comboOptions">
 									<div class="kind">
 										<span>期权品种</span>
-										<el-select v-model="comboOption.code" class="sel"> 
+										<el-select v-model="comboOption.code" class="sel">
 											<el-option
 											v-for="item in filteredOptions"
 											:key="item"
@@ -73,7 +73,7 @@
 									<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
 									<div class="kind">
 										<span style="margin-left:15px">波动率</span>
-										<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05"> 
+										<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
 										</el-input-number>
 									</div>
 								</div>
@@ -91,13 +91,13 @@
 			</el-col>
 
 			<el-col :span="14">
-				
+
 				<el-col :span="12">
 					<div class="graph" id="chart" style="width:100%;height:200px;margin-top:20px；margin-left:20px;">
 					</div>
 				</el-col>
 
-				
+
 				<el-col :span="12">
 					<el-row>
 					<el-col :span="24">
@@ -159,7 +159,7 @@
 						</el-col>
 					</el-row>
 				</el-col>
-				
+
 				<el-col :span="22" :offset="2">
 						<div class="partThree">
 						<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" disabled="true">
@@ -405,7 +405,7 @@
 			        	gridIndex:1,
 			        }
 			        ],
-			        
+
 			        grid: [
 			            //
 			            {
@@ -418,7 +418,7 @@
 			            xAxis: [
 			            {
 			            	type: "value",
-			            	name:"",			               
+			            	name:"",
 			            	data: null,
 			            	scale: true,
 			            	boundaryGap: true,
@@ -515,7 +515,7 @@
 			    		if(!this.checkNull(this.tri_dist)&&this.checkFull(this.tri_dist)){
 			    			if(this.checkNull(this.norm_dist)||this.checkNull(this.uni_dist)){
 			    				params.dist.type="triangle";
-			    				params.dist.argv=JSON.stringify(this.tri_dist);
+			    				params.dist.argv=this.tri_dist;
 			    			}
 			    			else{
 			    				this.$notify(onedistMessage)
@@ -524,17 +524,17 @@
 			    		else if(!this.checkNull(this.norm_dist)&&this.checkFull(this.norm_dist)){
 			    			if(this.checkNull(this.tri_dist)||this.checkNull(this.uni_dist)){
 			    				params.dist.type="normal";
-			    				params.dist.argv=JSON.stringify(this.norm_dist);
+			    				params.dist.argv=this.norm_dist;
 			    			}
 			    			else{
 			    				this.$notify(onedistMessage)
 			    			}
-			    			
+
 			    		}
 			    		else if(!this.checkNull(this.uni_dist)&&this.checkFull(this.uni_dist)){
 			    			if(this.checkNull(this.tri_dist)||this.checkNull(this.norm_dist)){
 			    				params.dist.type="uniform";
-			    				params.dist.argv=JSON.stringify(this.uni_dist)
+			    				params.dist.argv=this.uni_dist;
 			    			}
 			    			else{
 			    				this.$notify(onedistMessage)

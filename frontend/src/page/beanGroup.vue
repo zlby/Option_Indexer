@@ -12,11 +12,11 @@
 										<span style="vertical-align:center;margin-top:8px;">
 											时间
 										</span>
-										<el-date-picker v-model="daypicker" 
-											type="date" 
-											placeholder="选择日期时间" 
-											align="right" 
-											:picker-options="pickerOption" 
+										<el-date-picker v-model="daypicker"
+											type="date"
+											placeholder="选择日期时间"
+											align="right"
+											:picker-options="pickerOption"
 											format="yyyy-MM-dd"
 											style="width:80%">
 										</el-date-picker>
@@ -32,8 +32,8 @@
 								</el-col>
 							</el-row>
 						</el-card>
-					</div> 
-					
+					</div>
+
 					<div class="partTwo">
 						<el-row :gutter="20">
 							<el-col :span="12">
@@ -61,7 +61,7 @@
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
 										<span>期权品种</span>
-											<el-select v-model="comboOption.code" class="sel"> 
+											<el-select v-model="comboOption.code" class="sel">
 												<el-option
 												v-for="item in filteredOptions"
 												:key="item"
@@ -73,7 +73,7 @@
 										<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
 										<div class="kind">
 										<span style="margin-left:15px">波动率</span>
-											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05"> 
+											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
 											</el-input-number>
 										</div>
 									</div>
@@ -149,6 +149,7 @@
 						return (vm.futureTimetable[futureCode]>=chosenTime);
 					})
 				},
+
 			},
 			mounted:function(){
   				this.$store.dispatch('getFutureListBalance'),
@@ -269,7 +270,7 @@
 			        xAxis: [
 			            {
 			                type: "value",
-			                name:"当前豆粕现货价格",			               
+			                name:"当前豆粕现货价格",
 			                data: null,
 			                scale: true,
 			                boundaryGap: true,
@@ -466,7 +467,7 @@
 
 	<style lang="less">
 		@import '../style/common';
-	
+
 		.hidden{
 			display:none;
 		}

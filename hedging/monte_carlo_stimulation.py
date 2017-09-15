@@ -11,7 +11,7 @@ from gain_loss.history_vol import history_vol
 
 
 
-def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, time_future:datetime.datetime, dist, time_now = None, max_cost = 50000., fmax:int = 50, omax:int = 50):
+def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, time_future:datetime.datetime, dist, max_cost = 50000., fmax:int = 50, omax:int = 50, time_now = None):
     time_bg = time.clock()
     if time_now is None:
         time_now_with_seconds = datetime.datetime.now()
@@ -48,7 +48,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
     except:
         spot_price_now = Spot.objects.all().order_by('-time')[0].price
 
-    total_asset_tv0 = 10 * (spot_price_now * physicals) + 10 * total_future_tv0 + 10 * total_option_tv0
+    total_asset_tv0 = 10 * (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv0) + 10 * float(total_option_tv0)
 
 
     combo_list = choose_combos(time_future, max_cost, fmax, omax)
@@ -122,20 +122,20 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
 
     if dist['type'] == 'normal':
         for _ in range(20):
-            spot_price_list.append(np.random.normal(dist['argv'][0], dist['argv'][1]))
+            spot_price_list.append(np.random.normal(float(dist['argv'][0]), float(dist['argv'][1])))
     if dist['type'] == 'triangle':
         for _ in range(20):
-            spot_price_list.append(np.random.triangular(dist['argv'][0], dist['argv'][1], dist['argv'][2]))
+            spot_price_list.append(np.random.triangular(float(dist['argv'][0]), float(dist['argv'][1]), float(dist['argv'][2])))
     if dist['type'] == 'uniform':
         for _ in range(20):
-            spot_price_list.append(np.random.uniform(dist['argv'][0], dist['argv'][1]))
+            spot_price_list.append(np.random.uniform(float(dist['argv'][0]), float(dist['argv'][1])))
 
     if len(spot_price_list) != 20:
         return None
 
     for spot_price in spot_price_list:
         for future in futures_in_list:
-            future['price'] = (spot_price + future['u']) * np.exp((np.log(1.03) - future['y']) * t)
+            future['price'] = abs((spot_price + future['u']) * np.exp((np.log(1.03) - future['y']) * t))
 
         for i in range(len(options_in_list)):
             option_code = options_in_list[i]['code']
@@ -170,7 +170,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                         # option['price'] = item['price']
                         total_option_tv += item['price']
 
-            total_asset_tv = 10 * (spot_price_now * physicals) + 10 * total_future_tv + 10 * total_option_tv
+            total_asset_tv = 10 * (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv) + 10 * float(total_option_tv)
             combo['v_list'].append(total_asset_tv)
             combo['v0_minus_v_list'].append(total_asset_tv0 - total_asset_tv)
 
@@ -196,7 +196,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                 combo['P2'] = (i2 + 1) / len(P2_list)
                 break
 
-        combo['score'] = combo['P1'] * w1 + combo['P2'] * w2
+        combo['score'] = float(combo['P1']) * float(w1) + float(combo['P2']) * float(w2)
 
     result_combo = {}
     result_combo['score'] = combo_list[0]['score']

@@ -24,9 +24,9 @@
 						<el-select v-model="choose_agri" style="width:73%">
 							<el-option
 							v-for="item in filteredAgris"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"/>
+							:key="item"
+							:label="item"
+							:value="item"/>
 						</el-select>
 					</el-col>
 					<el-col :span="10" :offset="1" style="margin-top:10px">
@@ -62,16 +62,16 @@
 									<el-col :span="24" class="div-divider"></el-col>
 									<div v-for="(value,key,index) in optionList" class="item" >
 										<el-col :span="7" style="vertical-align:center">
-											<el-tag color="#ff4949">{{ optionList[key].code }}</el-tag>
+											<el-tag color="#ff4949">{{ optionList[key][0] }}</el-tag>
 										</el-col>
 										<el-col :span="7" style="vertical-align:center">
-											<el-tag color="#ff4949">{{ optionList[key].rate }}</el-tag>
+											<el-tag color="#ff4949">{{ optionList[key][1].toFixed(6) }}</el-tag>
 										</el-col>
 										<el-col :span="7" style="vertical-align:center">
-											<el-tag color="#ff4949">{{ optionList[key].coherence }}</el-tag>
+											<el-tag color="#ff4949">{{ optionList[key][2].toFixed(6) }}</el-tag>
 										</el-col>
 										<el-col :span="3">
-											<el-button size="mini" type="success"  style="vertical-align:center" :comboid="optionList[key].code" @click="updateGraph($event)">
+											<el-button size="mini" type="success"  style="vertical-align:center" :comboid="optionList[key][0]" @click="updateGraph($event)">
 												查看
 											</el-button>
 										</el-col>
@@ -87,7 +87,7 @@
 
 			<el-col :span="12" :offset="1">
 				<el-row>
-					<div class="graph" id="chart" style="width:95%;height:600px;border: 4px solid #F9D481;">
+					<div class="graph" id="chart" style="width:95%;height:540px;border: 4px solid #F9D481;">
 					</div>
 				</el-row>
 			</el-col>
@@ -136,15 +136,16 @@
 				return this.$store.state.login.futureTimetable
 			},
 			filteredAgris:function(){
+			    var vm = this
 				var agris=["小白菜", "生菜", "菠菜", "大包菜", "大白菜", "油菜", "茼蒿", "娃娃菜", "生葱", "胡萝卜", "番薯", "白萝卜", "莴笋", "洋葱", "藕", "土豆", "红薯", "黄瓜", "南瓜", "苦瓜", "冬瓜", "西兰花", "西红柿", "丝瓜", "青椒", "圆茄", "西葫芦", "茄子", "尖椒", "小黄瓜", "豆角", "芹菜", "香菜", "姜", "蒜苗", "大蒜", "香菇", "蘑菇", "韭菜", "黄豆芽", "绿豆芽", "玉米", "菜花", "蒜苔", "沙糖桔", "脐橙", "蜜柚", "蜜桔", "柠檬", "红柚", "小木瓜", "珍珠瓜", "无籽西瓜", "黑美人西瓜", "哈密瓜", "黄河蜜瓜", "西瓜", "皇帝香蕉", "海南香蕉", "皇冠梨", "蜜梨", "香梨", "青苹果", "进口蛇果", "贡梨", "花牛", "红富士", "梨", "鸭梨", "苹果", "国产青提", "无籽红提", "红提", "葡萄", "水仙芒果", "牛油果", "甜石榴", "圣女果", "进口山竹", "泰国榴莲", "进口奇异果", "黑甘蔗", "草莓", "菠萝", "柿子", "石榴", "人参果", "火龙果", "青枣", "山楂", "猕猴桃", "芒果", "枣", "板栗", "白香瓜", "木瓜", "鲜枣", "进口青提子", "金奇异果", "韭黄", "芦柑", "进口木瓜", "巨峰葡萄", "进口火龙果", "柿饼", "进口西柚", "进口柠檬", "红桔", "红江橙", "澳橙", "金桔", "胡柚", "贡桔", "甜瓜", "白兰瓜", "香蕉", "水晶红富士", "椰青", "进口龙眼", "进口红芒", "樱桃", "伊丽莎白", "杨梅", "桂圆", "梨枣", "杨桃", "进口红李", "黑布林", "贡柑", "甜橙", "杏", "四川水蜜桃","油桃","红樱桃"];
 				return agris.filter(function(item){
 					return (item.indexOf(vm.query) !== -1)||(item.indexOf(vm.query)!==-1)
 				})
+
+
 			}
 		},
 		mounted:function(){
-			//this.$store.dispatch('getFutureListBalance'),
-			//this.$store.dispatch('getOptionListBalance')
 			this.myChart= echarts.init(document.getElementById('chart'));
 			this.template={
 				"optionPrice":{
@@ -216,14 +217,14 @@
 				{
 					text: '期货与现货价格曲线',
 					subtext:"",
-					left:"5%",
-					top:"2%"
+					left:"7%",
+					top:"0%"
 				},
 				{
 					text: 'Error序列图',
 					subtext:"",
-					left:"5%",
-					top:"57%"
+					left:"7%",
+					top:"50%"
 				}
 				],
 				tooltip: {
@@ -246,7 +247,6 @@
 			                //obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
 			                return obj;
 			            },
-			            extraCssText: 'width: 170px'
 			        },
 			        toolbox: {
 			        	feature: {
@@ -272,50 +272,32 @@
 			        	xAxisIndex: [0]
 			        },
 			        {
-			        	type: "slider",
-			        	show: true,
-			        	start: 0,
-			        	end: 100,
-			        	xAxisIndex: [0],
-			        	top: "50%",
-			        	left:"15%"
-			        },
-			        {
 			        	type: "inside",
 			        	start: 0,
 			        	end: 100,
 			        	xAxisIndex: [1]
 			        },
-			        {
-			        	type: "slider",
-			        	show: true,
-			        	start: 0,
-			        	end: 100,
-			        	xAxisIndex: [1],
-			        	bottom: "3%",
-			        	left:"15%"
-			        },
 			        ],
 			        grid: [
 			            //
 			            {
-			            	left: '5%',
-			            	height: '40%',
-			            	top: "5%",
-			            	width: "90%"
+			            	left: '10%',
+			            	height: '38%',
+			            	top: "10%",
+			            	width: "80%"
 			            },
 			            {
-			            	left: '5%',
-			            	height: '40%',
-			            	top: "55%",
-			            	width: "90%"
+			            	left: '10%',
+			            	height: '38%',
+			            	top: "60%",
+			            	width: "80%"
 			            }
 			            ],
 			            xAxis: [
 			            {
-			            	type: "value",
+			            	type: "category",
 			            	name:"时间",
-			            	data: null,
+			            	data: [new Date("2000-01-01 00:00:00")],
 			            	scale: true,
 			            	boundaryGap: true,
 			            	axisLine: {onZero: false},
@@ -329,7 +311,7 @@
 			            	}
 			            },
 			            {
-			            	type: "value",
+			            	type: "category",
 			            	name:"时间",
 			            	data: null,
 			            	scale: true,
@@ -408,9 +390,10 @@
 			    			agri=this.combo_agri;
 			    		}
 			    		var params={
-			    			agri_type:agri,
-			    			code:comboid
+			    			agri_type:this.choose_agri,
+			    			code: comboid
 			    		}
+			    		var saveThis=this;
 			    		axios.get('/market/cross_breed_hedge/',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
@@ -420,6 +403,8 @@
 			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"期货曲线",data:res.crop_list}))
 			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"现货曲线",data:res.future_list}))
 			    				saveThis.addChartOption(saveThis.createErrorSeries({name:"error序列曲线",data:res.error_list}))
+                  saveThis.myChart.setOption(saveThis.option,true)
+                  console.log(saveThis.option.xAxis);
 			    			}else{
 			    				saveThis.$notify({
 			    					type:"danger",
@@ -441,9 +426,9 @@
 			    			if(res.status.code===0){
 			    				saveThis.optionList=[];
 			    				for(var item in res.future_return){
-			    					saveThis.optionList.push(item);
+			    					saveThis.optionList.push(res.future_return[item]);
 			    				}
-			    				saveThis.combo_agri=this.choose_agri
+			    				saveThis.combo_agri=saveThis.choose_agri
 			    			}else{
 			    				saveThis.$notify({
 			    					type:"danger",
@@ -456,13 +441,46 @@
 			    	createPriceSeries:function(data){
 			    		var series = this.deepClone(this.template.optionPrice);
 			    		series.name = data.name;
-			    		series.data = data.data.map(function(o){
-			    			return [o[0].toFixed(4),o[1].toFixed(4)];
+			    		var processed=data.data.map(function(o){
+			    			return [o[0].slice(0,10)+" "+o[0].slice(11,19),o[1]];
 			    		});
+			    		series.data=processed
 			    		series.xAxisIndex=0;
 			    		series.yAxisIndex=0;
-			    		series.gridIndex=0;
-			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
+			    		series.itemStyle.normal.color=this.randomGenWebSafeColor;
+			    		var newXAxis=[];
+			    		var abre=this.option.xAxis[0].data;
+			    	  var	index=-1;
+			    	  var processedX=processed.map(function(o){
+			    	      return o[0]
+              })
+			    		for(var i=0;i<abre.length;i++){
+			    		    if(abre[i]==processedX[i]){
+			    		        index=i;
+			    		        break;
+                  }
+              }
+              var pLength=processedX.length;
+              if(index==0){
+			    		    for(var i=0;i<pLength;i++){
+			    		        if(abre[0]==processedX[i]){
+			    		            index=i;
+			    		            break
+                      }
+                  }
+                  newXAxis=processedX.slice(0,index).concat(abre);
+              }
+              else if(index==-1){
+                  if(new Date(abre[0]).getTime()>new Date(processedX[0]).getTime()){
+                      newXAxis=processedX.concat(abre);
+                  }else{
+                      newXAxis=abre.concat(processedX);
+                  }
+              }else{
+                  newXAxis=abre.slice(0,index).concat(processedX);
+              }
+              this.option.xAxis[0].data=newXAxis;
+              console.log(newXAxis);
 			    		return {
 			    			name:data.name,
 			    			series:series
@@ -471,13 +489,17 @@
 			    	createErrorSeries:function(data){
 			    		var series = this.deepClone(this.template.optionError);
 			    		series.name = data.name;
-			    		series.data = data.data.map(function(o){
-			    			return [o[0].toFixed(4),o[1].toFixed(4)];
-			    		});;
+			    		var processed=data.data.map(function(o){
+			    			return [o[0].slice(0,10)+" "+o[0].slice(11,19),o[1].toFixed(4)];
+			    		});
+			    		series.data=processed
 			    		series.xAxisIndex=1;
 			    		series.yAxisIndex=1;
-			    		series.gridIndex=1;
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
+			    		this.option.xAxis[1].data=processed.map(function(o){
+			    		    return o[0]
+              })
+			    		console.log(series)
 			    		return {
 			    			name:data.name,
 			    			series:series
@@ -550,11 +572,12 @@
 				popOption: function(optionName){
 					this.popSeries(optionName);
 					this.myChart.setOption(this.option,true);
+
 				},
 				addChartOption:function(data){
 					var series=data.series;
 					this.option.series.push(series);
-					this.myChart.setOption(this.option,true);
+					//this.myChart.setOption(this.option,true);
 				},
 				randomDataGenK:function(){
 					var curX=Math.floor(Math.random()*1000);
@@ -599,4 +622,7 @@
 		span{
 			font-size: 14px;
 		}
+    .div-divider{
+      margin:3px 0px;
+    }
 	</style>

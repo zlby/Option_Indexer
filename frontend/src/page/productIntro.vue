@@ -8,7 +8,7 @@
           <el-menu-item index="/homepageSecond"><i class="el-icon-menu"></i>首页</el-menu-item>
 
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-menu"></i>金融</template>
+            <template slot="title"><i class="el-icon-menu"></i>期权列表</template>
             <el-submenu :index="key" v-for="(value,key,index) in items">
               <template slot="title">{{key}}</template>
 
@@ -19,7 +19,7 @@
                 </el-button>
                 </div>
               </el-menu-item>
-              
+
             </el-submenu>
 
           </el-submenu>
@@ -78,7 +78,7 @@
         var future = btn.parentNode.parentNode.parentNode.parentNode.children[0].innerText.trim();
         var option = btn.parentNode.parentNode.innerText.trim();
         var optionObj = {'future': future, 'option': option};
-          
+
         if (hasClass(btn, 'el-button--primary')) { // 添加，加号变减号
           removeClass(btn, 'el-button--primary');
           addClass(btn, 'el-button--danger');

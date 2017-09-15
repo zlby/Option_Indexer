@@ -1,11 +1,7 @@
 <template style="min-width:800px">
     <el-row>
-        <el-col :span="20">
-            <div id="option" style="width:100%;height:600px; margin:20px 0px;">
-            </div>
-        </el-col>
         <el-col :span="20" style="margin-top:20px">
-            
+
             <div class="el-col el-col-9 el-col-xs-9 el-col-sm-9 el-col-md-9 el-col-lg-9 ">
                 <el-date-picker
                   v-model="daypicker"
@@ -22,7 +18,7 @@
                 <el-radio-button label="day">日</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
             </el-radio-group>
             </el-col>
-            
+
             <el-col :span="4">
             <el-button type="success" size="large" style="position:relative;bottom:0px;" @click="changeDataFormat">确认数据展现格式</el-button>
             </el-col>
@@ -80,7 +76,7 @@
     },
     created:function(){
         var saveThis=this;
-        Bus.$on('addNewOption', optionObj=>{                        
+        Bus.$on('addNewOption', optionObj=>{
             saveThis.readyCombinedOption.push(optionObj.option);
             if(this.futureDataGet.indexOf(optionObj.future)===-1){
                 axios.get('/market/future/'+optionObj.future+'/treading/',{
@@ -161,7 +157,7 @@
         }).then(function(res){
             saveThis.createMapData(res.data);
             //saveThis.future[res.data.status.data.future.code]=saveThis.splitAppendData(res.data);
-            
+
         })*/
         axios.get('/market/futures/').then(function(res){
             res=res.data;
@@ -265,7 +261,7 @@
         title:[
         {
             text: '期货数据',
-            subtext:"请选择期权", 
+            subtext:"请选择期权",
             left:"10%",
             top:"0%"
         },
@@ -586,7 +582,7 @@ changeDataFormat:function(){
     this.resetChart();
     var startTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[0]);
     var endTime=echarts.format.formatTime("yyyy-MM-dd hh:mm",this.daypicker[1]);
-    
+
     if(this.interval=="hour"){
         var dataType="小时";
     }else{
