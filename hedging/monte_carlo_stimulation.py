@@ -254,7 +254,7 @@ def choose_combos(time_future:datetime.datetime, max_cost:float=50000, fmax=50, 
     for item in query_o:
         dict_ocp = {}
         dict_ocp['code'] = item.code
-        dict_ocp['current_price'] = HourOptionTreadingData.objects.filter(option=dict_ocp['code']).order_by('-time')[0].close_price
+        dict_ocp['current_price'] = OptionTreadingData.objects.filter(option=dict_ocp['code']).order_by('-time')[0].close_price
         dict_ocp['deposit_today'] = Option.objects.get(code=dict_ocp['code']).deposit_today
         dict_ocp['volatility'] = history_vol(dict_ocp['code'])
         option_code_price_deposit_list.append(dict_ocp)
