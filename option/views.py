@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 from option.models import Future, Option, News, Intervals
 from gain_loss import asset_portfolio
-from hedging import monte_carlo_stimulation
+from hedging import monte_carlo_stimulation, spot_price_distribution
 from cross_breed_hedge import cross_breed
 
 
@@ -238,6 +238,33 @@ def get_future_delivery_day_list(request):
         result['future_list'] = Future.get_future_and_delivery_day_list()
         status['message'] = '获取成功'
         return JsonResponse(result, status=200)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_distribution(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        dis_type = request.GET.get('type')
+        argv = request.GET.get('argv')
+
+        if dis_type and argv:
+            if dis_type is "normal":
+                result['distribution'] = spot_price_distribution.show_normal_distribution(argv[0], argv[1])
+            elif dis_type is "triangle":
+                result['distribution'] = spot_price_distribution.show_triangle_distribution(argv[0], argv[1], argv[2])
+            elif dis_type is "uniform":
+                result['distribution'] = spot_price_distribution.show_uniform_distribution(argv[0], argv[1])
+            status['message'] = '获取成功'
+            return JsonResponse(result, status=200)
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
     else:
         # http方法不支持
         status['code'] = 405
