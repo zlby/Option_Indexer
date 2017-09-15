@@ -496,7 +496,7 @@
 			    			physicals:this.currentHold,
 			    			future_list:JSON.stringify(this.comboFutures),
 			    			option_list:JSON.stringify(this.comboOptions),
-			    			t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
+			    			time_future:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
 			    			w1:this.radio1,
 			    			w2:this.radio2,
 			    			max_cost:this.max_cost,
