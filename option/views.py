@@ -293,18 +293,18 @@ def get_hedging(request):
                 return JsonResponse(result, status=400)
 
             if not isinstance(max_cost, float):
-                max_cost = None
+                max_cost = 50000
             if not isinstance(fmax, int):
-                fmax = None
+                fmax = 50
             if not isinstance(omax, int):
-                omax = None
+                omax = 50
 
             future_r, option_r = \
                 monte_carlo_stimulation.monte_carlo(future_list, option_list, physicals,
                                                     w1, w2, time_future, dist, max_cost, fmax, omax)
             result['future_list'] = future_r
             result['option_list'] = option_r
-            status['message'] = '获取成功'
+            status['message'] = 'Success'
             return JsonResponse(result, status=200)
         else:
             status['code'] = -2
