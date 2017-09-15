@@ -23,7 +23,7 @@
 						<span>现货&nbsp&nbsp&nbsp</span>
 						<el-select v-model="choose_agri" style="width:73%">
 							<el-option
-							v-for="item in filteredFutures"
+							v-for="item in filteredAgris"
 							:key="item.value"
 							:label="item.label"
 							:value="item.value"/>
