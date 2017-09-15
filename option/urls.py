@@ -9,6 +9,9 @@ urlpatterns = [
     url(r'^option/(\w+)/possible_combo/$', views.get_possible_combo),
     url(r'^options/treading_data', views.get_option_treading_data),
     url(r'^asset_evaluation/$', views.get_asset_evaluation),
+    url(r'^hedging/$', views.get_hedging),
+    url(r'^choose_future/$', views.choose_future),
+    url(r'^cross_breed_hedge/$', views.get_cross_breed_hedge),
     url(r'^future_time/$', views.get_future_delivery_day_list),
     url(r'^news/$', views.get_news),
 ]

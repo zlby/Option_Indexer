@@ -1,4 +1,3 @@
-<<<<<<< HEAD:hedging/calculate_hedge_cost.pyx
 # encoding = utf-8
 cdef:
     int CODE = 0
@@ -6,7 +5,6 @@ cdef:
     int DEPOSIT = 2
     int PRICE = 3
     float _calculate_sum_cost(list lots, list deposit, int size):
-=======
 # HEDGE COST=
 # Σ （各看涨期权空头持有手数*对应看涨期权空头保证金）
 # +Σ（各看跌期权空头持有手数*对应看跌期权保证金）
@@ -23,7 +21,6 @@ PRICE = 'price' #3
 
 cdef:
     float _calculate_sum_cost(list lots, list deposit):
->>>>>>> a8b8f2e1c441519f6dfca5902eacc0d62dc5c2cc:algorithm/prediction/data_analyzer/calculate_hedge_cost.pyx
         cdef float _sum = 0.
         for x,y in zip(lots,deposit):
             _sum += x * y

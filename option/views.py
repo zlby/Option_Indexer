@@ -3,6 +3,9 @@ import json
 from datetime import datetime
 from option.models import Future, Option, News, Intervals
 from gain_loss import asset_portfolio
+from hedging import monte_carlo_stimulation
+from cross_breed_hedge import cross_breed
+
 
 # Create your views here.
 
@@ -192,8 +195,8 @@ def get_asset_evaluation(request):
         physicals = request.GET.get('physicals')
         option_list = request.GET.get('option_list')
         future_list = request.GET.get('future_list')
-        if t1 and physicals\
-                and option_list\
+        if t1 and physicals \
+                and option_list \
                 and future_list:
             try:
                 t1 = datetime.strptime(t1, datetime_format)
@@ -235,6 +238,134 @@ def get_future_delivery_day_list(request):
         result['future_list'] = Future.get_future_and_delivery_day_list()
         status['message'] = '获取成功'
         return JsonResponse(result, status=200)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_hedging(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        datetime_format = '%Y-%m-%d'
+        future_list = request.GET.get('future_list')
+        option_list = request.GET.get('option_list')
+        physicals = request.GET.get('physicals')
+        w1 = request.GET.get('w1')
+        w2 = request.GET.get('w2')
+        time_future = request.GET.get('time_future')
+        dist = request.GET.get('dist')
+        max_cost = request.GET.get('max_cost')
+        fmax = request.GET.get('fmax')
+        omax = request.GET.get('omax')
+
+        if future_list and option_list \
+                and physicals \
+                and w1 and w2 \
+                and time_future \
+                and dist:
+            try:
+                time_future = datetime.strptime(time_future, datetime_format)
+            except ValueError:
+                status['code'] = -12
+                status['message'] = 'time_format_not_right'
+                return JsonResponse(result, status=400)
+            try:
+                future_list = list(json.loads(future_list))
+            except (TypeError, json.JSONDecodeError):
+                status['code'] = -12
+                status['message'] = 'future list format not right'
+                return JsonResponse(result, status=400)
+            try:
+                option_list = list(json.loads(option_list))
+            except (TypeError, json.JSONDecodeError):
+                status['code'] = -12
+                status['message'] = 'option list format not right'
+                return JsonResponse(result, status=400)
+
+            try:
+                dist = list(json.loads(dist))
+            except (TypeError, json.JSONDecodeError):
+                status['code'] = -12
+                status['message'] = 'dist format not right'
+                return JsonResponse(result, status=400)
+
+            if not isinstance(max_cost, float):
+                max_cost = None
+            if not isinstance(fmax, int):
+                fmax = None
+            if not isinstance(omax, int):
+                omax = None
+
+            future_r, option_r = \
+                monte_carlo_stimulation.monte_carlo(future_list, option_list, physicals,
+                                                    w1, w2, time_future, dist, max_cost, fmax, omax)
+            result['future_list'] = future_r
+            result['option_list'] = option_r
+            status['message'] = '获取成功'
+            return JsonResponse(result, status=200)
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def choose_future(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        datetime_format = '%Y-%m-%d'
+        agri_type = request.GET.get('agri_type')
+        time_future = request.GET.get('time_future')
+
+        if agri_type and time_future:
+            try:
+                time_future = datetime.strptime(time_future, datetime_format)
+            except ValueError:
+                status['code'] = -12
+                status['message'] = 'time_format_not_right'
+                return JsonResponse(result, status=400)
+            result['future_return'] = cross_breed.choose_futures(agri_type, time_future)
+            status['message'] = '获取成功'
+            return JsonResponse(result, status=200)
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
+    else:
+        # http方法不支持
+        status['code'] = 405
+        status['message'] = 'http method not supported'
+        return JsonResponse(result, status=405)
+
+
+def get_cross_breed_hedge(request):
+    status = {'code': 0, 'message': 'unknown'}
+    result = {'status': status}
+    if request.method == 'GET':
+        agri_type = request.GET.get('agri_type')
+        code = request.GET.get('code')
+
+        if agri_type and code:
+            crop_r = cross_breed.show_crop_diagram(agri_type)
+            future_r = cross_breed.show_future_diagram(code)
+            error_r = cross_breed.show_error_diagram(agri_type, code)
+            result['future_list'] = future_r
+            result['crop_list'] = crop_r
+            result['error_list'] = error_r
+            status['message'] = '获取成功'
+            return JsonResponse(result, status=200)
+        else:
+            status['code'] = -2
+            status['message'] = 'need more argument'
+            return JsonResponse(result, status=400)
     else:
         # http方法不支持
         status['code'] = 405
