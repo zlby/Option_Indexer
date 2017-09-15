@@ -287,7 +287,7 @@ def get_hedging(request):
 
             try:
                 dist = dict(json.loads(dist))
-                dist['argv'] = list(json.load(dist['argv']))
+                dist['argv'] = list(dist['argv'])
             except (TypeError, json.JSONDecodeError):
                 status['code'] = -12
                 status['message'] = 'dist format not right'
