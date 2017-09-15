@@ -36,6 +36,8 @@ def choose_futures(type:str, time_future:datetime.datetime):
 
     for code in future_code_list:
         query = FutureTreadingData.objects.filter(future=code).order_by('-time')[:500]
+        if len(query) != 500:
+            continue
         future_list = []
         for item in query:
             future_list.insert(0, item.close_price)
