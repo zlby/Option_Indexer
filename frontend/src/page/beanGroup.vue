@@ -215,7 +215,6 @@
 			                //obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
 			                return obj;
 			            },
-			            extraCssText: 'width: 170px'
 			        },
 			        toolbox: {
 			            feature: {
@@ -296,13 +295,13 @@
 			                axisLine: {show: true},
 			                axisTick: {show: true},
 			                splitLine: {show: true},
-			                axisPointer: {
+			                /*axisPointer: {
 			                    label: {
 			                        formatter: function (params) {
 			                            return params.value.toFixed(4);
 			                        }
 			                    }
-			                }
+			                }*/
 			            }
 			        ],
 			        animationThreshold: 1000,
@@ -338,8 +337,6 @@
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
 							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
-							saveThis.comboFutures=[];
-							saveThis.comboOptions=[];
 						}else{
 							saveThis.$notify({
 								type:"danger",
@@ -352,7 +349,9 @@
 				createSeries:function(data){
 				    var series = this.deepClone(this.template.optionK);
 				    series.name = data.name;
-				    series.data = data.data;
+				    series.data = data.data.map(function(o){
+				    	return [o[0].toFixed(2),o[1].toFixed(2)];
+				    });
 				    series.xAxisIndex=0;
 				    series.yAxisIndex=0;
 				    return {

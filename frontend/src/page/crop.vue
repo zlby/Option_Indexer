@@ -114,12 +114,12 @@
 						</el-col>
 						<el-col :span="6">
 							<span>μ&nbsp&nbsp</span>
-							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
+							<el-input v-model="norm_dist[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="12">
 							<span>σ&nbsp&nbsp</span>
-							<el-input v-model="dist.argv[1]" size="small" style="width:25%"></el-input>
+							<el-input v-model="norm_dist[1]" size="small" style="width:25%"></el-input>
 						</el-col>
 
 					</el-row>
@@ -131,17 +131,17 @@
 
 						<el-col :span="6">
 							<span>a&nbsp&nbsp</span>
-							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
+							<el-input v-model="tri_dist[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="6">
 							<span>b&nbsp&nbsp</span>
-							<el-input v-model="dist.argv[2]" size="small" style="width:50%"></el-input>
+							<el-input v-model="tri_dist[2]" size="small" style="width:50%"></el-input>
 						</el-col>
 
 						<el-col :span="6">
 							<span>c</span>
-							<el-input v-model="dist.argv[1]" size="small" style="width:50%"></el-input>
+							<el-input v-model="tri_dist[1]" size="small" style="width:50%"></el-input>
 						</el-col>
 					</el-row>
 
@@ -151,16 +151,15 @@
 						</el-col>
 						<el-col :span="6">
 							<span>u1</span>
-							<el-input v-model="dist.argv[0]" size="small" style="width:50%"></el-input>
+							<el-input v-model="uni_dist[0]" size="small" style="width:50%"></el-input>
 						</el-col>
 						<el-col :span="12">
 							<span>u2</span>
-							<el-input v-model="dist.argv[1]" size="small" style="width:25%"></el-input>
+							<el-input v-model="uni_dist[1]" size="small" style="width:25%"></el-input>
 						</el-col>
 					</el-row>
 				</el-col>
 				
-				<el-row>
 				<el-col :span="22" :offset="2">
 						<div class="partThree">
 						<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" disabled="true">
@@ -168,7 +167,6 @@
 						</el-button>
 					</div>
 				</el-col>
-				</el-row>
 
 				<el-col :span="22" :offset="2">
 					<div>
@@ -227,7 +225,7 @@
 								<span>套期保值成本上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input v-model="max_cost" style="width:20%;"></el-input>
+								<el-input-number v-model="max_cost" style="width:30%;"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -236,7 +234,7 @@
 								<span>豆粕期货单边持仓上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input v-model="fmax" style="width:20%"></el-input>
+								<el-input-number v-model="fmax" style="width:30%"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -245,7 +243,7 @@
 								<span>豆粕期权单边持仓下限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input v-model="omax" style="width:20%"></el-input>
+								<el-input-number v-model="omax" style="width:30%"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -279,14 +277,14 @@
 				comboFutures:[],
 				comboOptions:[],
 				currentHold:0,
-				w2: 5,
-				w1: 5,
+				radio2: 5,
+				radio1: 5,
 				max_cost:0,
 				fmax:0,
 				omax:0,
-				tri_dist:[null,null,null],
-				norm_dist:[null,null],
-				uni_dist:[null,null],
+				tri_dist:['','',''],
+				norm_dist:['',''],
+				uni_dist:['',''	],
 				daypicker: new Date(),
 				pickerOption: {
 					shortcuts: [{
@@ -499,8 +497,8 @@
 			    			future_list:JSON.stringify(this.comboFutures),
 			    			option_list:JSON.stringify(this.comboOptions),
 			    			t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
-			    			w1:this.w1,
-			    			w2:this.w2,
+			    			w1:this.radio1,
+			    			w2:this.radio2,
 			    			max_cost:this.max_cost,
 			    			fmax:this.fmax,
 			    			omax:this.omax,
@@ -514,8 +512,8 @@
 			    			title:"注意",
 			    			message:"一次显示只能选择一种分布，请删除别的分布的参数"
 			    		}
-			    		if(!checkNull(this.tri_dist)&&checkFull(this.tri_dist)){
-			    			if(checkNull(this.norm_dist)||checkNull(this.uni_dist)){
+			    		if(!this.checkNull(this.tri_dist)&&this.checkFull(this.tri_dist)){
+			    			if(this.checkNull(this.norm_dist)||this.checkNull(this.uni_dist)){
 			    				params.dist.type="triangle";
 			    				params.dist.argv=JSON.stringify(this.tri_dist);
 			    			}
@@ -523,8 +521,8 @@
 			    				this.$notify(onedistMessage)
 			    			}
 			    		}
-			    		else if(!checkNull(this.norm_dist)&&checkFull(this.norm_dist)){
-			    			if(checkNull(this.tri_dist)||checkNull(this.uni_dist)){
+			    		else if(!this.checkNull(this.norm_dist)&&this.checkFull(this.norm_dist)){
+			    			if(this.checkNull(this.tri_dist)||this.checkNull(this.uni_dist)){
 			    				params.dist.type="normal";
 			    				params.dist.argv=JSON.stringify(this.norm_dist);
 			    			}
@@ -533,8 +531,8 @@
 			    			}
 			    			
 			    		}
-			    		else if(!checkNull(this.uni_dist)&&checkFull(this.uni_dist)){
-			    			if(checkNull(this.tri_dist)||checkNull(this.norm_dist)){
+			    		else if(!this.checkNull(this.uni_dist)&&this.checkFull(this.uni_dist)){
+			    			if(this.checkNull(this.tri_dist)||this.checkNull(this.norm_dist)){
 			    				params.dist.type="uniform";
 			    				params.dist.argv=JSON.stringify(this.uni_dist)
 			    			}
@@ -549,7 +547,7 @@
 			    			})
 			    			return ;
 			    		}
-			    		console.log(params)
+			    		console.log(typeof(params.max_cost),typeof(params.fmax),typeof(params.omax))
 			    		if(typeof(params.max_cost)!="number"){
 			    			params.max_cost=null;
 			    		}

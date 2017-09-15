@@ -31,6 +31,11 @@
             </el-col>
 
         </el-col>
+
+                <el-col :span="20" :offset="4">
+            <div id="option" style="width:100%;height:600px; margin-top:30px;">
+            </div>
+        </el-col>
     </el-row>
 </template>
 
@@ -261,25 +266,25 @@
         {
             text: '期货数据',
             subtext:"请选择期权", 
-            left:"5%",
+            left:"10%",
             top:"0%"
         },
         {
             text: '期权数据',
             subtext:"请选择期权",
-            left:"5%",
+            left:"10%",
             top:"45%"
         },
         {
             text: '期权隐含波动率',
             subtext:"请选择期权",
-            left:"55%",
+            left:"60%",
             top:"0%"
         },
         {
             text: '隐含波动率之差',
             subtext:"需选择两个期权",
-            left:"55%",
+            left:"60%",
             top:"45%"
         }
         ],
@@ -322,7 +327,7 @@
         {
             data:[],
             bottom: "6%",
-            left: "5%",
+            left: "10%",
             icon: "roundRect",
             gridIndex:1,
         }
@@ -349,25 +354,25 @@
         grid: [
             //
             {
-                left: '5%',
+                left: '10%',
                 height: '30%',
                 top: "10%",
                 width: "40%"
             },
             {
-                left: '5%',
+                left: '10%',
                 bottom: '15%',
                 height: '30%',
                 width: "40%"
             },
             {
-                left: '55%',
+                left: '60%',
                 top: '10%',
                 height: '30%',
                 width: "40%"
             },
             {
-                left: '55%',
+                left: '60%',
                 bottom: '15%',
                 height: '30%',
                 width: "40%"
