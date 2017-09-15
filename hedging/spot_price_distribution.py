@@ -2,7 +2,6 @@
 # import datetime
 import numpy as np
 import scipy.stats as stats
-import matplotlib.pyplot as pl
 
 #正态分布：
 def show_normal_distribution(mean, sigma):
