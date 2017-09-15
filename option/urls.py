@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^cross_breed_hedge/$', views.get_cross_breed_hedge),
     url(r'^future_time/$', views.get_future_delivery_day_list),
     url(r'^news/$', views.get_news),
+    url(r'^distributions/$', views.get_distribution)
 ]
