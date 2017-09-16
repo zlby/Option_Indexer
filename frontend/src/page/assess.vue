@@ -47,7 +47,7 @@
 								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
 								<el-row style="margin-top:10px">
 									<el-col :span="6" :offset="1" style="vertical-align:center">
-										现货名称
+										期货名称
 									</el-col>
 									<el-col :span="6" :offset="1" style="vertical-align:center">
 										买入卖出比
