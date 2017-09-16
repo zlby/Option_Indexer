@@ -250,7 +250,7 @@
 
 						<el-row style="margin-top:10px">
 							<el-col :span="6" style="margin-top:8px">
-								<span>豆粕期权单边持仓下限</span>
+								<span>豆粕期权单边持仓上限</span>
 							</el-col>
 							<el-col :span="18">
 								<el-input-number v-model="omax" style="width:30%"></el-input-number>
@@ -490,7 +490,6 @@
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
-			    				saveThis.popSeries(dis_name);
 			    				saveThis.addChartOption(saveThis.createSeries({name:dis_name,data:res.distribution}))
 			    			}
 			    			else{
@@ -523,11 +522,14 @@
 			    				argv:JSON.stringify(this.uni_dist)
 			    			})
 						}
+						this.popSeries("三角分布")
+              this.popSeries("正态分布")
+              this.popSeries("均匀分布")
 			    	},
 			    	checkNull:function(array){
 			    		var isNull=true;
 			    		for(var i=0;i<array.length;i++){
-			    			if(array[i]!=null||array[i]!=""){
+			    			if(array[i]!=""){
 			    			    isNull=false;
 			    			}else{
 
@@ -538,7 +540,7 @@
 			    	checkFull:function(array){
 			    		var isFull=true;
 			    		for(var i=0;i<array.length;i++){
-			    			if(array[i]==null||array[i]==""){
+			    			if(array[i]==""){
 			    			    isFull=false;
 			    			}else{
 
@@ -608,7 +610,6 @@
 			    			})
 			    			return ;
 			    		}
-			    		console.log(typeof(params.max_cost),typeof(params.fmax),typeof(params.omax))
 			    		if(typeof(params.max_cost)!="number"){
 			    			params.max_cost=null;
 			    		}
@@ -618,15 +619,18 @@
 			    		if(typeof(params.omax)!="number"){
 			    			params.omax=null;
 			    		}
+			    		console.log(this.tri_dist,this.norm_dist,this.uni_dist)
+              console.log(this.checkNull(this.tri_dist),this.checkNull(this.norm_dist),this.checkNull(this.uni_dist))
 			    		var saveThis=this
-			    		axios.get('/market/hedging/',{params:params}).then(function(res){
-			    			res=res.data;
-			    			if(res.status.code===0){
-			    				saveThis.$notify({
+              saveThis.$notify({
 			    					type:"success",
 			    					title:"成功",
 			    					message:"我们的服务器正在为您计算套保策略，这可能会需要几分钟，我们会将结果发送至您的邮箱中"
 			    				})
+			    		axios.get('/market/hedging/',{params:params}).then(function(res){
+			    			res=res.data;
+			    			if(res.status.code===0){
+
 			    			}
 			    			else if(res.status.code===-6){
 			    				saveThis.$notify({

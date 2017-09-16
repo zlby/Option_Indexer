@@ -251,7 +251,7 @@ def get_distribution(request):
     if request.method == 'GET':
         dis_type = request.GET.get('type')
         argv = request.GET.get('argv')
-
+        argv = list(json.loads(argv))
         if dis_type and argv:
             if dis_type == "normal":
                 result['distribution'] = spot_price_distribution.show_normal_distribution(argv[0], argv[1])

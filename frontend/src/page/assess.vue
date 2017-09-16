@@ -447,7 +447,7 @@
 			    		series.data=processed
 			    		series.xAxisIndex=0;
 			    		series.yAxisIndex=0;
-			    		series.itemStyle.normal.color=this.randomGenWebSafeColor;
+			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		var newXAxis=[];
 			    		var abre=this.option.xAxis[0].data;
 			    	  var	index=-1;
