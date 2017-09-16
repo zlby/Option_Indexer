@@ -46,13 +46,13 @@
 							<el-card style="height:335px; width:95%">
 								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
 								<el-row style="margin-top:10px">
-									<el-col :span="7" style="vertical-align:center">
+									<el-col :span="6" :offset="1" style="vertical-align:center">
 										现货名称
 									</el-col>
-									<el-col :span="7" style="vertical-align:center">
+									<el-col :span="6" :offset="1" style="vertical-align:center">
 										买入卖出比
 									</el-col>
-									<el-col :span="7" style="vertical-align:center">
+									<el-col :span="6" :offset="1" style="vertical-align:center">
 										相关系数
 									</el-col>
 									<el-col :span="3">
@@ -61,13 +61,13 @@
 								</el-row>
 									<el-col :span="24" class="div-divider"></el-col>
 									<div v-for="(value,key,index) in optionList" class="item" >
-										<el-col :span="7" style="vertical-align:center">
+										<el-col :span="6" :offset="1" style="vertical-align:center">
 											<el-tag color="#ff4949">{{ optionList[key][0] }}</el-tag>
 										</el-col>
-										<el-col :span="7" style="vertical-align:center">
+										<el-col :span="6" :offset="1" style="vertical-align:center">
 											<el-tag color="#ff4949">{{ optionList[key][1].toFixed(6) }}</el-tag>
 										</el-col>
-										<el-col :span="7" style="vertical-align:center">
+										<el-col :span="6" :offset="1" style="vertical-align:center">
 											<el-tag color="#ff4949">{{ optionList[key][2].toFixed(6) }}</el-tag>
 										</el-col>
 										<el-col :span="3">
@@ -87,7 +87,7 @@
 
 			<el-col :span="12" :offset="1">
 				<el-row>
-					<div class="graph" id="chart" style="width:95%;height:540px;border: 4px solid #F9D481;">
+					<div class="graph" id="assesschart" style="width:95%;height:540px;border: 3px solid #F9D481;border-radius: 6px;">
 					</div>
 				</el-row>
 			</el-col>
@@ -146,7 +146,7 @@
 			}
 		},
 		mounted:function(){
-			this.myChart= echarts.init(document.getElementById('chart'));
+			this.myChart= echarts.init(document.getElementById('assesschart'));
 			this.template={
 				"optionPrice":{
 					name: null,
@@ -282,13 +282,13 @@
 			            //
 			            {
 			            	left: '10%',
-			            	height: '38%',
+			            	height: '36%',
 			            	top: "10%",
 			            	width: "80%"
 			            },
 			            {
 			            	left: '10%',
-			            	height: '38%',
+			            	height: '36%',
 			            	top: "60%",
 			            	width: "80%"
 			            }
@@ -617,7 +617,7 @@
 			border-radius: 6px;
 			border: 3px solid #F9D481;
 			background:rgba(0, 0, 0, 0);
-			height:575px;
+			height:548px;
 		}
 		span{
 			font-size: 14px;

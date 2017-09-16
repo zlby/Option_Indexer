@@ -89,8 +89,8 @@
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="14">
-					<div class="graph" id="chart" style="width:100%;height:600px;margin-top:20px；margin_left:50px">
+				<el-col :span="13" :offset="1" v-loading="loading" element-loading-text="拼命加载中">
+					<div class="graph"  id="beanchart" style="width:100%;height:600px;margin-top:20px">
 					</div>
 				</el-col>
 			</div>
@@ -122,6 +122,7 @@
 			            }
 			          }]
 			        },
+          loading:false
 				}
 			},
 			computed:{
@@ -154,7 +155,7 @@
 			mounted:function(){
   				this.$store.dispatch('getFutureListBalance'),
   				this.$store.dispatch('getOptionListBalance')
-				this.myChart= echarts.init(document.getElementById('chart'));
+				this.myChart= echarts.init(document.getElementById('beanchart'));
 			    this.template={
 			        "optionK":{
 			            name: null,
@@ -187,8 +188,8 @@
 			            {
 			                text: '损益图',
 			                subtext:"",
-			                left:"10%",
-			                top:"4%"
+			                left:"5%",
+			                top:"0%"
 			            }
 			        ],
 			        tooltip: {
@@ -254,17 +255,17 @@
 			                start: 0,
 			                end: 100,
 			                xAxisIndex: [0],
-			                bottom: "10%",
-			                left:"15%"
+			                bottom: "5%",
+			                left:"10%"
 			            }
 			        ],
 			        grid: [
 			            //
 			            {
-			                left: '15%',
-			                height: '60%',
-			                top: "20%",
-			                width: "60%"
+			                left: '10%',
+			                height: '75%',
+			                top: "10%",
+			                width: "75%"
 			            }
 			        ],
 			        xAxis: [
@@ -338,6 +339,7 @@
 						if(res.status.code===0){
 							saveThis.popOption("资产组合")
 							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
+              saveThis.loading=false;
 						}else{
 							saveThis.$notify({
 								type:"danger",
@@ -346,6 +348,7 @@
 							})
 						}
 					})
+        this.loading = true;
 				},
 				createSeries:function(data){
 				    var series = this.deepClone(this.template.optionK);
@@ -501,7 +504,7 @@
 			padding-bottom: 10px;
 			padding-left: 12px;
 		  width: 95%;
-		height: 370px;
+		height: 380px;
 		border-radius: 5px;
 		border: 2px solid #2C2E3B;
 		overflow: auto;

@@ -262,7 +262,7 @@ def get_distribution(request):
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
         else:
-            status['code'] = -2
+            status['code'] = -24
             status['message'] = 'need more argument'
             return JsonResponse(result, status=400)
     else:

@@ -83,23 +83,23 @@
 					</el-row>
 				</div>
 
-				<div class="partThree">
-					<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" @click="confirmCombo">
-						<div style="color: #656565;font-size: 24px">开&nbsp&nbsp&nbsp始</div></el-button>
-					</div>
+				<!--<div class="partThree">-->
+					<!--<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" @click="confirmCombo">-->
+						<!--<div style="color: #656565;font-size: 24px">开&nbsp&nbsp&nbsp始</div></el-button>-->
+					<!--</div>-->
 				</div>
 			</el-col>
 
 			<el-col :span="14">
 
 				<el-col :span="12">
-					<div class="graph" id="chart" style="width:100%;height:200px;margin-top:20px；margin-left:20px;">
+					<div class="graph" id="cropchart" style="width:100%;height:200px;margin-top:20px；margin-left:20px;">
 					</div>
 				</el-col>
 
 
 				<el-col :span="12">
-					
+
 					<el-row style="margin-top:10px">
 						<el-col :span="6" style="margin-top:8px;">
 							<p>正态分布</p>
@@ -159,15 +159,15 @@
 							</div>
 						</el-col>
 					</el-row>
-					<el-row>
-						<el-col :span="24">
-							<div class="partThree">
-							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px">
-							<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
-							</el-button>
-							</div>
-						</el-col>
-					</el-row>
+					<!--<el-row>-->
+						<!--<el-col :span="24">-->
+							<!--<div class="partThree">-->
+							<!--<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px">-->
+							<!--<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>-->
+							<!--</el-button>-->
+							<!--</div>-->
+						<!--</el-col>-->
+					<!--</el-row>-->
 				</el-col>
 
 				<el-col :span="22" :offset="2">
@@ -262,7 +262,7 @@
 
 				<el-col :span="24">
 					<div class="partThree">
-						<el-button class="el-col el-col-xs-12 el-col-md-12 el-col-sm-12 el-col-lg-12" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-left:250px">
+						<el-button class="el-col el-col-xs-12 el-col-md-12 el-col-sm-12 el-col-lg-12" @click="confirmCombo" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-left:250px">
 							<div style="color: #656565;font-size: 20px">生成套期保值最优决策</div></el-button>
 					</div>
 				</el-col>
@@ -335,7 +335,7 @@
 		mounted:function(){
 			this.$store.dispatch('getFutureListBalance'),
 			this.$store.dispatch('getOptionListBalance')
-			this.myChart= echarts.init(document.getElementById('chart'));
+			this.myChart= echarts.init(document.getElementById('cropchart'));
 			this.template={
 				"optionK":{
 					name: null,
@@ -487,7 +487,7 @@
 			    		if(params.type=="uniform"){
 			    			dis_name="均匀分布"
 			    		}
-			    		axios.get('/distribution',{params:params}).then(function(res){
+			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
 			    				saveThis.popSeries(dis_name);
@@ -501,34 +501,36 @@
 			    				})
 			    			}
 			    		})
-			    	}
+			    	},
 			    	updateGraph:function(){
 			    		var full=[this.checkFull(this.tri_dist),this.checkFull(this.norm_dist),this.checkFull(this.uni_dist)];
+			    		console.log(full,this.checkFull(this.norm_dist),this.checkFull(this.norm_dist))
 			    		if(full[0]){
-			    			sendDispReq({
+			    			this.sendDispReq({
 			    				type:"triangle",
 			    				argv:JSON.stringify(this.tri_dist)
 			    			})
 			    		}
 						if(full[1]){
-							sendDispReq({
+							this.sendDispReq({
 			    				type:"normal",
 			    				argv:JSON.stringify(this.norm_dist)
 			    			})
 						}
 						if(full[2]){
-							sendDispReq({
+							this.sendDispReq({
 			    				type:"uniform",
 			    				argv:JSON.stringify(this.uni_dist)
 			    			})
 						}
-			    	}
+			    	},
 			    	checkNull:function(array){
 			    		var isNull=true;
 			    		for(var i=0;i<array.length;i++){
-			    			if(array[i]===null||array[i]===""){
+			    			if(array[i]!=null||array[i]!=""){
+			    			    isNull=false;
 			    			}else{
-			    				isNull=false;
+
 			    			}
 			    		}
 			    		return isNull;
@@ -536,9 +538,10 @@
 			    	checkFull:function(array){
 			    		var isFull=true;
 			    		for(var i=0;i<array.length;i++){
-			    			if(array[i]!==null||array[i]!==""){
+			    			if(array[i]==null||array[i]==""){
+			    			    isFull=false;
 			    			}else{
-			    				isFull=false;
+
 			    			}
 			    		}
 			    		return isFull;
@@ -797,7 +800,7 @@
 			padding-bottom: 10px;
 			padding-left: 12px;
 			width: 95%;
-			height: 370px;
+			height: 415px;
 			border-radius: 5px;
 			border: 2px solid #2C2E3B;
 			overflow: auto;

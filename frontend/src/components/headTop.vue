@@ -7,13 +7,13 @@
       <el-col :span="1" :offset="2">
          <el-menu-item index="/">
           <img src="../assets/未标题-1.png" class="touxiang">
-        </el-menu-item>	
+        </el-menu-item>
       </el-col>
 
       <el-col :span="7" :offset="8" :xs="7" :md="7" :lg="7" :sm="7" class="main-page-group">
-       <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>	
+       <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>
 
-       <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >
+       <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-if="loggedin==true">
         <el-dropdown menu-align="start">
           <span class="el-dropdown-link1">套期保值
           </span>
@@ -27,21 +27,37 @@
             <el-dropdown-item>
               <el-button type="text" @click="toAccess">农作物跨品种套期保值</el-button>
             </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-menu-item>
+
+        <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-else>
+        <el-dropdown menu-align="start">
+          <span class="el-dropdown-link1">套期保值
+          </span>
+          <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-              <el-button type="text" @click="toCal">期权定价计算器</el-button>
+            <el-button type="text" @click="toLogin">豆粕资产组合损益图</el-button>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button type="text" @click="toLogin">豆粕资产组合套期保值</el-button>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <el-button type="text" @click="toLogin">农作物跨品种套期保值</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
 
-      <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" >策略套利</el-menu-item>
+      <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
+        <el-menu-item index="/login" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-else>策略套利</el-menu-item>
     </el-col>
-  
+
 
 
      <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-if="loggedin==false">
        <el-menu-item index= "/login" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">登录</el-menu-item>
-       <el-menu-item index="/register" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">注册</el-menu-item>	
+       <el-menu-item index="/register" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">注册</el-menu-item>
      </el-col>
 
      <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-else>
@@ -52,14 +68,14 @@
       </el-menu-item>
 
       <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
-      <img style="width: 50px; height: 50px;margin-top:5px" src="../assets/bigtouxiang.png">
+      <img style="width: 50px; height: 50px;margin-top:0px" src="../assets/bigtouxiang.png">
       </el-menu-item>
       <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
         <el-dropdown style="margin-left:10px">
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
-          
+
           <el-dropdown-menu slot="dropdown" style="background-color:#404040; border:0px;margin-left:40px">
             <el-dropdown-item><i class="el-icon-document" style="color:white"></i>
               <el-button type="text" @click="homepageIndividual">个人主页</el-button>
@@ -143,6 +159,9 @@
       toAccess: function(){
         this.$router.push({ path: '/assess'})
       },
+      toLogin:function () {
+        this.$router.push({ path: '/login'})
+      },
       watch: {
         dialogFormVisible: function(val){
           if(val===false){ // 要隐藏
@@ -157,10 +176,10 @@
 <style lang="less">
 
 	@import '../style/common';
-  
+
 	.el-menu-demo1{
 		width:100%;
-    background-repeat:no-repeat; 
+    background-repeat:no-repeat;
     background-size:100% 100%;
     -moz-background-size:100% 100%;
     padding-left: 0px;
@@ -207,7 +226,7 @@
 
 .touxiang1{
 	color:white;
-	-webkit-filter: drop-shadow(#FFFFFF 0px 0);filter: drop-shadow(#FFFFFF 0px 0);   
+	-webkit-filter: drop-shadow(#FFFFFF 0px 0);filter: drop-shadow(#FFFFFF 0px 0);
 }
 
 // .navigate{

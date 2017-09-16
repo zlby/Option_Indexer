@@ -28,7 +28,7 @@
 					</el-col>
 
 
-					
+
 					<el-col :span="24">
 					<el-form-item prop="email">
 						<el-input v-model="form.email" class="input_op"  placeholder="Email"></el-input>

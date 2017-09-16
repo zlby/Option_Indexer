@@ -26,7 +26,7 @@ export const UserRegister = ({ commit }, data) => {
     api.localRegister(data).then(function (res) {
       res = res.data
       if (res.status.code == '0') {
-        router.push({path:'/homepageIndividual'})
+        router.push({path:'/'})
         commit('login', {username: data.username});
         resolve()
       } else if(res.status.code == '-3'){
@@ -46,7 +46,7 @@ export const UserLogin = ({ commit }, data) => {
     api.localLogin(data).then(function (res) {
       res = res.data
       if (res.status.code == '0') {
-        router.push({path:'/homepageIndividual'})
+        router.push({path:'/'})
         commit('login', {username: data.username});
         resolve()
       } else {
@@ -59,7 +59,7 @@ export const UserLogin = ({ commit }, data) => {
       reject()
     })
   })
-    
+
 };
 
 export const UpdateUserInfo = ({ commit }) => {
@@ -82,9 +82,10 @@ export const UserLogout = ({ commit }) => {
     res = res.data
     if (res.status.code == '0') { // 注销成功，返回首页
       commit('logout')
+      router.push({path:'/'})
       } else { // 注销失败
         alert('注销失败！')
-      } 
+      }
     }).catch(function (error) {
       alert('注销失败！')
     })
@@ -98,7 +99,7 @@ export const UserLogout = ({ commit }) => {
       router.push({path:'/login'})
       } else { // 注销失败
         alert('账号切换失败！')
-      } 
+      }
     }).catch(function (error) {
       alert('账号切换失败！')
     })
@@ -108,7 +109,7 @@ export const UserLogout = ({ commit }) => {
     api.localNews({page_number: obj.page_number}).then(function (res){
       res = res.data
       if  (res.status.code == '0'){
-        
+
         commit('getNews', {news: res.news, page_number: obj.page_number})
       }else{
         alert('获取新闻失败！')
@@ -137,7 +138,7 @@ export const UserNewemailphone = ({ commit }, data) =>{
       // alert('邮箱或手机修改失败！！')
     })
   })
-  
+
 };
 
 export const getNotification = ({ commit }, obj)=>{
