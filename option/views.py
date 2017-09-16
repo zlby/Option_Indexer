@@ -253,11 +253,11 @@ def get_distribution(request):
         argv = request.GET.get('argv')
 
         if dis_type and argv:
-            if dis_type is "normal":
+            if dis_type == "normal":
                 result['distribution'] = spot_price_distribution.show_normal_distribution(argv[0], argv[1])
-            elif dis_type is "triangle":
+            elif dis_type == "triangle":
                 result['distribution'] = spot_price_distribution.show_triangle_distribution(argv[0], argv[1], argv[2])
-            elif dis_type is "uniform":
+            elif dis_type == "uniform":
                 result['distribution'] = spot_price_distribution.show_uniform_distribution(argv[0], argv[1])
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
