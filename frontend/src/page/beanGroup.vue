@@ -271,7 +271,7 @@
 			        xAxis: [
 			            {
 			                type: "value",
-			                name:"当前豆粕现货价格",
+			                name:"豆粕现货价格",
 			                data: null,
 			                scale: true,
 			                boundaryGap: true,
