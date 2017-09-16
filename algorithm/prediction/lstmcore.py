@@ -1,8 +1,11 @@
 import tensorflow as tf
+import tensorflow.contrib.distributions as dst
 import numpy as np
 
 class LstmModel:
     def __init__(self, series, time_step=10, batch_size=10, cell_size=30):
+        scale = np.std(series,dtype=np.float32)
+        self.__nmfunc = dst.Normal(loc=np.mean(series, 0, np.float32), scale=scale)
         self.__meta_list = series
         self.__input_size = 1
         self.__output_size = 1
@@ -15,22 +18,21 @@ class LstmModel:
         self.__input_layer_var = None
         self.__cell_state = None
         self.__out_state = None
+        self.__predication = None
         self.__input_placeholder = tf.placeholder(dtype=tf.float32, name="Inputs")
         self.__label_placeholder = tf.placeholder(dtype=tf.float32, name="labels")
-        self.predication = np.asarray([])
 
+        self.__predication = np.asarray([])
         self.__generate_next_batch()
-        pass
-
-    def __call__(self, *args, **kwargs):
         pass
 
     def __get_input_layer_output(self):
         """A full-link layer"""
         with tf.name_scope("Input_Layer"):
-            l_in_x = tf.reshape(tensor=self.__input_placeholder,
+            origin_in_x = tf.reshape(tensor=self.__input_placeholder,
                                 shape=[-1, self.__input_size]
                                 )
+            l_in_x = self.__nmfunc.cdf(origin_in_x)
             Ws_in = tf.get_variable("input_layer_weights",
                                     shape=[self.__input_size, self.__cell_size],
                                     dtype=tf.float32
@@ -51,7 +53,8 @@ class LstmModel:
     def __get_cell_layer_output(self, input_tensor):
         with tf.name_scope("Cell_Layer"):
             cell = tf.nn.rnn_cell.LSTMCell(num_units=self.__cell_size,
-                                           activation=tf.tanh
+                                           activation=tf.tanh,
+                                           forget_bias=0.4
                                            )
             self.__cell_state = cell.zero_state(batch_size=self.__batch_size, dtype=tf.float32)
             cell_outputs, self.__out_state = tf.nn.dynamic_rnn(cell=cell,
@@ -82,15 +85,17 @@ class LstmModel:
     def __generate_train_step(self):
         l_in_o = self.__get_input_layer_output()
         l_c_o = self.__get_cell_layer_output(l_in_o)
-        self.pred = l_out_o = self.__get_output_layer_output(l_c_o)
+        l_out_o = self.__get_output_layer_output(l_c_o)
+        self.pred = self.__nmfunc.quantile(l_out_o)
         _pred = tf.reshape(tensor=l_out_o,
                            shape=[-1],
                            name="predication"
                            )
-        labels = tf.reshape(tensor=self.__label_placeholder,
-                            shape=[-1],
-                            name="labels"
-                            )
+        origin_labels = tf.reshape(tensor=self.__label_placeholder,
+                                   shape=[-1],
+                                   name="labels"
+                                   )
+        labels = self.__nmfunc.cdf(origin_labels)
         self.loss = tf.reduce_mean(tf.square(_pred - labels))
         self.train_step = tf.train.AdamOptimizer(0.01).minimize(self.loss)
 
@@ -133,8 +138,8 @@ class LstmModel:
                                      feed_dict={self.__input_placeholder: self.__batches,
                                                 self.__label_placeholder: self.__labels}
                                      )
-            self.predication = np.append(self.predication, np.reshape(prd[0, :, 0], [-1]), 0)
-            self.predication = np.append(self.predication, np.reshape(prd[1:, -1, 0], [-1]), 0)
+            self.__predication = np.append(self.__predication, np.reshape(prd[0, :, 0], [-1]), 0)
+            self.__predication = np.append(self.__predication, np.reshape(prd[1:, -1, 0], [-1]), 0)
             while self.__check_is_not_end():
                 self.__generate_next_batch()
                 loss, _, state, prd = sess.run([self.loss, self.train_step, self.__out_state, self.pred],
@@ -142,9 +147,9 @@ class LstmModel:
                                                           self.__label_placeholder: self.__labels,
                                                           self.__cell_state: state
                                                           })
-                self.predication = np.append(self.predication, np.reshape(prd[:, -1, 0], [-1]), 0)
+                self.__predication = np.append(self.__predication, np.reshape(prd[:, -1, 0], [-1]), 0)
                 if self.cursor % 20 == 0:
                     print("run %s times: %s" % (self.cursor, loss))
 
     def get_prediction_list(self):
-        return self.predication
+        return self.__predication
