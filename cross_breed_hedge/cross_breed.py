@@ -13,7 +13,7 @@ def show_crop_diagram(type:str):
     return result_set
 
 def show_future_diagram(code:str):
-    query_set = FutureTreadingData.objects.filter(future=code).order_by('-time')[:500]
+    query_set = DayFutureTreadingData.objects.filter(future=code).order_by('-time')[:500]
 
     result_set = []
 

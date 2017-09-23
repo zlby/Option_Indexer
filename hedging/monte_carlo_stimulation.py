@@ -170,7 +170,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                         # option['price'] = item['price']
                         total_option_tv += item['price']
 
-            total_asset_tv = 10 * (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv) + 10 * float(total_option_tv)
+            total_asset_tv = (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv) + 10 * float(total_option_tv)
             combo['v_list'].append(total_asset_tv)
             combo['v0_minus_v_list'].append(total_asset_tv0 - total_asset_tv)
 

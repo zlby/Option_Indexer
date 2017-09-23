@@ -182,7 +182,7 @@ def get_ass(time_future: datetime.datetime, physicals: float, future_list, optio
             total_option += option_list[i]['price'] * option_list[i]['amount']
 
 
-        total_asset = 10 * (stimulate_price * physicals) + 10 * total_future + 10 * total_option
+        total_asset = (stimulate_price * physicals) + 10 * total_future + 10 * total_option
         total_asset_coordinate_list.append((stimulate_price, total_asset))
 
         # x_list.append(stimulate_price)
