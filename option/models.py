@@ -303,7 +303,7 @@ class Crop(models.Model):
 
 class ContinuousFuture(models.Model):
     code = models.CharField(verbose_name=u'期货代码', max_length=20, primary_key=True)
-    type = models.CharField(verbose_name=u'期货种类')
+    type = models.CharField(verbose_name=u'期货种类', max_length=20)
     delivery_day = models.DateField(verbose_name=u'交割日', null=True)
 
 
