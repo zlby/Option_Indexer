@@ -299,3 +299,13 @@ class Crop(models.Model):
     time = models.DateTimeField(verbose_name=u'时间')
     type = models.CharField(verbose_name=u'种类', max_length=20)
     price = models.FloatField(verbose_name=u'价格')
+
+
+class ContinuousFuture(models.Model):
+    code = models.CharField(verbose_name=u'期货代码', max_length=20, primary_key=True)
+    type = models.CharField(verbose_name=u'期货种类')
+    delivery_day = models.DateField(verbose_name=u'交割日', null=True)
+
+
+class ContinuousDayFutureTreadingData(TreadingDataBase):
+    future = models.ForeignKey(verbose_name=u'对应期货', to=ContinuousFuture)
