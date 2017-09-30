@@ -54,3 +54,5 @@ option/migrations/__pycache__/
 /algorithm/prediction/data_analyzer/calculate_hedge_cost.cp35-win_amd64.pyd
 /algorithm/prediction/data_analyzer/sim_spot_futures.c
 /algorithm/prediction/data_analyzer/sim_spot_futures.cp35-win_amd64.pyd
+/data_importer/crop_data/
+/.gitignore

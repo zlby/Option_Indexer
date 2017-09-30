@@ -4,7 +4,7 @@ import time
 import copy
 import os
 import codecs
-from option.models import FutureTreadingData, OptionTreadingData, Future, Option, Spot
+from option.models import FutureTreadingData, OptionTreadingData, Future, Option, Spot,  ContinuousDayFutureTreadingData
 
 
 class FutureTD:
@@ -220,5 +220,28 @@ def physicals_data_transfer(file_path):
             physicals_group.append(physical)
 
         Spot.objects.bulk_create(physicals_group)
+
+    print('finish')
+
+
+def crop_data_transfer(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        data_list = f.read().split('\n')
+
+        data_list = data_list[2:-3]
+        print(data_list)
+        datetime_format = '%Y-%m-%d'
+        physicals_group = []
+        for data in data_list:
+            [p_time, open_price, max_price, min_price, close_price, _, _, _, _] = data.split(',')
+            p_time = datetime.datetime.strptime(p_time, datetime_format)
+            open_price = float(open_price)
+            max_price = float(max_price)
+            min_price = float(min_price)
+            close_price = float(close_price)
+            physical = ContinuousDayFutureTreadingData(type='鸡蛋', time=p_time, open_price=open_price, max_price=max_price, min_price=min_price, close_price=close_price)
+            physicals_group.append(physical)
+
+        ContinuousDayFutureTreadingData.objects.bulk_create(physicals_group)
 
     print('finish')

@@ -29,7 +29,7 @@ def choose_futures(type:str, time_future:datetime.datetime):
     for item in query_set_crop:
         crop_list.insert(0, item.price)
 
-    query_set_future = Future.objects.filter(delivery_day__gt=time_future)
+    query_set_future = ContinuousDayFutureTreadingData.objects.all()
     future_code_list = []
     for item in query_set_future:
         future_code_list.append(item.code)
@@ -47,6 +47,7 @@ def choose_futures(type:str, time_future:datetime.datetime):
         result_set.append((code, rate, co))
         result_set.sort(key=lambda co : co[1], reverse=True)
     return result_set
+
 
 def show_error_diagram(type:str, code:str):
     query_set_crop = Crop.objects.filter(type=type).order_by('-time')[:500]
