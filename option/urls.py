@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^hedging/$', views.get_hedging),
     url(r'^choose_future/$', views.choose_future),
     url(r'^cross_breed_hedge/$', views.get_cross_breed_hedge),
+    url(r'^distribution/$', views.get_distribution),
     url(r'^future_time/$', views.get_future_delivery_day_list),
     url(r'^news/$', views.get_news),
     url(r'^distributions/$', views.get_distribution)
