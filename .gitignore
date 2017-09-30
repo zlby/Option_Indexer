@@ -58,3 +58,4 @@ option/migrations/__pycache__/
 !/message/mail.py
 
 *.pdf
+*.mp4
