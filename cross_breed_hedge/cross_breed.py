@@ -5,7 +5,7 @@ import datetime
 
 
 def show_crop_diagram(type:str):
-    query_set = ContinuousDayFutureTreadingData.objects.filter(type=type).order_by('-time')[:500]
+    query_set = Crop.objects.filter(type=type).order_by('-time')[:500]
 
     result_set = []
     for item in query_set:
@@ -15,7 +15,7 @@ def show_crop_diagram(type:str):
 
 
 def show_future_diagram(code:str):
-    query_set = DayFutureTreadingData.objects.filter(future=code).order_by('-time')[:500]
+    query_set = ContinuousDayFutureTreadingData.objects.filter(type=code).order_by('-time')[:500]
 
     result_set = []
 
