@@ -56,7 +56,7 @@ def show_error_diagram(type:str, code:str):
     for item in query_set_crop:
         crop_list.insert(0, item.price)
         time_list.insert(0, item.time)
-    query_set_future = FutureTreadingData.objects.filter(future=code).order_by('-time')[:500]
+    query_set_future = ContinuousDayFutureTreadingData.objects.filter(type=code).order_by('-time')[:500]
     future_list = []
     for item in query_set_future:
         future_list.insert(0, item.close_price)
