@@ -3,9 +3,9 @@ import tensorflow.contrib.distributions as dst
 import numpy as np
 
 class LstmModel:
-    def __init__(self, series, time_step=10, batch_size=10, cell_size=30):
-        scale = np.std(series,dtype=np.float32)
-        self.__nmfunc = dst.Normal(loc=np.mean(series, 0, np.float32), scale=scale)
+    def __init__(self, series, time_step=10, batch_size=10, cell_size=100):
+        scale = np.std(np.multiply(series, 2.0), dtype=np.float32)
+        self.__nmFunc = dst.Normal(loc=np.mean(series, 0, np.float32), scale=scale)
         self.__meta_list = series
         self.__input_size = 1
         self.__output_size = 1
@@ -19,11 +19,24 @@ class LstmModel:
         self.__cell_state = None
         self.__out_state = None
         self.__predication = None
+        self.__last_out = None
         self.__input_placeholder = tf.placeholder(dtype=tf.float32, name="Inputs")
         self.__label_placeholder = tf.placeholder(dtype=tf.float32, name="labels")
 
         self.__predication = np.asarray([])
         self.__generate_next_batch()
+
+        # Flags
+        self.trained = False
+        self.config = tf.ConfigProto(device_count={"CPU": 3},  # limit to num_cpu_core CPU usage
+                                     inter_op_parallelism_threads=1,
+                                     intra_op_parallelism_threads=1,
+                                     log_device_placement=False
+                                     )
+        self.__save_path = "./save/lstmVar.save"
+
+        # Model
+        self.__saver = None
         pass
 
     def __get_input_layer_output(self):
@@ -32,7 +45,7 @@ class LstmModel:
             origin_in_x = tf.reshape(tensor=self.__input_placeholder,
                                 shape=[-1, self.__input_size]
                                 )
-            l_in_x = self.__nmfunc.cdf(origin_in_x)
+            l_in_x = self.__nmFunc.cdf(origin_in_x)
             Ws_in = tf.get_variable("input_layer_weights",
                                     shape=[self.__input_size, self.__cell_size],
                                     dtype=tf.float32
@@ -54,7 +67,7 @@ class LstmModel:
         with tf.name_scope("Cell_Layer"):
             cell = tf.nn.rnn_cell.LSTMCell(num_units=self.__cell_size,
                                            activation=tf.tanh,
-                                           forget_bias=0.4
+                                           forget_bias=0.2
                                            )
             self.__cell_state = cell.zero_state(batch_size=self.__batch_size, dtype=tf.float32)
             cell_outputs, self.__out_state = tf.nn.dynamic_rnn(cell=cell,
@@ -82,11 +95,20 @@ class LstmModel:
                               name="output_layer_out"
                               )
 
-    def __generate_train_step(self):
+    def __forward(self):
+        """Forward calculate, fetch [self.input_placeholders] as input layer's input.
+
+        :return l_out_o [Tensor]
+            Predicate of give
+        """
         l_in_o = self.__get_input_layer_output()
         l_c_o = self.__get_cell_layer_output(l_in_o)
         l_out_o = self.__get_output_layer_output(l_c_o)
-        self.pred = self.__nmfunc.quantile(l_out_o)
+        return l_out_o
+
+    def __generate_train_step(self):
+        l_out_o = self.__forward()
+        self.pred = self.__nmFunc.quantile(l_out_o)
         _pred = tf.reshape(tensor=l_out_o,
                            shape=[-1],
                            name="predication"
@@ -95,7 +117,7 @@ class LstmModel:
                                    shape=[-1],
                                    name="labels"
                                    )
-        labels = self.__nmfunc.cdf(origin_labels)
+        labels = self.__nmFunc.cdf(origin_labels)
         self.loss = tf.reduce_mean(tf.square(_pred - labels))
         self.train_step = tf.train.AdamOptimizer(0.01).minimize(self.loss)
 
@@ -131,7 +153,8 @@ class LstmModel:
 
     def train_till_series_end(self):
         self.__generate_train_step()
-        with tf.Session() as sess:
+        self.__saver = tf.train.Saver()
+        with tf.Session(config=self.config) as sess:
             sess.run(tf.global_variables_initializer())
             self.__generate_next_batch()
             _, state, prd = sess.run([self.train_step, self.__out_state, self.pred],
@@ -150,6 +173,24 @@ class LstmModel:
                 self.__predication = np.append(self.__predication, np.reshape(prd[:, -1, 0], [-1]), 0)
                 if self.cursor % 20 == 0:
                     print("run %s times: %s" % (self.cursor, loss))
+            self.__last_out = (state, prd)
+            self.__save_path = self.__saver.save(sess, self.__save_path)
+        self.trained = True
 
     def get_prediction_list(self):
         return self.__predication
+
+    def predict(self, day_length):
+        if not self.trained:
+            self.train_till_series_end()
+        with tf.Session(config=self.config) as sess:
+            self.__saver.restore(sess, self.__save_path)
+            for i in range(day_length):
+                self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
+                    self.__input_placeholder: self.__last_out[1],
+                    self.__cell_state: self.__last_out[0]
+                }))
+                print(self.__last_out[1])
+                self.__predication = np.append(self.__predication,
+                                               np.reshape(self.__last_out[1][:, -1, 0], [-1]), 0)
+        return self.__predication[-day_length:]
