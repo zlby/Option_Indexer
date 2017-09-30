@@ -11,9 +11,9 @@
       </el-col>
 
       <el-col :span="7" :offset="8" :xs="7" :md="7" :lg="7" :sm="7" class="main-page-group">
-       <el-menu-item class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" index="/">首页</el-menu-item>
+       <el-menu-item class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" index="/">首页</el-menu-item>
 
-       <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-if="loggedin==true">
+       <el-menu-item index="/" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">
         <el-dropdown menu-align="start">
           <span class="el-dropdown-link1">套期保值
           </span>
@@ -31,26 +31,23 @@
         </el-dropdown>
       </el-menu-item>
 
-        <el-menu-item index="/" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-else>
+        <el-menu-item index="/" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>
         <el-dropdown menu-align="start">
-          <span class="el-dropdown-link1">套期保值
+          <span class="el-dropdown-link1">帮助
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="toLogin">豆粕资产组合损益图</el-button>
+            <el-button type="text" @click="window.location.href='/static/pdf/INDEXER.pdf'">用户手册</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toLogin">豆粕资产组合套期保值</el-button>
-            </el-dropdown-item>
-            <el-dropdown-item>
-              <el-button type="text" @click="toLogin">农作物跨品种套期保值</el-button>
+              <el-button type="text" @click="window.open='/static/video/INDEXER.mkv'">演示视频</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
 
-      <el-menu-item index="/productIntro" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
-        <el-menu-item index="/login" class="el-col el-col-xs-8 el-col-md-8 el-col-sm-8 el-col-lg-8 main-page-btn" v-else>策略套利</el-menu-item>
+      <el-menu-item index="/productIntro" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
+        <el-menu-item index="/login" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>策略套利</el-menu-item>
     </el-col>
 
 
