@@ -56,3 +56,5 @@ option/migrations/__pycache__/
 /algorithm/prediction/data_analyzer/sim_spot_futures.cp35-win_amd64.pyd
 /message/mail.py
 !/message/mail.py
+
+*.pdf
