@@ -45,7 +45,7 @@ def choose_futures(type:str, time_future:datetime.datetime):
         co = abs(get_coherence_rate(crop_list, future_list))
         rate = abs(OLS(diffx=get_diff(future_list), diffy=get_diff(crop_list)))
         result_set.append((type, rate, co))
-        result_set.sort(key=lambda co : co[1], reverse=True)
+        result_set.sort(key=lambda co : co[2], reverse=True)
     return result_set
 
 
