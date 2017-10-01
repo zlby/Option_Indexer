@@ -164,7 +164,7 @@
       },
       toVideo:function(){
         window.open("/static/video/INDEXER.mp4")
-      }
+      },
       watch: {
         dialogFormVisible: function(val){
           if(val===false){ // 要隐藏
