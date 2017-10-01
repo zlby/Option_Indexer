@@ -450,37 +450,34 @@
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		var newXAxis=[];
 			    		var abre=this.option.xAxis[0].data;
-			    	  var	index=-1;
-			    	  var processedX=processed.map(function(o){
-			    	      return o[0]
-              })
-			    		for(var i=0;i<abre.length;i++){
-			    		    if(abre[i]==processedX[i]){
-			    		        index=i;
-			    		        break;
-                  }
-              }
-              var pLength=processedX.length;
-              if(index==0){
-			    		    for(var i=0;i<pLength;i++){
-			    		        if(abre[0]==processedX[i]){
-			    		            index=i;
-			    		            break
-                      }
-                  }
-                  newXAxis=processedX.slice(0,index).concat(abre);
-              }
-              else if(index==-1){
-                  if(new Date(abre[0]).getTime()>new Date(processedX[0]).getTime()){
-                      newXAxis=processedX.concat(abre);
-                  }else{
-                      newXAxis=abre.concat(processedX);
-                  }
-              }else{
-                  newXAxis=abre.slice(0,index).concat(processedX);
-              }
-              this.option.xAxis[0].data=newXAxis;
-              console.log(newXAxis);
+			    		var processedX=processed.map(function(o){
+			    			return o[0]
+			    		})
+			    		if(new Date(abre[0]).getTime()>new Date(processedX[0]).getTime()){
+			    			var start=processedX[0];
+			    		}
+			    		else{
+			    			var start=abre[0]
+			    		}
+			    		if(abre.length==1){
+			    			start=processedX[0]
+			    		}
+			    		if(new Date(abre[abre.length-1]).getTime()>new Date(processedX[processedX.length-1]).getTime()){
+			    			var end=abre[abre.length-1]
+			    		}
+			    		else{
+			    			var end=processedX[processedX.length-1]
+			    		}
+			    		var days=(new Date(end).getTime()-new Date(start).getTime())/86400000;
+			    		newXAxis.push(start);
+			    		var startMiSec=new Date(start).getTime()
+			    		for(var i=1;i<days;i++){
+			    			var date=new Date(startMiSec+86400000*i);
+			    			newXAxis.push(echarts.format.formatTime("yyyy-MM-dd",date))
+			    		}
+			    		newXAxis.push(end)
+			    		this.option.xAxis[0].data=newXAxis;
+			    		console.log(newXAxis);
 			    		return {
 			    			name:data.name,
 			    			series:series
