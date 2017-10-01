@@ -37,10 +37,10 @@
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="toPdf">用户手册</el-button>
+            <a href="/static/pdf/INDEXER.pdf">用户手册</a>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toVideo">演示视频</el-button>
+            <a href="/static/video/INDEXER.mp4">演示视频</a>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
