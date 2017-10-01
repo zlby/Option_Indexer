@@ -8,7 +8,7 @@ import numpy as np
 from gain_loss.option_price_cal import get_option_price
 import algorithm.prediction.data_analyzer.calculate_hedge_cost as chc
 from gain_loss.history_vol import history_vol
-
+from hedging.spot_price_distribution import get_predict
 
 
 def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, time_future:datetime.datetime, dist, max_cost = 50000., fmax:int = 50, omax:int = 50, time_now = None):
@@ -131,7 +131,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
             spot_price_list.append(np.random.uniform(float(dist['argv'][0]), float(dist['argv'][1])))
     if dist['type'] == 'predict':
         for _ in range(20):
-            spot_price_list.append(np.random.normal(float(dist['argv'][0]), 1))
+            spot_price_list.append(np.random.normal(get_predict(time_future), 1))
 
     if len(spot_price_list) != 20:
         return None
