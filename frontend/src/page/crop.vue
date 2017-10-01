@@ -159,15 +159,18 @@
 							</div>
 						</el-col>
 					</el-row>
-					<!--<el-row>-->
-						<!--<el-col :span="24">-->
-							<!--<div class="partThree">-->
-							<!--<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px">-->
-							<!--<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>-->
-							<!--</el-button>-->
-							<!--</div>-->
-						<!--</el-col>-->
-					<!--</el-row>-->
+					<el-row>
+						<el-col :span="12">
+							<div class="partThree">
+							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraphDL">
+								<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
+							</el-button>
+							</div>
+						</el-col>
+						<el-col :span="12">
+							<el-checkbox v-model="usePredict">使用深度学习预测结果</el-checkbox>
+						</el-col>
+					</el-row>
 				</el-col>
 
 				<el-col :span="22" :offset="2">
@@ -289,6 +292,7 @@
 				currentHold:0,
 				radio2: 5,
 				radio1: 5,
+				usePredict:false,
 				max_cost:0,
 				fmax:0,
 				omax:0,
@@ -510,22 +514,48 @@
 			    				argv:JSON.stringify(this.tri_dist)
 			    			})
 			    		}
-						if(full[1]){
-							this.sendDispReq({
+			    		if(full[1]){
+			    			this.sendDispReq({
 			    				type:"normal",
 			    				argv:JSON.stringify(this.norm_dist)
 			    			})
-						}
-						if(full[2]){
-							this.sendDispReq({
+			    		}
+			    		if(full[2]){
+			    			this.sendDispReq({
 			    				type:"uniform",
 			    				argv:JSON.stringify(this.uni_dist)
 			    			})
-						}
-						this.popSeries("三角分布")
-              this.popSeries("正态分布")
-              this.popSeries("均匀分布")
+			    		}
+			    		this.popSeries("三角分布")
+			    		this.popSeries("正态分布")
+			    		this.popSeries("均匀分布")
+			    		this.popSeries("深度学习分布")
 			    	},
+			    	updateGraphDL:function(){
+			    		var params={
+			    			type:"predict",
+			    			argv:JSON.stringify([echarts.format.formatTime("yyyy-MM-dd",this.daypicker)])
+			    		}
+			    		var dis_name=
+			    		axios.get('market/distributions',{params:params}).then(function(res){
+			    			res=res.data;
+			    			if(res.status.code===0){
+			    				saveThis.popSeries("三角分布")
+			    				saveThis.popSeries("正态分布")
+			    				saveThis.popSeries("均匀分布")
+			    				saveThis.popSeries("深度学习分布")
+			    				saveThis.addChartOption(saveThis.createSeries({name:"深度学习分布",data:res.distribution}))
+			    			}
+			    			else{
+			    				saveThis.$notify({
+			    					type:"danger",
+			    					title:"错误",
+			    					message:"似乎出了一些问题"
+			    				})
+			    			}
+			    		})
+
+			    	}
 			    	checkNull:function(array){
 			    		var isNull=true;
 			    		for(var i=0;i<array.length;i++){
@@ -575,7 +605,11 @@
 			    			title:"注意",
 			    			message:"一次显示只能选择一种分布，请删除别的分布的参数"
 			    		}
-			    		if(!this.checkNull(this.tri_dist)&&this.checkFull(this.tri_dist)){
+			    		if(this.usePredict==true){
+			    			params.dist.type="predict"
+			    			params.argv=JSON.stringify([echarts.format.formatTime("yyyy-MM-dd",this.daypicker)])
+			    		}
+			    		else if(!this.checkNull(this.tri_dist)&&this.checkFull(this.tri_dist)){
 			    			if(this.checkNull(this.norm_dist)||this.checkNull(this.uni_dist)){
 			    				params.dist.type="triangle";
 			    				params.dist.argv=this.tri_dist;
@@ -619,8 +653,7 @@
 			    		if(typeof(params.omax)!="number"){
 			    			params.omax=null;
 			    		}
-			    		console.log(this.tri_dist,this.norm_dist,this.uni_dist)
-              console.log(this.checkNull(this.tri_dist),this.checkNull(this.norm_dist),this.checkNull(this.uni_dist))
+
 			    		var saveThis=this
               saveThis.$notify({
 			    					type:"success",
