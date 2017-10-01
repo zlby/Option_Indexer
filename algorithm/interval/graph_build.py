@@ -291,45 +291,6 @@ class GraphBuilder(object):
 
         benefits = tf.reduce_sum(step_bene) - sale_rate * (p1[-1] * gamma * p2[-1]) * tf.reduce_sum((sgns_out_hg + sgns_in_nm) * sign(dr))
 
-
-        # # no err threshold
-        # def get_data_normal_distribution_arguments():
-        #     try:
-        #         res = self.nm_dst
-        #     except:
-        #         mean = tf.reduce_mean(r1 + tf.multiply(gamma, r2))
-        #         scl = tf.sqrt(self.__get_variance(r1 + tf.multiply(gamma, r2)))
-        #         self.nm_dst = dst.Normal(loc=mean, scale=scl)
-        #         res = self.nm_dst
-        #     return  res
-        #     # over~
-        #     #
-        #
-        # def get_thresholds(_nm_dst):
-        #     vrs0 = tf.Variable(np.random.rand())
-        #     vrs1 = tf.Variable(np.random.rand())
-        #     _max_raw = _nm_dst.prob(tf.reduce_mean(r1 + tf.multiply(gamma, r2)))
-        #     _trd_nm = _nm_dst.cdf(vrs0) * _max_raw
-        #     _trd_hg = _nm_dst.cdf(vrs1) * _trd_nm
-        #     return _trd_nm, _trd_hg, _max_raw
-        #
-        # def interval_signs(ls: tf.Tensor, _trd_hg, _trd_nm):
-        #     # TODO: unit test
-        #     mr_nm_cvt = dst.Logistic(loc=_trd_nm, scale=0.05).cdf
-        #
-        #     def ls_hg_cvt(_ls):
-        #         _a = dst.Logistic(loc=_trd_hg, scale=0.05).cdf(_ls)
-        #         return tf.subtract(_a, 1.)
-        #
-        #     return tf.add(ls_hg_cvt(ls), mr_nm_cvt(ls))
-        #
-        # def sign(_ls):
-        #     _a = dst.Logistic(loc=0., scale=0.05).cdf(_ls)
-        #     return 2. * _a - 1.
-        #
-        # def normalize_loss(_benefits):
-        #     return dst.Logistic(0., 3.).cdf(-_benefits)
-        #
         def find_interval(value, avg, scale):
             with tf.name_scope("find_interval_with_raw_value"):
                 min_of_interval = avg - tf.pow(-tf.log(2 * np.pi * scale ** 2 * value ** 2), 0.5) * scale
