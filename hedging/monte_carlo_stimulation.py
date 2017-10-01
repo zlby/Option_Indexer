@@ -129,6 +129,9 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
     if dist['type'] == 'uniform':
         for _ in range(20):
             spot_price_list.append(np.random.uniform(float(dist['argv'][0]), float(dist['argv'][1])))
+    if dist['type'] == 'predict':
+        for _ in range(20):
+            spot_price_list.append(np.random.normal(float(dist['argv'][0]), 1))
 
     if len(spot_price_list) != 20:
         return None

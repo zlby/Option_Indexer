@@ -1,7 +1,8 @@
-# from option.models import *
-# import datetime
+from option.models import *
+import datetime
 import numpy as np
 import scipy.stats as stats
+from algorithm.prediction.lstmcore import *
 
 #正态分布：
 def show_normal_distribution(mean, sigma):
@@ -53,4 +54,19 @@ def show_uniform_distribution(u1, u2):
         result.append(a)
 
     return result
-# print(show_normal_distribution(0, 1))
+
+
+def show_predict(time_future:datetime.date):
+    query_spot = Spot.objects.all().order_by('-time')[:200]
+    spot_list = []
+    for item in query_spot:
+        spot_list.insert(0, item.price)
+
+    spot_list = np.asarray(spot_list)
+    today = datetime.date.today()
+    day_length = (time_future - today).days
+    lstm = LstmModel(series=spot_list)
+    u = lstm.predict(day_length)[-1]
+
+    return u, show_normal_distribution(u, 1)
+

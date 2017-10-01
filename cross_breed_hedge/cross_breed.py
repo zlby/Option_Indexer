@@ -5,7 +5,7 @@ import datetime
 
 
 def show_crop_diagram(type:str):
-    query_set = Crop.objects.filter(type=type).order_by('-time')[:500]
+    query_set = Crop.objects.filter(type=type).order_by('-time')[:300]
 
     result_set = []
     for item in query_set:
@@ -15,7 +15,7 @@ def show_crop_diagram(type:str):
 
 
 def show_future_diagram(code:str):
-    query_set = ContinuousDayFutureTreadingData.objects.filter(type=code).order_by('-time')[:500]
+    query_set = ContinuousDayFutureTreadingData.objects.filter(type=code).order_by('-time')[:300]
 
     result_set = []
 
@@ -26,7 +26,7 @@ def show_future_diagram(code:str):
 
 
 def choose_futures(type:str, time_future:datetime.datetime):
-    query_set_crop = Crop.objects.filter(type=type).order_by('-time')[:500]
+    query_set_crop = Crop.objects.filter(type=type).order_by('-time')[:300]
     result_set = []
     crop_list = []
     for item in query_set_crop:
@@ -35,8 +35,8 @@ def choose_futures(type:str, time_future:datetime.datetime):
     future_type_list = ['豆粕', '棕榈油', '玉米', '玉米淀粉', '纤维板', '胶合板', '豆油', '鸡蛋']
 
     for type in future_type_list:
-        query = ContinuousDayFutureTreadingData.objects.filter(type=type).order_by('-time')[:500]
-        if len(query) != 500:
+        query = ContinuousDayFutureTreadingData.objects.filter(type=type).order_by('-time')[:300]
+        if len(query) != 300:
             continue
         future_list = []
         for item in query:
