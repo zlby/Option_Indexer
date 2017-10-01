@@ -250,6 +250,8 @@ def get_distribution(request):
     result = {'status': status}
     if request.method == 'GET':
         dis_type = request.GET.get('type')
+        datetime_format = '%Y-%m-%d'
+        time_future = request.GET.get('time_future')
         argv = request.GET.get('argv')
         argv = list(json.loads(argv))
         if dis_type and argv:
@@ -259,6 +261,19 @@ def get_distribution(request):
                 result['distribution'] = spot_price_distribution.show_triangle_distribution(argv[0], argv[1], argv[2])
             elif dis_type == "uniform":
                 result['distribution'] = spot_price_distribution.show_uniform_distribution(argv[0], argv[1])
+            elif dis_type == "predict":
+                if time_future:
+                    try:
+                        time_future = datetime.strptime(time_future, datetime_format)
+                    except ValueError:
+                        status['code'] = -12
+                        status['message'] = 'time format not right'
+                        return JsonResponse(result, status=400)
+                    result['distribution'] = spot_price_distribution.show_predict(time_future)
+                else:
+                    status['code'] = -12
+                    status['message'] = 'no time provided'
+                    return JsonResponse(result, status=400)
             status['message'] = '获取成功'
             return JsonResponse(result, status=200)
         else:
@@ -297,7 +312,7 @@ def get_hedging(request):
                 time_future = datetime.strptime(time_future, datetime_format)
             except ValueError:
                 status['code'] = -12
-                status['message'] = 'time_format_not_right'
+                status['message'] = 'time format not right'
                 return JsonResponse(result, status=400)
             try:
                 future_list = list(json.loads(future_list))
