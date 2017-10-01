@@ -534,9 +534,11 @@
 			    	updateGraphDL:function(){
 			    		var params={
 			    			type:"predict",
-			    			argv:JSON.stringify([echarts.format.formatTime("yyyy-MM-dd",this.daypicker)])
+			    			time_future:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
+                argv:JSON.stringify([echarts.format.formatTime("yyyy-MM-dd",this.daypicker)])
 			    		}
-			    		var dis_name=
+			    		var dis_name="深度学习分布"
+              var saveThis=this
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
@@ -555,7 +557,7 @@
 			    			}
 			    		})
 
-			    	}
+			    	},
 			    	checkNull:function(array){
 			    		var isNull=true;
 			    		for(var i=0;i<array.length;i++){
