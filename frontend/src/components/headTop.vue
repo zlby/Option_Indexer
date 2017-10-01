@@ -37,10 +37,10 @@
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="win.location.href='/static/pdf/INDEXER.pdf'">用户手册</el-button>
+            <el-button type="text" @click="toPdf">用户手册</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="win.open='/static/video/INDEXER.mkv'">演示视频</el-button>
+              <el-button type="text" @click="toVideo">演示视频</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -105,7 +105,6 @@
     return {
       no_readCount:0,
       dialogFormVisible: false,
-      win:window,
       form: {
               // username: '',
               old_password: '',
@@ -160,6 +159,12 @@
       toLogin:function () {
         this.$router.push({ path: '/login'})
       },
+      toPdf:function(){
+        window.open("/static/pdf/INDEXER.pdf")
+      },
+      toVideo:function(){
+        window.open("/static/video/INDEXER.mp4")
+      }
       watch: {
         dialogFormVisible: function(val){
           if(val===false){ // 要隐藏
