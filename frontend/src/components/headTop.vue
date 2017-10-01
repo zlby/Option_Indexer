@@ -31,6 +31,10 @@
         </el-dropdown>
       </el-menu-item>
 
+
+
+      <el-menu-item index="/productIntro" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
+        <el-menu-item index="/login" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>策略套利</el-menu-item>
         <el-menu-item index="/" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn">
         <el-dropdown menu-align="start">
           <span class="el-dropdown-link1">帮助
@@ -45,9 +49,6 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
-
-      <el-menu-item index="/productIntro" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
-        <el-menu-item index="/login" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>策略套利</el-menu-item>
     </el-col>
 
 

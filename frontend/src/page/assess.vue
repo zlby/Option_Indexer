@@ -473,7 +473,7 @@
 			    		var startMiSec=new Date(start).getTime()
 			    		for(var i=1;i<days;i++){
 			    			var date=new Date(startMiSec+86400000*i);
-			    			newXAxis.push(echarts.format.formatTime("yyyy-MM-dd",date))
+			    			newXAxis.push(echarts.format.formatTime("yyyy-MM-dd hh:mm:ss",date))
 			    		}
 			    		newXAxis.push(end)
 			    		this.option.xAxis[0].data=newXAxis;
