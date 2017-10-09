@@ -43,8 +43,8 @@ class LstmModel:
         """A full-link layer"""
         with tf.name_scope("Input_Layer"):
             origin_in_x = tf.reshape(tensor=self.__input_placeholder,
-                                shape=[-1, self.__input_size]
-                                )
+                                     shape=[-1, self.__input_size]
+                                     )
             l_in_x = self.__nmFunc.cdf(origin_in_x)
             Ws_in = tf.get_variable("input_layer_weights",
                                     shape=[self.__input_size, self.__cell_size],
@@ -182,6 +182,7 @@ class LstmModel:
 
     def predict(self, day_length):
         if not self.trained:
+            import shutil; shutil.rmtree("./save");del shutil
             self.train_till_series_end()
         with tf.Session(config=self.config) as sess:
             self.__saver.restore(sess, self.__save_path)

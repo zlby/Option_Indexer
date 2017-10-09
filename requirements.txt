@@ -1,3 +1,5 @@
+numpy
+tensorflow
 Cython
 Django == 1.11.3
 beautifulsoup4 == 4.6.0
