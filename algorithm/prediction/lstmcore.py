@@ -182,7 +182,10 @@ class LstmModel:
 
     def predict(self, day_length):
         if not self.trained:
-            import shutil; shutil.rmtree("./save");del shutil
+            try:
+                import shutil; shutil.rmtree("./save");del shutil
+            except FileNotFoundError:
+                pass
             self.train_till_series_end()
         with tf.Session(config=self.config) as sess:
             self.__saver.restore(sess, self.__save_path)
