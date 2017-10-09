@@ -55,8 +55,10 @@ def show_uniform_distribution(u1, u2):
 
     return result
 
+lstm = None
 
 def get_predict(time_future:datetime.datetime):
+    global lstm
     query_spot = Spot.objects.all().order_by('-time')[:200]
     spot_list = []
     for item in query_spot:
@@ -66,7 +68,8 @@ def get_predict(time_future:datetime.datetime):
     today = datetime.date.today()
     future_day = datetime.date(year=time_future.year, month=time_future.month, day=time_future.day)
     day_length = (future_day - today).days
-    lstm = LstmModel(series=spot_list)
+    if not lstm:
+        lstm = LstmModel(spot_list)
     u = lstm.predict(day_length)[-1]
 
     return u
