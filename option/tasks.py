@@ -26,6 +26,7 @@ def option_hour_data_turner():
     hour_next = hour_pre+timedelta(hours=1)
 
     option_data = FutureTreadingData.objects.filter(time__gt=hour_pre, time__lt=hour_next)
+    future = option_data.first().future
     open_price = option_data.first().open_price
     max_price = 0
     min_price = 99999
@@ -36,10 +37,12 @@ def option_hour_data_turner():
         if option.min_price < min_price:
             min_price = option.min_price
 
-    new_option_hour_data = HourFutureTreadingData(open_price=open_price,
+    new_option_hour_data = HourFutureTreadingData(time=hour_pre,
+                                                  open_price=open_price,
                                                   max_price=max_price,
                                                   min_price=min_price,
-                                                  close_price=close_price)
+                                                  close_price=close_price,
+                                                  future=future)
     new_option_hour_data.save()
 
 
@@ -51,8 +54,8 @@ def option_day_data_turner():
                          seconds=-day_pre.second,
                          microseconds=-day_pre.microsecond)
     day_next = day_pre+timedelta(days=1)
-
     option_data = HourFutureTreadingData.objects.filter(time__gt=day_pre, time__lt=day_next)
+    future = option_data.first().future
     open_price = option_data.first().open_price
     max_price = 0
     min_price = 99999
@@ -63,10 +66,12 @@ def option_day_data_turner():
         if option.min_price < min_price:
             min_price = option.min_price
 
-    new_option_day_data = DayFutureTreadingData(open_price=open_price,
+    new_option_day_data = DayFutureTreadingData(time=day_pre,
+                                                open_price=open_price,
                                                 max_price=max_price,
                                                 min_price=min_price,
-                                                close_price=close_price)
+                                                close_price=close_price,
+                                                future=future)
     new_option_day_data.save()
 
 
