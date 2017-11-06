@@ -12,7 +12,7 @@ from hedging.spot_price_distribution import get_predict
 
 
 def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, time_future:datetime.datetime, dist, max_cost = 50000., fmax:int = 50, omax:int = 50, time_now = None):
-    time_bg = time.clock()
+    # time_bg = time.clock()
     if time_now is None:
         time_now_with_seconds = datetime.datetime.now()
         time_now = datetime.datetime(year=time_now_with_seconds.year, month=time_now_with_seconds.month, day=time_now_with_seconds.day
@@ -147,12 +147,18 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                 if future['code'] == future_code:
                     options_in_list[i]['future_price'] = future['price']
                     break
-            if options_in_list[i]['volatility'] is None:
-                option_price = get_option_price(options_in_list[i]['code'], time_future_with_min, 2000, price=options_in_list[i]['future_price'])
-            else:
-                option_price = get_option_price(options_in_list[i]['code'], time_future_with_min, 2000, price=options_in_list[i]['future_price'],
-                                                volat=options_in_list[i]['volatility'])
-            options_in_list[i]['price'] = option_price
+            # code is wrong here
+            # if options_in_list[i]['volatility'] is None:
+            #     option_price = get_option_price(options_in_list[i]['code'], time_future_with_min, 2000, price=options_in_list[i]['future_price'])
+            # else:
+            #     option_price = get_option_price(options_in_list[i]['code'], time_future_with_min, 2000, price=options_in_list[i]['future_price'],
+            #                                     volat=options_in_list[i]['volatility'])
+            # options_in_list[i]['price'] = option_price
+
+            # new code
+            strike_price = option_code[8:]
+            strike_price = float(strike_price)
+            options_in_list[i]['price'] = max(options_in_list[i]['future_price'] - strike_price, 0)
 
         # 计算vi
         for combo in combo_list:
@@ -165,15 +171,15 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                 for item in futures_in_list:
                     if future['code'] == item['code']:
                         # future['price'] = item['price']
-                        total_future_tv += item['price']
+                        total_future_tv += item['price'] * future['amount']
                         break
             for option in combo['option_together']:
                 for item in options_in_list:
                     if option['code'] == item['code']:
                         # option['price'] = item['price']
-                        total_option_tv += item['price']
+                        total_option_tv += item['price'] * option['amount']
 
-            total_asset_tv = (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv) + 10 * float(total_option_tv)
+            total_asset_tv = (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv) + 10 * float(total_option_tv) - combo['hedge_cost']
             combo['v_list'].append(total_asset_tv)
             combo['v0_minus_v_list'].append(total_asset_tv0 - total_asset_tv)
 
@@ -183,12 +189,12 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
         combo['P2_add_value'] = 0
         for value in combo['v0_minus_v_list']:
             combo['P2_add_value'] += value
-        combo['P2_value'] = max(combo['P2_add_value'], 0)
+        combo['P2_value'] = abs(combo['P2_add_value'])
         P1_list.append(combo['hedge_cost'])
         P2_list.append(combo['P2_value'])
 
-    P1_list.sort()
-    P2_list.sort()
+    P1_list.sort(reverse=True)
+    P2_list.sort(reverse=True)
     for combo in combo_list:
         for i1 in range(len(P1_list)):
             if P1_list[i1] == combo['hedge_cost']:
@@ -200,6 +206,14 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                 break
 
         combo['score'] = float(combo['P1']) * float(w1) + float(combo['P2']) * float(w2)
+
+    # combo_list.sort(key=lambda co : co['score'], reverse=True)
+    # result_combo = combo_list[0]
+
+
+    # for item in combo_list:
+    #     print(item['score'], item['future_list'], item['option_list'], item['P1'], item['P2'])
+
 
     result_combo = {}
     result_combo['score'] = combo_list[0]['score']
@@ -219,9 +233,9 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
                 opt['amount'] = opti['amount']
                 result_combo['option_list'].append(opt)
 
-    time_com = time.clock()
+    # time_com = time.clock()
 
-    print(time_com - time_bg)
+
 
     return result_combo['future_list'], result_combo['option_list']
 
@@ -293,6 +307,8 @@ def choose_combos(time_future:datetime.datetime, max_cost:float=50000, fmax=50, 
                     fu = {}
                     fu['code'] = future_dict['code']
                     fu['amount'] = random.randint(-fmax, fmax)
+                    if fu['amount'] == 0:
+                        fu['amount'] = random.randint(1, fmax)
                     for item in future_code_price_deposit_list:
                         if fu['code'] == item['code']:
                             fu['price'] = item['current_price']
@@ -303,6 +319,8 @@ def choose_combos(time_future:datetime.datetime, max_cost:float=50000, fmax=50, 
                     op = {}
                     op['code'] = option_dict['code']
                     op['amount'] = random.randint(-omax, omax)
+                    if op['amount'] == 0:
+                        op['amount'] = random.randint(1, omax)
                     for item in option_code_price_deposit_list:
                         if op['code'] == item['code']:
                             op['price'] = item['current_price']

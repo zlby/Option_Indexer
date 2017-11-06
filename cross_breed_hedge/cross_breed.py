@@ -25,7 +25,7 @@ def show_future_diagram(code:str):
     return result_set
 
 
-def choose_futures(type:str, time_future:datetime.datetime):
+def choose_futures(type:str, time_future:datetime.datetime = None):
     query_set_crop = Crop.objects.filter(type=type).order_by('-time')[:300]
     result_set = []
     crop_list = []

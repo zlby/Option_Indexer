@@ -1,5 +1,8 @@
 import statsmodels.api as sm
 
+'''
+return y/x 手数比
+'''
 def OLS(diffx, diffy):
     if len(diffx) == len(diffy):
         x = sm.add_constant(diffx)
