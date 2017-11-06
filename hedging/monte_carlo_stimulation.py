@@ -48,7 +48,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
     except:
         spot_price_now = Spot.objects.all().order_by('-time')[0].price
 
-    total_asset_tv0 = 10 * (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv0) + 10 * float(total_option_tv0)
+    total_asset_tv0 = (float(spot_price_now) * float(physicals)) + 10 * float(total_future_tv0) + 10 * float(total_option_tv0)
 
 
     combo_list = choose_combos(time_future, max_cost, fmax, omax)
@@ -220,6 +220,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
 
     for combo in combo_list:
         if combo['score'] > result_combo['score']:
+            result_combo['hedge_cost'] = combo['hedge_cost']
             result_combo['future_list'] = []
             result_combo['option_list'] = []
             for fute in combo['future_list']:
@@ -237,7 +238,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
 
 
 
-    return result_combo['future_list'], result_combo['option_list']
+    return result_combo['future_list'], result_combo['option_list'], result_combo['hedge_cost']
 
 
 
