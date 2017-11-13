@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<head-second></head-second>
+
 		<div class="beangroup">
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">

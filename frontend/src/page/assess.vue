@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<head-second></head-second>
 		<div style="margin-top:30px">
 			<el-row>
 
@@ -329,7 +328,26 @@
 			            ],
 			            yAxis: [
 			            {
-			            	name:"价格",
+			            	name:"期货价格",
+			            	scale: true,
+			            	gridIndex: 0,
+			            	splitNumber: 10,
+			            	axisLabel: {
+			            		show: true,
+			            	},
+			            	axisLine: {show: true},
+			            	axisTick: {show: true},
+			            	splitLine: {show: true},
+			            	axisPointer: {
+			            		label: {
+			            			formatter: function (params) {
+			            				return params.value
+			            			}
+			            		}
+			            	}
+			            },
+			            {
+			            	name:"现货价格",
 			            	scale: true,
 			            	gridIndex: 0,
 			            	splitNumber: 10,
@@ -446,7 +464,11 @@
 			    		});
 			    		series.data=processed
 			    		series.xAxisIndex=0;
-			    		series.yAxisIndex=0;
+			    		if(data.name=="期货曲线"){
+			    			series.yAxisIndex=0;
+			    		}else{
+			    			series.yAxisIndex=1;
+			    		}
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		var newXAxis=[];
 			    		var abre=this.option.xAxis[0].data;
@@ -491,7 +513,7 @@
 			    		});
 			    		series.data=processed
 			    		series.xAxisIndex=1;
-			    		series.yAxisIndex=1;
+			    		series.yAxisIndex=2;
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		this.option.xAxis[1].data=processed.map(function(o){
 			    		    return o[0]
