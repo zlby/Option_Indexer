@@ -1,6 +1,5 @@
 <template>
   <div class="manage_page fillcontain">
-      <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
       <el-col :span="5"  style="height: 100%; background-color: #324057;overflow-y:scroll;">
         <el-menu theme="dark" style="height: 100%;min-width:230px;" default-active="defaultActive" class="el-menu-vertical-demo">

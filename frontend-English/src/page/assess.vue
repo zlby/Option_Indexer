@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<head-second></head-second>
 		<div style="margin-top:30px">
 			<el-row>
 
@@ -137,7 +136,7 @@
 			},
 			filteredAgris:function(){
 			    var vm = this
-				var agris=["Pakchoi"," lettuce"," spinach"," cabbage"," Chinese cabbage"," cole"," Artemisia chinensis"," baby food"," green onion"," carrot"," sweet potato","White radish"," lettuce"," onion"," Lotus Root"," Potato"," Sweet Potato"," Cucumber"," Pumpkin"," bitter gourd"," Wax gourd"," broccoli"," tomato","Towel gourd"," Green Pepper"," Round Eggplant"," Summer Squash"," Eggplant","Pepper","Little Cucumber"," Beans"," Celery"," Cilantro"," Ginger"," Garlic"," Mushroom"," Mushroom"," Leek"," Yellow Bean Sprouts"," Green Bean Sprouts"," Corn"," Cauliflower"," Garlic Moss"," Sacha Sugar Orange"," Pomelo "," Miju "," Lemon "," Red Pomelo "," Small Papaya "," Pearl Melon "," Seedless Watermelon "," Black Beauty Watermelon "," Hami Melon "," Watermelon"," Emperor Banana"," Hainan Banana"," Crown Pear"," Honey Pear"," Pear"," Green Apple"," Imported Snake Fruit"," Gong Pear","  Red Fuji"," Pear"," Yali Pear"," Apple"," Qingtian"," Red Seed"," Red Grape"," Grape"," Narcissus"," Avocado"," Sweet pomegranate "," samara fruit "," imported mangosteen "," Thai durian "," imported kiwi "," black sugar cane "," strawberry "," pineapple "," persimmon "," pomegranate  Ginseng "," dragon fruit "," jujube "," hawthorn "," kiwifruit "," mango "," jujube "," chestnut "," white melon "," papaya "," fresh dates  Green grapes"," kiwifruit"," chives"," citrus"," papaya"," Kyoho grapes"," imported dragon fruit"," dried persimmons"," imported grapefruit"," imported lemons"," Red orange"," red orange"," orange"," kumquat"," grapefruit"," tribute orange"," melon"," white berry melon"," banana"," crystal red fuji"," Coconut Green"," Imported Longan"," Imported Hongmang"," Cherry"," Elizabeth"," Yangmei"," Longan"," Lizao"," Imported Red Li"," Black Brin "," tribute orange "," sweet orange "," apricot "," Sichuan peach "," nectarine ","cherry" ]
+				var agris=["小白菜", "生菜", "菠菜", "大包菜", "大白菜", "油菜", "茼蒿", "娃娃菜", "生葱", "胡萝卜", "番薯", "白萝卜", "莴笋", "洋葱", "藕", "土豆", "红薯", "黄瓜", "南瓜", "苦瓜", "冬瓜", "西兰花", "西红柿", "丝瓜", "青椒", "圆茄", "西葫芦", "茄子", "尖椒", "小黄瓜", "豆角", "芹菜", "香菜", "姜", "蒜苗", "大蒜", "香菇", "蘑菇", "韭菜", "黄豆芽", "绿豆芽", "玉米", "菜花", "蒜苔", "沙糖桔", "脐橙", "蜜柚", "蜜桔", "柠檬", "红柚", "小木瓜", "珍珠瓜", "无籽西瓜", "黑美人西瓜", "哈密瓜", "黄河蜜瓜", "西瓜", "皇帝香蕉", "海南香蕉", "皇冠梨", "蜜梨", "香梨", "青苹果", "进口蛇果", "贡梨", "花牛", "红富士", "梨", "鸭梨", "苹果", "国产青提", "无籽红提", "红提", "葡萄", "水仙芒果", "牛油果", "甜石榴", "圣女果", "进口山竹", "泰国榴莲", "进口奇异果", "黑甘蔗", "草莓", "菠萝", "柿子", "石榴", "人参果", "火龙果", "青枣", "山楂", "猕猴桃", "芒果", "枣", "板栗", "白香瓜", "木瓜", "鲜枣", "进口青提子", "金奇异果", "韭黄", "芦柑", "进口木瓜", "巨峰葡萄", "进口火龙果", "柿饼", "进口西柚", "进口柠檬", "红桔", "红江橙", "澳橙", "金桔", "胡柚", "贡桔", "甜瓜", "白兰瓜", "香蕉", "水晶红富士", "椰青", "进口龙眼", "进口红芒", "樱桃", "伊丽莎白", "杨梅", "桂圆", "梨枣", "杨桃", "进口红李", "黑布林", "贡柑", "甜橙", "杏", "四川水蜜桃","油桃","红樱桃"];
 				return agris.filter(function(item){
 					return (item.indexOf(vm.query) !== -1)||(item.indexOf(vm.query)!==-1)
 				})
@@ -329,7 +328,7 @@
 			            ],
 			            yAxis: [
 			            {
-			            	name:"Price",
+			            	name:"Future Price",
 			            	scale: true,
 			            	gridIndex: 0,
 			            	splitNumber: 10,
@@ -348,7 +347,26 @@
 			            	}
 			            },
 			            {
-			            	name:"错误率",
+			            	name:"Spot Goods Price",
+			            	scale: true,
+			            	gridIndex: 0,
+			            	splitNumber: 10,
+			            	axisLabel: {
+			            		show: true,
+			            	},
+			            	axisLine: {show: true},
+			            	axisTick: {show: true},
+			            	splitLine: {show: true},
+			            	axisPointer: {
+			            		label: {
+			            			formatter: function (params) {
+			            				return params.value
+			            			}
+			            		}
+			            	}
+			            },
+			            {
+			            	name:"Error Rate",
 			            	scale: true,
 			            	gridIndex: 1,
 			            	splitNumber: 10,
@@ -446,7 +464,11 @@
 			    		});
 			    		series.data=processed
 			    		series.xAxisIndex=0;
-			    		series.yAxisIndex=0;
+			    		if(data.name=="期货曲线"){
+			    			series.yAxisIndex=0;
+			    		}else{
+			    			series.yAxisIndex=1;
+			    		}
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		var newXAxis=[];
 			    		var abre=this.option.xAxis[0].data;
