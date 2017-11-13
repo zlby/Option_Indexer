@@ -2,6 +2,8 @@ from django.http import JsonResponse
 import json
 from datetime import datetime
 from option.models import Future, Option, News, Intervals
+from client.models import Client
+from message.mail import MailSender
 from gain_loss import asset_portfolio
 from hedging import monte_carlo_stimulation, spot_price_distribution
 from cross_breed_hedge import cross_breed
@@ -348,6 +350,12 @@ def get_hedging(request):
             result['future_list'] = future_r
             result['option_list'] = option_r
             status['message'] = 'Success'
+
+            user = request.user
+            if user.is_authenticated:
+                client = Client.objects.get(user=user)
+                MailSender.send_hedging_result(client.email, client.username, future_r, option_r)
+
             return JsonResponse(result, status=200)
         else:
             status['code'] = -2
