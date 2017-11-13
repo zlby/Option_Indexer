@@ -2,31 +2,49 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-
-const homepage = r => require.ensure([], () => r(require('@/page/homepage')), 'homepage');
-const register = r => require.ensure([], () => r(require('@/page/register')), 'register');
-const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
-const use = r => require.ensure([], () => r(require('@/page/use')), 'use');
-const carousel = r => require.ensure([], () => r(require('@/page/carousel')), 'carousel');
-const productIntro = r => require.ensure([], () => r(require('@/page/productIntro')), 'productIntro');
-const homepageSecond = r => require.ensure([], () => r(require('@/page/homepageSecond')), 'homepageSecond');
-const option1 = r => require.ensure([], () => r(require('@/page/option1')), 'option1');
-const homepageIndividual = r => require.ensure([], () => r(require('@/page/homepageIndividual')), 'homepageIndividual');
-const infoIndividual = r => require.ensure([], () => r(require('@/page/infoIndividual')), 'infoIndividual');
-const list = r => require.ensure([], () => r(require('@/page/list')), 'list');
-const infoReminder = r => require.ensure([], () => r(require('@/page/infoReminder')), 'infoReminder');
-const beanGroup = r => require.ensure([], () => r(require('@/page/beanGroup')), 'beanGroup');
-const crop = r => require.ensure([], () => r(require('@/page/crop')), 'crop');
-const assess = r => require.ensure([], () => r(require('@/page/assess')), 'assess');
-const calculator = r => require.ensure([], () => r(require('@/page/calculator')), 'calculator');
-
-
+//中文版
+const homepage = r => require.ensure([], () => r(require('@/page/CH/homepage')), 'homepage');
+const register = r => require.ensure([], () => r(require('@/page/CH/register')), 'register');
+const login = r => require.ensure([], () => r(require('@/page/CH/login')), 'login');
+const use = r => require.ensure([], () => r(require('@/page/CH/use')), 'use');
+const carousel = r => require.ensure([], () => r(require('@/page/CH/carousel')), 'carousel');
+const productIntro = r => require.ensure([], () => r(require('@/page/CH/productIntro')), 'productIntro');
+const homepageSecond = r => require.ensure([], () => r(require('@/page/CH/homepageSecond')), 'homepageSecond');
+const option1 = r => require.ensure([], () => r(require('@/page/CH/option1')), 'option1');
+const homepageIndividual = r => require.ensure([], () => r(require('@/page/CH/homepageIndividual')), 'homepageIndividual');
+const infoIndividual = r => require.ensure([], () => r(require('@/page/CH/infoIndividual')), 'infoIndividual');
+const list = r => require.ensure([], () => r(require('@/page/CH/list')), 'list');
+const infoReminder = r => require.ensure([], () => r(require('@/page/CH/infoReminder')), 'infoReminder');
+const beanGroup = r => require.ensure([], () => r(require('@/page/CH/beanGroup')), 'beanGroup');
+const crop = r => require.ensure([], () => r(require('@/page/CH/crop')), 'crop');
+const assess = r => require.ensure([], () => r(require('@/page/CH/assess')), 'assess');
+const calculator = r => require.ensure([], () => r(require('@/page/CH/calculator')), 'calculator');
+//
+//英文版
+const homepage_en = r => require.ensure([], () => r(require('@/page/EN/homepage')), 'homepage_en');
+const register_en = r => require.ensure([], () => r(require('@/page/EN/register')), 'register_en');
+const login_en = r => require.ensure([], () => r(require('@/page/EN/login')), 'login_en');
+const use_en = r => require.ensure([], () => r(require('@/page/EN/use')), 'use_en');
+const carousel_en = r => require.ensure([], () => r(require('@/page/EN/carousel')), 'carousel_en');
+const productIntro_en = r => require.ensure([], () => r(require('@/page/EN/productIntro')), 'productIntro_en');
+const homepageSecond_en = r => require.ensure([], () => r(require('@/page/EN/homepageSecond')), 'homepageSecond_en');
+const option1_en = r => require.ensure([], () => r(require('@/page/EN/option1')), 'option1_en');
+const homepageIndividual_en = r => require.ensure([], () => r(require('@/page/EN/homepageIndividual')), 'homepageIndividual_en');
+const infoIndividual_en = r => require.ensure([], () => r(require('@/page/EN/infoIndividual')), 'infoIndividual_en');
+const list_en = r => require.ensure([], () => r(require('@/page/EN/list')), 'list');
+const infoReminder_en = r => require.ensure([], () => r(require('@/page/EN/infoReminder')), 'infoReminder_en');
+const beanGroup_en = r => require.ensure([], () => r(require('@/page/EN/beanGroup')), 'beanGroup_en');
+const crop_en = r => require.ensure([], () => r(require('@/page/EN/crop')), 'crop_en');
+const assess_en = r => require.ensure([], () => r(require('@/page/EN/assess')), 'assess_en');
+const calculator_en = r => require.ensure([], () => r(require('@/page/EN/calculator')), 'calculator_en');
+//
 const routes = [
 {
 	// mode: 'history',
 	path: '/',
 	component: homepage,
 	name: 'homepage',
+	alias:'/zh-cn',
 	children: [
 	{
 		path: '',
@@ -34,19 +52,19 @@ const routes = [
 		name: 'carousel'
 	},
 	{
-		path: '/register',
+		path: '/zh-cn/register',
 		component: register,
 		name: 'register'
 	},{
-		path: '/login',
+		path: '/zh-cn/login',
 		component: login,
 		name: 'login'
 	},{
-		path: '/use',
+		path: '/zh-cn/use',
 		component: use,
 		name: 'use'
 	},{
-		path: '/homepageIndividual',
+		path: '/zh-cn/homepageIndividual',
 		component: homepageIndividual,
 		name: 'homepageIndividual',
 		children:[{
@@ -54,21 +72,21 @@ const routes = [
 			component: infoIndividual,
 			name: 'infoIndividual'
 		},{
-			path: '/homepageIndividual/list',
+			path: '/zh-cn/homepageIndividual/list',
 			component: list,
 			name: 'list'
 		},{
-			path: '/homepageIndividual/infoReminder',
+			path: '/zh-cn/homepageIndividual/infoReminder',
 			component: infoReminder,
 			name: 'infoReminder'
 		},{
-			path: '/homepageIndividual/infoIndividual',
+			path: '/zh-cn/homepageIndividual/infoIndividual',
 			component: infoIndividual,
 			name: 'infoIndividual'
 		}
 		]
 	},{
-		path: '/productIntro',
+		path: '/zh-cn/productIntro',
 		component: productIntro,
 		name: 'productIntro',
 		children: [
@@ -78,32 +96,118 @@ const routes = [
 			name: 'option1'
 		},
 		{
-			path: '/option1',
+			path: '/zh-cn/option1',
 			component: option1,
 			name: 'option1'
 		},
 		{
-			path: '/homepageSecond',
+			path: '/zh-cn/homepageSecond',
 			component: homepageSecond,
 			name: 'homepageSecond'
 		}
 		]
 	},{
-		path: '/beanGroup',
+		path: '/zh-cn/beanGroup',
 		component: beanGroup,
 		name: 'beanGroup',
 	},{
-		path: '/crop',
+		path: '/zh-cn/crop',
 		component: crop,
 		name: 'crop',
 	},{
-		path: '/assess',
+		path: '/zh-cn/assess',
 		component: assess,
 		name: 'assess',
 	},{
-		path: '/calculator',
+		path: '/zh-cn/calculator',
 		component: calculator,
 		name: 'calculator',
+	},
+
+	]
+},
+{
+	// mode: 'history',
+	path: '/en',
+	component: homepage,
+	name: 'homepage',
+	children: [
+	{
+		path: '',
+		component: carousel_en,
+		name: 'carousel_en'
+	},
+	{
+		path: '/en/register',
+		component: register_en,
+		name: 'register_en'
+	},{
+		path: '/en/login',
+		component: login_en,
+		name: 'login_en'
+	},{
+		path: '/en/use',
+		component: use_en,
+		name: 'use_en'
+	},{
+		path: '/en/homepageIndividual',
+		component: homepageIndividual_en,
+		name: 'homepageIndividual_en',
+		children:[{
+			path: '',
+			component: infoIndividual_en,
+			name: 'infoIndividual_en'
+		},{
+			path: '/en/homepageIndividual/list',
+			component: list_en,
+			name: 'list_en'
+		},{
+			path: '/en/homepageIndividual/infoReminder',
+			component: infoReminder_en,
+			name: 'infoReminder_en'
+		},{
+			path: '/en/homepageIndividual/infoIndividual',
+			component: infoIndividual_en,
+			name: 'infoIndividual_en'
+		}
+		]
+	},{
+		path: '/productIntro',
+		component: productIntro_en,
+		name: 'productIntro_en',
+		children: [
+		{
+			path: '',
+			component: option1_en,
+			name: 'option1_en'
+		},
+		{
+			path: '/en/productIntro/option1',
+			component: option1_en,
+			name: 'option1_en'
+		},
+		{
+			path: '/en/productIntro/homepageSecond',
+			component: homepageSecond_en,
+			name: 'homepageSecond_en'
+		}
+		]
+	},{
+		path: '/en/beanGroup',
+		component: beanGroup_en,
+		name: 'beanGroup_en',
+	},{
+		path: '/en/crop',
+		component: crop_en,
+		name: 'crop_en',
+	},{
+		path: '/en/assess',
+		component: assess_en,
+		name: 'assess_en',
+	},{
+		path: '/en/calculator',
+		component: calculator_en,
+		name: 'calculator_en',
 	},
 
 	]
