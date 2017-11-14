@@ -1,4 +1,5 @@
 import tensorflow as tf
+import os
 import tensorflow.contrib.distributions as dst
 import numpy as np
 
@@ -9,6 +10,7 @@ class LstmModel:
         self.__meta_list = series
         self.__input_size = 1
         self.__output_size = 1
+        self.__forget_bias = 0.2
         self.__batch_size = batch_size
         self.__cell_size = cell_size
         self.__time_step = time_step
@@ -33,11 +35,7 @@ class LstmModel:
                                      intra_op_parallelism_threads=1,
                                      log_device_placement=False
                                      )
-        self.__save_path = "./save/lstmVar.save"
-
-        # Model
-        self.__saver = None
-        pass
+        self.__session_holder = None
 
     def __get_input_layer_output(self):
         """A full-link layer"""
@@ -67,7 +65,7 @@ class LstmModel:
         with tf.name_scope("Cell_Layer"):
             cell = tf.nn.rnn_cell.LSTMCell(num_units=self.__cell_size,
                                            activation=tf.tanh,
-                                           forget_bias=0.2
+                                           forget_bias=self.__forget_bias
                                            )
             self.__cell_state = cell.zero_state(batch_size=self.__batch_size, dtype=tf.float32)
             cell_outputs, self.__out_state = tf.nn.dynamic_rnn(cell=cell,
@@ -154,47 +152,39 @@ class LstmModel:
     def train_till_series_end(self):
         self.__generate_train_step()
         self.__saver = tf.train.Saver()
-        with tf.Session(config=self.config) as sess:
-            sess.run(tf.global_variables_initializer())
+        if not self.__session_holder:
+            self.__session_holder = tf.Session(config=self.config)
+        sess = self.__session_holder
+        sess.run(tf.global_variables_initializer())
+        self.__generate_next_batch()
+        _, state, prd = sess.run([self.train_step, self.__out_state, self.pred],
+                                 feed_dict={self.__input_placeholder: self.__batches,
+                                            self.__label_placeholder: self.__labels}
+                                 )
+        self.__predication = np.append(self.__predication, np.reshape(prd[0, :, 0], [-1]), 0)
+        self.__predication = np.append(self.__predication, np.reshape(prd[1:, -1, 0], [-1]), 0)
+        while self.__check_is_not_end():
             self.__generate_next_batch()
-            _, state, prd = sess.run([self.train_step, self.__out_state, self.pred],
-                                     feed_dict={self.__input_placeholder: self.__batches,
-                                                self.__label_placeholder: self.__labels}
-                                     )
-            self.__predication = np.append(self.__predication, np.reshape(prd[0, :, 0], [-1]), 0)
-            self.__predication = np.append(self.__predication, np.reshape(prd[1:, -1, 0], [-1]), 0)
-            while self.__check_is_not_end():
-                self.__generate_next_batch()
-                loss, _, state, prd = sess.run([self.loss, self.train_step, self.__out_state, self.pred],
-                                               feed_dict={self.__input_placeholder: self.__batches,
-                                                          self.__label_placeholder: self.__labels,
-                                                          self.__cell_state: state
-                                                          })
-                self.__predication = np.append(self.__predication, np.reshape(prd[:, -1, 0], [-1]), 0)
-                if self.cursor % 20 == 0:
-                    print("run %s times: %s" % (self.cursor, loss))
-            self.__last_out = (state, prd)
-            self.__save_path = self.__saver.save(sess, self.__save_path)
-        self.trained = True
+            loss, _, state, prd = sess.run([self.loss, self.train_step, self.__out_state, self.pred],
+                                           feed_dict={self.__input_placeholder: self.__batches,
+                                                      self.__label_placeholder: self.__labels,
+                                                      self.__cell_state: state
+                                                      })
+            self.__predication = np.append(self.__predication, np.reshape(prd[:, -1, 0], [-1]), 0)
+            if self.cursor % 20 == 0:
+                print("run %s times: %s" % (self.cursor, loss))
+        self.__last_out = (state, prd)
 
     def get_prediction_list(self):
         return self.__predication
 
     def predict(self, day_length):
-        if not self.trained:
-            try:
-                import shutil; shutil.rmtree("./save");del shutil
-            except FileNotFoundError:
-                pass
-            self.train_till_series_end()
-        with tf.Session(config=self.config) as sess:
-            self.__saver.restore(sess, self.__save_path)
+        with self.__session_holder as sess:
             for i in range(day_length):
                 self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
                     self.__input_placeholder: self.__last_out[1],
                     self.__cell_state: self.__last_out[0]
                 }))
-                print(self.__last_out[1])
                 self.__predication = np.append(self.__predication,
                                                np.reshape(self.__last_out[1][:, -1, 0], [-1]), 0)
         return self.__predication[-day_length:]

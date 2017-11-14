@@ -30,8 +30,13 @@ def longPredTest():
     series = np.asarray([a[0] for a in entrys])
     test_object = LstmModel(series)
     test_object.train_till_series_end()
-    prd = test_object.predict(30)
-    print(prd)
+    _ = test_object.predict(30)
+    import pylab as plt
+    plt.plot(test_object.get_prediction_list())
+    plt.plot(series, 'r')
+    plt.show()
+    csr.close()
+    database.close()
 
 if __name__ == "__main__":
     longPredTest()
