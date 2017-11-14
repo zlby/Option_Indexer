@@ -96,7 +96,7 @@
 </template>
 
 <script>
-	import headSecond from '../components/headSecond'
+	import headSecond from '../componentsEN/headSecond'
 	import echarts from 'echarts'
 	import axios from 'axios'
 	import {notifi} from '../notif'

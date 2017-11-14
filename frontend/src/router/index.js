@@ -3,40 +3,40 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 //中文版
-const homepage = r => require.ensure([], () => r(require('@/page/CH/homepage')), 'homepage');
-const register = r => require.ensure([], () => r(require('@/page/CH/register')), 'register');
-const login = r => require.ensure([], () => r(require('@/page/CH/login')), 'login');
-const use = r => require.ensure([], () => r(require('@/page/CH/use')), 'use');
-const carousel = r => require.ensure([], () => r(require('@/page/CH/carousel')), 'carousel');
-const productIntro = r => require.ensure([], () => r(require('@/page/CH/productIntro')), 'productIntro');
-const homepageSecond = r => require.ensure([], () => r(require('@/page/CH/homepageSecond')), 'homepageSecond');
-const option1 = r => require.ensure([], () => r(require('@/page/CH/option1')), 'option1');
-const homepageIndividual = r => require.ensure([], () => r(require('@/page/CH/homepageIndividual')), 'homepageIndividual');
-const infoIndividual = r => require.ensure([], () => r(require('@/page/CH/infoIndividual')), 'infoIndividual');
-const list = r => require.ensure([], () => r(require('@/page/CH/list')), 'list');
-const infoReminder = r => require.ensure([], () => r(require('@/page/CH/infoReminder')), 'infoReminder');
-const beanGroup = r => require.ensure([], () => r(require('@/page/CH/beanGroup')), 'beanGroup');
-const crop = r => require.ensure([], () => r(require('@/page/CH/crop')), 'crop');
-const assess = r => require.ensure([], () => r(require('@/page/CH/assess')), 'assess');
-const calculator = r => require.ensure([], () => r(require('@/page/CH/calculator')), 'calculator');
+const homepage = r => require.ensure([], () => r(require('@/pageCH/homepage')), 'homepage');
+const register = r => require.ensure([], () => r(require('@/pageCH/register')), 'register');
+const login = r => require.ensure([], () => r(require('@/pageCH/login')), 'login');
+const use = r => require.ensure([], () => r(require('@/pageCH/use')), 'use');
+const carousel = r => require.ensure([], () => r(require('@/pageCH/carousel')), 'carousel');
+const productIntro = r => require.ensure([], () => r(require('@/pageCH/productIntro')), 'productIntro');
+const homepageSecond = r => require.ensure([], () => r(require('@/pageCH/homepageSecond')), 'homepageSecond');
+const option1 = r => require.ensure([], () => r(require('@/pageCH/option1')), 'option1');
+const homepageIndividual = r => require.ensure([], () => r(require('@/pageCH/homepageIndividual')), 'homepageIndividual');
+const infoIndividual = r => require.ensure([], () => r(require('@/pageCH/infoIndividual')), 'infoIndividual');
+const list = r => require.ensure([], () => r(require('@/pageCH/list')), 'list');
+const infoReminder = r => require.ensure([], () => r(require('@/pageCH/infoReminder')), 'infoReminder');
+const beanGroup = r => require.ensure([], () => r(require('@/pageCH/beanGroup')), 'beanGroup');
+const crop = r => require.ensure([], () => r(require('@/pageCH/crop')), 'crop');
+const assess = r => require.ensure([], () => r(require('@/pageCH/assess')), 'assess');
+const calculator = r => require.ensure([], () => r(require('@/pageCH/calculator')), 'calculator');
 //
 //英文版
-const homepage_en = r => require.ensure([], () => r(require('@/page/EN/homepage')), 'homepage_en');
-const register_en = r => require.ensure([], () => r(require('@/page/EN/register')), 'register_en');
-const login_en = r => require.ensure([], () => r(require('@/page/EN/login')), 'login_en');
-const use_en = r => require.ensure([], () => r(require('@/page/EN/use')), 'use_en');
-const carousel_en = r => require.ensure([], () => r(require('@/page/EN/carousel')), 'carousel_en');
-const productIntro_en = r => require.ensure([], () => r(require('@/page/EN/productIntro')), 'productIntro_en');
-const homepageSecond_en = r => require.ensure([], () => r(require('@/page/EN/homepageSecond')), 'homepageSecond_en');
-const option1_en = r => require.ensure([], () => r(require('@/page/EN/option1')), 'option1_en');
-const homepageIndividual_en = r => require.ensure([], () => r(require('@/page/EN/homepageIndividual')), 'homepageIndividual_en');
-const infoIndividual_en = r => require.ensure([], () => r(require('@/page/EN/infoIndividual')), 'infoIndividual_en');
-const list_en = r => require.ensure([], () => r(require('@/page/EN/list')), 'list');
-const infoReminder_en = r => require.ensure([], () => r(require('@/page/EN/infoReminder')), 'infoReminder_en');
-const beanGroup_en = r => require.ensure([], () => r(require('@/page/EN/beanGroup')), 'beanGroup_en');
-const crop_en = r => require.ensure([], () => r(require('@/page/EN/crop')), 'crop_en');
-const assess_en = r => require.ensure([], () => r(require('@/page/EN/assess')), 'assess_en');
-const calculator_en = r => require.ensure([], () => r(require('@/page/EN/calculator')), 'calculator_en');
+const homepage_en = r => require.ensure([], () => r(require('@/pageEN/homepage')), 'homepage_en');
+const register_en = r => require.ensure([], () => r(require('@/pageEN/register')), 'register_en');
+const login_en = r => require.ensure([], () => r(require('@/pageEN/login')), 'login_en');
+const use_en = r => require.ensure([], () => r(require('@/pageEN/use')), 'use_en');
+const carousel_en = r => require.ensure([], () => r(require('@/pageEN/carousel')), 'carousel_en');
+const productIntro_en = r => require.ensure([], () => r(require('@/pageEN/productIntro')), 'productIntro_en');
+const homepageSecond_en = r => require.ensure([], () => r(require('@/pageEN/homepageSecond')), 'homepageSecond_en');
+const option1_en = r => require.ensure([], () => r(require('@/pageEN/option1')), 'option1_en');
+const homepageIndividual_en = r => require.ensure([], () => r(require('@/pageEN/homepageIndividual')), 'homepageIndividual_en');
+const infoIndividual_en = r => require.ensure([], () => r(require('@/pageEN/infoIndividual')), 'infoIndividual_en');
+const list_en = r => require.ensure([], () => r(require('@/pageEN/list')), 'list');
+const infoReminder_en = r => require.ensure([], () => r(require('@/pageEN/infoReminder')), 'infoReminder_en');
+const beanGroup_en = r => require.ensure([], () => r(require('@/pageEN/beanGroup')), 'beanGroup_en');
+const crop_en = r => require.ensure([], () => r(require('@/pageEN/crop')), 'crop_en');
+const assess_en = r => require.ensure([], () => r(require('@/pageEN/assess')), 'assess_en');
+const calculator_en = r => require.ensure([], () => r(require('@/pageEN/calculator')), 'calculator_en');
 //
 const routes = [
 {

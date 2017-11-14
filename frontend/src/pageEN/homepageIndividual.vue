@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import headSecond from '../components/headSecond'
+  import headSecond from '../componentsEN/headSecond'
 
   export default{
 

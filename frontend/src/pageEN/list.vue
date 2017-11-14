@@ -67,7 +67,7 @@
   import echarts from 'echarts'
   import Bus from '../bus'
   import axios from 'axios'
-  import radarCharts from '../components/radarCharts'
+  import radarCharts from '../componentsEN/radarCharts'
   import {notifi} from '../notif'
 
   export default{
