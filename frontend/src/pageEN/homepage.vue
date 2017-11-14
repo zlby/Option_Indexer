@@ -10,8 +10,8 @@
 </template>
 
 <script>
-	import headTop from '../components/EN/headTop'
-	import footerBottom from '../components/EN/footerBottom'
+	import headTop from '../componentsEN/headTop'
+	import footerBottom from '../componentsEN/footerBottom'
 	export default{
 
 		components:{
