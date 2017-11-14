@@ -96,14 +96,12 @@
 </template>
 
 <script>
-	import headSecond from '../componentsEN/headSecond'
 	import echarts from 'echarts'
 	import axios from 'axios'
 	import {notifi} from '../notif'
 	export default{
 
 		components:{
-			headSecond,
 		},
 
 		data(){
@@ -513,7 +511,7 @@
 			    		});
 			    		series.data=processed
 			    		series.xAxisIndex=1;
-			    		series.yAxisIndex=1;
+			    		series.yAxisIndex=2;
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		this.option.xAxis[1].data=processed.map(function(o){
 			    		    return o[0]
