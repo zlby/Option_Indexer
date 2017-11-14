@@ -90,8 +90,7 @@
         if (this.form.new_password != '') {
           this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password, new_password:this.form.new_password})
           .then(function success(){
-            notifi('Successfully modified
-', 'password modified successfully ，please login again！', 'success', context)
+            notifi('Successfully modified', 'password modified successfully ，please login again！', 'success', context)
           }, function fail(){
             context.notif('Modification failed', 'password modification failed，please login again！', 'error')
           })
@@ -104,7 +103,7 @@
             context.notif('Modification failed', 'E-mail or mobile phone modification failed, please log in again!', 'error')
           })
         }
-        
+
         this.$store.dispatch('UserLogout');
         this.$router.push({ path: '/' })
       },
