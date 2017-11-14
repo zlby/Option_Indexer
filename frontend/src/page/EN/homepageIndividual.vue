@@ -1,13 +1,12 @@
 <template>
   <div class="manage_page fillcontain">
-    <headSecond></headSecond>
     <el-row style="height: 100%; min-width:200px">
       <el-col :span="5"  style="min-height: 100%; background-color: #324057;min-width:200px">
         <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
-          <el-menu-item index="/homepageIndividual"><i class="el-icon-menu"></i>个人资料</el-menu-item>
-          <el-menu-item index="/homepageIndividual/list"><i class="el-icon-menu"></i>订阅列表</el-menu-item>
-          <el-menu-item index="/homepageIndividual/infoReminder"><i class="el-icon-menu"></i>消息提醒</el-menu-item>
+          <el-menu-item index="/homepageIndividual"><i class="el-icon-menu"></i>Personal Info</el-menu-item>
+          <el-menu-item index="/homepageIndividual/list"><i class="el-icon-menu"></i>Subscribe List</el-menu-item>
+          <el-menu-item index="/homepageIndividual/infoReminder"><i class="el-icon-menu"></i>Notification</el-menu-item>
 
         </el-menu>
       </el-col>

@@ -84,10 +84,10 @@ export const UserLogout = ({ commit }) => {
       commit('logout')
       router.push({path:'/'})
       } else { // 注销失败
-        alert('注销失败！')
+        console.log('注销失败！')
       }
     }).catch(function (error) {
-      alert('注销失败！')
+      console.log('注销失败！')
     })
   };
 
@@ -98,10 +98,10 @@ export const UserLogout = ({ commit }) => {
       commit('logout')
       router.push({path:'/login'})
       } else { // 注销失败
-        alert('账号切换失败！')
+        console.log('账号切换失败！')
       }
     }).catch(function (error) {
-      alert('账号切换失败！')
+      console.log('账号切换失败！')
     })
   };
 
@@ -112,10 +112,10 @@ export const UserLogout = ({ commit }) => {
 
         commit('getNews', {news: res.news, page_number: obj.page_number})
       }else{
-        alert('获取新闻失败！')
+        console.log('获取新闻失败！')
       }
     }).catch(function (error){
-      alert('获取新闻失败！')
+      console.log('获取新闻失败！')
     })
   };
 
@@ -154,10 +154,10 @@ export const getNotification = ({ commit }, obj)=>{
       }
       Bus.$emit("getno-read", {count:count});
     }else{
-      alert('获取消息失败 code不为0')
+      console.log('获取消息失败 code不为0')
       }
     }).catch(function (error){
-      alert('获取消息失败！ ')
+      console.log('获取消息失败！ ')
       console.log(error)
     })
 };
@@ -168,10 +168,10 @@ export const getOptionCombo = ({ commit }, obj)=>{
     if (res.status.code == '0'){
       commit('getOptionCombo',res.combo_list)
     }else{
-      alert('获取消息失败 code不为0')
+      console.log('获取消息失败 code不为0')
       }
     }).catch(function (error){
-      alert('获取消息失败！ ')
+      console.log('获取消息失败！ ')
       console.log(error)
     })
 };
@@ -182,10 +182,10 @@ export const getFutureListBalance = ({ commit }, obj)=>{
     if (res.status.code == '0'){
       commit('getFutureListBalance',res.future_list)
     }else{
-      alert('获取消息失败 code不为0')
+      console.log('获取消息失败 code不为0')
       }
     }).catch(function (error){
-      alert('获取消息失败！ ')
+      console.log('获取消息失败！ ')
       console.log(error)
     })
 };
@@ -201,10 +201,10 @@ export const getOptionListBalance = ({ commit }, obj)=>{
     if (res.status.code == '0'){
       commit('getOptionListBalance',{time:future,future_list:res.future_list})
     }else{
-      alert('获取消息失败 code不为0')
+      console.log('获取消息失败 code不为0')
       }
     }).catch(function (error){
-      alert('获取消息失败！ ')
+      console.log('获取消息失败！ ')
       console.log(error)
     })
 };

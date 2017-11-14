@@ -5,27 +5,27 @@
       <el-menu class="el-menu-demo1" mode="horizontal" router>
 
       <el-col :span="1" :offset="2">
-         <el-menu-item index="/">
+         <el-menu-item index="/en">
           <img src="../assets/未标题-1.png" class="touxiang">
         </el-menu-item>
       </el-col>
 
       <el-col :span="7" :offset="8" :xs="7" :md="7" :lg="7" :sm="7" class="main-page-group">
-       <el-menu-item class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" index="/">首页</el-menu-item>
+       <el-menu-item class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" index="/en">Mainpage</el-menu-item>
 
-       <el-menu-item index="/" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">
+       <el-menu-item index="/en" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">
         <el-dropdown menu-align="start">
-          <span class="el-dropdown-link1">套期保值
+          <span class="el-dropdown-link1">Hedging
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="toBeanGroup">豆粕资产组合损益图</el-button>
+            <el-button type="text" @click="toBeanGroup">Soybean meal portfolio profit loss chart</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toCrop">豆粕资产组合套期保值</el-button>
+              <el-button type="text" @click="toCrop">Soybean meal portfolio hedging</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toAccess">农作物跨品种套期保值</el-button>
+              <el-button type="text" @click="toAccess">Crops across breeds hedging</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -33,18 +33,21 @@
 
 
 
-      <el-menu-item index="/productIntro" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">策略套利</el-menu-item>
-        <el-menu-item index="/login" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>策略套利</el-menu-item>
-        <el-menu-item index="/" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn">
+      <el-menu-item index="/en/productIntro" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">Arbitrage</el-menu-item>
+        <el-menu-item index="/en/login" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-else>Arbitrage</el-menu-item>
+        <el-menu-item index="/en" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn">
         <el-dropdown menu-align="start">
-          <span class="el-dropdown-link1">帮助
+          <span class="el-dropdown-link1">Help
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <a href="/static/pdf/INDEXER.pdf">用户手册</a>
+            <a href="/static/pdf/INDEXER.pdf">User Manual</a>
             </el-dropdown-item>
             <el-dropdown-item>
-            <a href="/static/video/INDEXER.mp4">演示视频</a>
+            <a href="/static/video/INDEXER.mp4">Demo Video</a>
+            </el-dropdown-item>
+            <el-dropdown-item @click="toChinese">
+              中文版
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -54,21 +57,21 @@
 
 
      <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-if="loggedin==false">
-       <el-menu-item index= "/login" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">登录</el-menu-item>
-       <el-menu-item index="/register" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">注册</el-menu-item>
+       <el-menu-item index= "/en/login" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">Login</el-menu-item>
+       <el-menu-item index="/en/register" class="el-col el-col-xs-12 el-col-sm-12 el-col-md-12 el-col-lg-12 main-page-btn">Register</el-menu-item>
      </el-col>
 
      <el-col :span="5" :offset="1" :xs="5" :md="5" :lg="5" :sm="5" v-else>
-      <el-menu-item  index="/homepageIndividual/infoReminder"  class="el-col  main-page-btn" style="width:40%;">
+      <el-menu-item  index="/en/homepageIndividual/infoReminder"  class="el-col  main-page-btn" style="width:40%;">
       <el-badge :value="no_readCount" class="item">
         <i class="el-icon-message"></i>
       </el-badge>
       </el-menu-item>
 
-      <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
+      <el-menu-item  index="/en" class="el-col main-page-btn" style="width:30%">
       <img style="width: 50px; height: 50px;margin-top:0px" src="../assets/bigtouxiang.png">
       </el-menu-item>
-      <el-menu-item  index="/" class="el-col main-page-btn" style="width:30%">
+      <el-menu-item  index="/en" class="el-col main-page-btn" style="width:30%">
         <el-dropdown style="margin-left:10px">
           <span class="el-dropdown-link1">
             {{name}}<i class="el-icon-caret-bottom el-icon--right"></i>
@@ -76,13 +79,13 @@
 
           <el-dropdown-menu slot="dropdown" style="background-color:#404040; border:0px;margin-left:40px">
             <el-dropdown-item><i class="el-icon-document" style="color:white"></i>
-              <el-button type="text" @click="homepageIndividual">个人主页</el-button>
+              <el-button type="text" @click="homepageIndividual">Homepage</el-button>
             </el-dropdown-item>
             <el-dropdown-item><i class="el-icon-edit" style="color:white"></i>
-              <el-button type="text" @click="change">切换账号</el-button>
+              <el-button type="text" @click="change">Switch accounts</el-button>
             </el-dropdown-item>
             <el-dropdown-item><i class="el-icon-arrow-left" style="color:white"></i>
-              <el-button type="text" @click="logout">注销</el-button>
+              <el-button type="text" @click="logout">Log out</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -143,28 +146,31 @@
         this.$store.dispatch('UserChange');
       },
       homepageIndividual: function(){
-        this.$router.push({ path: '/homepageIndividual' })
+        this.$router.push({ path: '/en/homepageIndividual' })
       },
       toBeanGroup: function(){
-        this.$router.push({ path: '/beanGroup'})
+        this.$router.push({ path: '/en/beanGroup'})
       },
       toCal: function(){
-        this.$router.push({ path: '/calculator'})
+        this.$router.push({ path: '/en/calculator'})
       },
       toCrop: function(){
-        this.$router.push({ path: '/crop'})
+        this.$router.push({ path: '/en/crop'})
       },
       toAccess: function(){
-        this.$router.push({ path: '/assess'})
+        this.$router.push({ path: '/en/assess'})
       },
       toLogin:function () {
-        this.$router.push({ path: '/login'})
+        this.$router.push({ path: '/en/login'})
       },
       toPdf:function(){
         window.open("/static/pdf/INDEXER.pdf")
       },
       toVideo:function(){
         window.open("/static/video/INDEXER.mp4")
+      },
+      toChinese:function(){
+        this.$router.push({path:'/zh-cn'})
       },
       watch: {
         dialogFormVisible: function(val){
@@ -179,10 +185,10 @@
 
 <style lang="less">
 
-	@import '../style/common';
+  @import '../style/common';
 
-	.el-menu-demo1{
-		width:100%;
+  .el-menu-demo1{
+    width:100%;
     background-repeat:no-repeat;
     background-size:100% 100%;
     -moz-background-size:100% 100%;
@@ -229,8 +235,8 @@
 }
 
 .touxiang1{
-	color:white;
-	-webkit-filter: drop-shadow(#FFFFFF 0px 0);filter: drop-shadow(#FFFFFF 0px 0);
+  color:white;
+  -webkit-filter: drop-shadow(#FFFFFF 0px 0);filter: drop-shadow(#FFFFFF 0px 0);
 }
 
 // .navigate{
@@ -242,11 +248,11 @@
 // }
 
 #username{
-	opacity:0.90;
+  opacity:0.90;
 }
 
 #password{
-	opacity: 0.90;
+  opacity: 0.90;
 }
 
 // .item{

@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<head-second></head-second>
 		<div class="beangroup">
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
@@ -10,11 +9,11 @@
 								<el-col :span="14">
 									<div style="">
 										<span style="vertical-align:center;margin-top:8px;">
-											时间
+											Time
 										</span>
 										<el-date-picker v-model="daypicker"
 											type="date"
-											placeholder="选择日期时间"
+											placeholder="Select Time"
 											align="right"
 											:picker-options="pickerOption"
 											format="yyyy-MM-dd"
@@ -25,9 +24,9 @@
 								<el-col :span="10">
 									<div style="">
 										<span style="vertical-align:center; margin-top:8px">
-											现货
+											Physicals
 										</span>
-										<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
+										<el-input placeholder="Please enter physicals(tons)" style="width:70%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
 							</el-row>
@@ -40,7 +39,7 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboFuture in comboFutures">
 										<div class="kind">
-											<span>期货品种</span>
+											<span>Future</span>
 											<el-select v-model="comboFuture.code" class="sel">
 												<el-option
 												v-for="item in filteredFutures"
@@ -49,7 +48,7 @@
 												:value="item"/>
 											</el-select>
 										</div>
-										<span>期货持仓</span>
+										<span>Future Positions</span>
 										<el-input-number class="inp" v-model="comboFuture.amount" size="small"></el-input-number>
 									</div>
 									<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
@@ -60,7 +59,7 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
-										<span>期权品种</span>
+										<span>Option</span>
 											<el-select v-model="comboOption.code" class="sel">
 												<el-option
 												v-for="item in filteredOptions"
@@ -69,10 +68,10 @@
 												:value="item"/>
 											</el-select>
 										</div>
-										<span>期权持仓</span>
+										<span>Option Positions</span>
 										<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
 										<div class="kind">
-										<span style="margin-left:15px">波动率</span>
+										<span style="margin-left:15px">Implied Volatility</span>
 											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
 											</el-input-number>
 										</div>
@@ -85,11 +84,11 @@
 
 					<div class="partThree">
 						<el-button class="el-col el-col-xs-24 el-col-md-24 el-col-sm-24 el-col-lg-24" style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481;" @click="confirmCombo">
-							<div style="color: #656565;font-size: 24px">开&nbsp&nbsp&nbsp始</div></el-button>
+							<div style="color: #656565;font-size: 24px">Start Calculation</div></el-button>
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="13" :offset="1" v-loading="loading" element-loading-text="拼命加载中">
+				<el-col :span="13" :offset="1" v-loading="loading" element-loading-text="Loading ASAP">
 					<div class="graph"  id="beanchart" style="width:100%;height:600px;margin-top:20px">
 					</div>
 				</el-col>
@@ -116,7 +115,7 @@
 					daypicker: new Date(),
 					pickerOption: {
 			          shortcuts: [{
-			            text: '今天',
+			            text: 'Today',
 			            onClick(picker) {
 			              picker.$emit('pick', new Date());
 			            }

@@ -6,9 +6,9 @@
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">最前沿的商品期货期权资讯</p>
+						<p class="p2">Most advanced commodity futures and options information</p>
 						<br><br><br><br>
-						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
             <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
@@ -17,9 +17,9 @@
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">最精确的商品期货期权预测</p>
+						<p class="p2">Most accurate forecast of commodity futures options</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
             <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
@@ -28,9 +28,9 @@
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">最权威的商品期权交易策略</p>
+						<p class="p2">Most authoritative commodity options trading strategy</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
             <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
@@ -39,10 +39,10 @@
 					<div class="inner">
 						<p class="p1">INDEXER</p>
 						<br>
-						<p class="p2">最准时的商品期权交易提醒</p>
+						<p class="p2">Most punctual commodity options trading reminder</p>
 						<br><br>						<br><br>
-						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">开始使用</el-button>
-            <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
+						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
+            <el-button class="button1" v-on:click="home" v-else>HomePage</el-button>
 					</div>
 					<!-- <img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -56,9 +56,9 @@
 		<div class="news">
 			<div class="Carousel2">
 				<div class="outer" style="padding-top:50px">
-					<p class="p1">新闻资讯</p>
+					<p class="p1">News</p>
 					<br>
-					<p class="p2">提供最前沿的豆粕期货期权资讯</p>
+					<p class="p2">Provide on time soybean meal futures options information</p>
 					<br><br><br>
 				</div>
 
@@ -87,7 +87,7 @@
 						<p class="H1">{{time[index1-1][index2-1]}}</p>
 						<div>{{content[index1-1][index2-1]}}</div>
 					<div slot="footer" class="dialog-footer">
-						<el-button @click="dialogFormVisible=false">退 出</el-button>
+						<el-button @click="dialogFormVisible=false">Back</el-button>
 					</div>
 				</el-dialog>
 
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-	import footerBottom from '../components/footerBottom'
+	import footerBottom from '../components/EN/footerBottom'
 	import api from '../api'
 	export default{
 
