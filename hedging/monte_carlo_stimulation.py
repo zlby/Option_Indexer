@@ -238,7 +238,7 @@ def monte_carlo(future_list, option_list, physicals:float, w1:float, w2:float, t
 
 
 
-    return result_combo['future_list'], result_combo['option_list'], result_combo['hedge_cost']
+    return result_combo['future_list'], result_combo['option_list']
 
 
 
