@@ -275,14 +275,12 @@
 </template>
 
 <script>
-	import headSecond from '../componentsEN/headSecond'
 	import echarts from 'echarts'
 	import axios from 'axios'
 	import {notifi} from '../notif'
 	export default{
 
 		components:{
-			headSecond,
 		},
 
 		data(){
@@ -370,7 +368,7 @@
 			this.option={
 				title:[
 				{
-					text: '概率密度函数',
+					text: 'Frequency Function',
 					subtext:"",
 					left:"10%",
 					top:"4%"

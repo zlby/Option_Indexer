@@ -99,7 +99,7 @@
 </template>
 
 <script>
-	import footerBottom from '../componentsEN/footerBottom'
+	import footerBottom from '../componentsEN/footerBottom_en'
 	import api from '../api'
 	export default{
 

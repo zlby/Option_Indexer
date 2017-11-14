@@ -1,6 +1,6 @@
 <template>
 	<div class="homepage fillcontain">
-		<head-top></head-top>
+		<head-top_en></head-top_en>
 		<transition name="slide">
 		<router-view></router-view>
 		</transition>
@@ -10,13 +10,13 @@
 </template>
 
 <script>
-	import headTop from '../componentsEN/headTop'
-	import footerBottom from '../componentsEN/footerBottom'
+	import headTop_en from '../componentsEN/headTop_en'
+	import footerBottom_en from '../componentsEN/footerBottom_en'
 	export default{
 
 		components:{
-			headTop,
-			 footerBottom,
+			headTop_en,
+			 footerBottom_en,
 		},
 
 		data(){
@@ -43,14 +43,14 @@
     font-size: 18px;
     opacity: 0.75;
     line-height: 800px;
-    
+
     margin: 0;
   }
-  
+
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
   }
-  
+
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
   }

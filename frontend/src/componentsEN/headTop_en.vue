@@ -41,13 +41,13 @@
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <a href="/static/pdf/INDEXER.pdf">User Manual</a>
+            <a href="/static/pdf/INDEXER.pdf" class="normalize_font">User Manual</a>
             </el-dropdown-item>
             <el-dropdown-item>
-            <a href="/static/video/INDEXER.mp4">Demo Video</a>
+            <a href="/static/video/INDEXER.mp4" class="normalize_font">Demo Video</a>
             </el-dropdown-item>
-            <el-dropdown-item @click="toChinese">
-              中文版
+            <el-dropdown-item >
+              <router-link to="/zh-cn" class="normalize_font">中文版</router-link>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -169,9 +169,6 @@
       toVideo:function(){
         window.open("/static/video/INDEXER.mp4")
       },
-      toChinese:function(){
-        this.$router.push({path:'/zh-cn'})
-      },
       watch: {
         dialogFormVisible: function(val){
           if(val===false){ // 要隐藏
@@ -268,4 +265,8 @@
   margin-top: 15px;
 }
 
+.normalize_font{
+  text-decoration: none;
+  color:#20a0e0;
+}
 </style>

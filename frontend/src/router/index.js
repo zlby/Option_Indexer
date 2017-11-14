@@ -129,8 +129,8 @@ const routes = [
 {
 	// mode: 'history',
 	path: '/en',
-	component: homepage,
-	name: 'homepage',
+	component: homepage_en,
+	name: 'homepage_en',
 	children: [
 	{
 		path: '',
@@ -172,7 +172,7 @@ const routes = [
 		}
 		]
 	},{
-		path: '/productIntro',
+		path: '/en/productIntro',
 		component: productIntro_en,
 		name: 'productIntro_en',
 		children: [

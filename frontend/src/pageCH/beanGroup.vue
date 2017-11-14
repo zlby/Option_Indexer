@@ -102,10 +102,6 @@
 		import {notifi} from '../notif'
 		export default{
 
-			components:{
-				headSecond,
-			},
-
 			data(){
 				return{
 					comboFutures:[],

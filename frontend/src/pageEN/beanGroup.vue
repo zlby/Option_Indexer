@@ -104,7 +104,7 @@
 		export default{
 
 			components:{
-				headSecond,
+
 			},
 
 			data(){
@@ -185,7 +185,7 @@
 			    this.option={
 			        title:[
 			            {
-			                text: '损益图',
+			                text: 'Gain Loss Curve',
 			                subtext:"",
 			                left:"5%",
 			                top:"0%"
@@ -270,7 +270,7 @@
 			        xAxis: [
 			            {
 			                type: "value",
-			                name:"豆粕现货价格",
+			                name:"Soymeal Spot Price",
 			                data: null,
 			                scale: true,
 			                boundaryGap: true,
@@ -286,7 +286,7 @@
 			        ],
 			        yAxis: [
 			            {
-			            	name:"资产组合价值",
+			            	name:"Portfolio Price",
 			                scale: true,
 			                gridIndex: 0,
 			                splitNumber: 10,

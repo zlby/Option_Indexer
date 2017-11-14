@@ -15,7 +15,7 @@
 
             <el-col :span="4">
             <el-radio-group v-model="interval">
-                <el-radio-button label="day">day</el-radio-button><el-radio-button label="hour">小时</el-radio-button>
+                <el-radio-button label="day">day</el-radio-button><el-radio-button label="hour">hour</el-radio-button>
             </el-radio-group>
             </el-col>
 
@@ -1100,13 +1100,13 @@ putCombination:function(){
               if(res.data.status.code=='0'){
                   saveThis.$notify({
                       title: 'Success',
-                      message: 'You has successfully chosen option '+saveThis.readyCombinedOption[0]+"and option "+saveThis.readyCombinedOption[1],
+                      message: 'You have successfully chosen option '+saveThis.readyCombinedOption[0]+"and option "+saveThis.readyCombinedOption[1],
                       type: 'success'
                   });
               }else if(res.data.status.code=="-6"){
                 saveThis.$notify.error({
                     title: 'Error',
-                    message: 'You has chosen an nonexistent option or the combination you choose is unpredictable',
+                    message: 'You have chosen an nonexistent option or the combination you choose is unpredictable',
                     type: 'danger'
                 });
               }
