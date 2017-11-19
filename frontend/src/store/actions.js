@@ -21,12 +21,12 @@ export const UserNewpassword = ({ commit }, data) =>{
 
 
 
-export const UserRegister = ({ commit }, data) => {
+export const UserRegister_en = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
     api.localRegister(data).then(function (res) {
       res = res.data
       if (res.status.code == '0') {
-        router.push({path:'/'})
+        router.push({path:'/en'})
         commit('login', {username: data.username});
         resolve()
       } else if(res.status.code == '-3'){
@@ -41,12 +41,32 @@ export const UserRegister = ({ commit }, data) => {
   })
 };
 
-export const UserLogin = ({ commit }, data) => {
+export const UserRegister_ch = ({ commit }, data) => {
+  return new Promise((resolve, reject) => {
+    api.localRegister(data).then(function (res) {
+      res = res.data
+      if (res.status.code == '0') {
+        router.push({path:'/zh-cn'})
+        commit('login', {username: data.username});
+        resolve()
+      } else if(res.status.code == '-3'){
+        reject()
+      } else{
+        reject()
+      }
+    })
+    .catch(function (error) {
+      reject()
+    })
+  })
+};
+
+export const UserLogin_en = ({ commit }, data) => {
   return new Promise((resolve, reject) => {
     api.localLogin(data).then(function (res) {
       res = res.data
       if (res.status.code == '0') {
-        router.push({path:'/'})
+        router.push({path:'/en'})
         commit('login', {username: data.username});
         resolve()
       } else {
@@ -59,7 +79,26 @@ export const UserLogin = ({ commit }, data) => {
       reject()
     })
   })
+};
 
+export const UserLogin_ch = ({ commit }, data) => {
+  return new Promise((resolve, reject) => {
+    api.localLogin(data).then(function (res) {
+      res = res.data
+      if (res.status.code == '0') {
+        router.push({path:'/zh-cn'})
+        commit('login', {username: data.username});
+        resolve()
+      } else {
+        // alert('登录失败！')
+        reject()
+      }
+    })
+    .catch(function (error) {
+      // alert('登录失败！!')
+      reject()
+    })
+  })
 };
 
 export const UpdateUserInfo = ({ commit }) => {
@@ -69,20 +108,22 @@ export const UpdateUserInfo = ({ commit }) => {
       console.log(res)
       commit('updateUserInfo', {username: res.username, email: res.email, phone: res.phone});
     } else {
-      console.log('获取用户信息失败！')
+      console.log('Wrong Information！')
     }
   })
   .catch(function (error) {
-    console.log('获取用户信息失败！！')
+    console.log('Wrong Information！')
   })
 };
 
-export const UserLogout = ({ commit }) => {
+
+
+export const UserLogout_en = ({ commit }) => {
   api.localLogout().then(function (res) {
     res = res.data
     if (res.status.code == '0') { // 注销成功，返回首页
       commit('logout')
-      router.push({path:'/'})
+      router.push({path:'/en'})
       } else { // 注销失败
         console.log('注销失败！')
       }
@@ -91,12 +132,40 @@ export const UserLogout = ({ commit }) => {
     })
   };
 
-  export const UserChange = ({ commit }) => {
+export const UserLogout_ch = ({ commit }) => {
+  api.localLogout().then(function (res) {
+    res = res.data
+    if (res.status.code == '0') { // 注销成功，返回首页
+      commit('logout')
+      router.push({path:'/zh-ch'})
+      } else { // 注销失败
+        console.log('注销失败！')
+      }
+    }).catch(function (error) {
+      console.log('注销失败！')
+    })
+  };
+
+  export const UserChange_ch = ({ commit }) => {
     api.localLogout().then(function (res) {
       res = res.data
     if (res.status.code == '0') { // 注销成功，返回首页
       commit('logout')
-      router.push({path:'/login'})
+      router.push({path:'/zh-cn/login'})
+      } else { // 注销失败
+        console.log('账号切换失败！')
+      }
+    }).catch(function (error) {
+      console.log('账号切换失败！')
+    })
+  };
+
+    export const UserChange_en = ({ commit }) => {
+    api.localLogout().then(function (res) {
+      res = res.data
+    if (res.status.code == '0') { // 注销成功，返回首页
+      commit('logout')
+      router.push({path:'/en/login'})
       } else { // 注销失败
         console.log('账号切换失败！')
       }

@@ -134,7 +134,7 @@
       },
       methods: {
        logout: function() {
-        this.$store.dispatch('UserLogout');
+        this.$store.dispatch('UserLogout_ch');
       },
       dj: function(){
         this.$store.dispatch('UserNewpassword', {old_password:this.form.old_password,
@@ -143,7 +143,7 @@
           phone:this.form.phone});
       },
       change: function(){
-        this.$store.dispatch('UserChange');
+        this.$store.dispatch('UserChange_ch');
       },
       homepageIndividual: function(){
         this.$router.push({ path: '/zh-cn/homepageIndividual' })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="admin_title"><i class="el-icon-edit"></i>      个人信息</header>
+    <header class="admin_title"><i class="el-icon-edit"></i>      Personal Info</header>
     <div class="admin_set">
     <el-col :span="18">
       <el-form :model="form" ref="form" label-width="100px" class="demo-ruleForm">

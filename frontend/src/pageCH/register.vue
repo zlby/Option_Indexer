@@ -120,7 +120,7 @@ methods: {
 			// 	this.$store.dispatch('UpdateUserInfo')
 			// })
 
-			this.$store.dispatch('UserRegister', this.form)
+			this.$store.dispatch('UserRegister_ch', this.form)
 			.then(function success(){
 	        	notifi('注册成功', '欢迎您，' + context.form.username, 'success', context)
 	        	context.$store.dispatch('UpdateUserInfo')

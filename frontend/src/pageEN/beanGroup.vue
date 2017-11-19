@@ -26,7 +26,7 @@
 										<span style="vertical-align:center; margin-top:8px">
 											Physicals
 										</span>
-										<el-input placeholder="Please enter physicals(tons)" style="width:70%" v-model="currentHold"></el-input>
+										<el-input placeholder="Please enter physicals(tons)" style="width:50%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
 							</el-row>
@@ -40,7 +40,7 @@
 									<div class="wrapper" v-for="comboFuture in comboFutures">
 										<div class="kind">
 											<span>Future</span>
-											<el-select v-model="comboFuture.code" class="sel">
+											<el-select v-model="comboFuture.code" class="sel" style="margin-left: 64px">
 												<el-option
 												v-for="item in filteredFutures"
 												:key="item"
@@ -49,7 +49,7 @@
 											</el-select>
 										</div>
 										<span>Future Positions</span>
-										<el-input-number class="inp" v-model="comboFuture.amount" size="small"></el-input-number>
+										<el-input-number class="inp" v-model="comboFuture.amount" size="small" style="width:40%"></el-input-number>
 									</div>
 									<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 								</div>
@@ -60,7 +60,7 @@
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
 										<span>Option</span>
-											<el-select v-model="comboOption.code" class="sel">
+											<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px">
 												<el-option
 												v-for="item in filteredOptions"
 												:key="item"
@@ -69,10 +69,10 @@
 											</el-select>
 										</div>
 										<span>Option Positions</span>
-										<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
+										<el-input-number class="inp" v-model="comboOption.amount" size="small" style="width:40%"></el-input-number>
 										<div class="kind">
-										<span style="margin-left:15px">Implied Volatility</span>
-											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
+										<span>Implied Volatility</span>
+											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05" style="width:41%">
 											</el-input-number>
 										</div>
 									</div>
@@ -336,8 +336,8 @@
 					axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
 						res=res.data;
 						if(res.status.code===0){
-							saveThis.popOption("资产组合")
-							saveThis.addChartOption(saveThis.createSeries({name:"资产组合",data:res.asset_evaluation_list}))
+							saveThis.popOption("Asset Portfolio")
+							saveThis.addChartOption(saveThis.createSeries({name:"Asset Portfolio",data:res.asset_evaluation_list}))
               saveThis.loading=false;
 						}else{
 							saveThis.$notify({

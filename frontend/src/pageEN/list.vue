@@ -26,11 +26,11 @@
         </el-col>
         <el-col :span="20" style="margin-top:30px; margin-left:50px">
             <el-card class="box-card">
-              <el-input v-model="query" placeholder="搜索所需组合"></el-input>
+              <el-input v-model="query" placeholder="Search combination"></el-input>
 
               <div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
                     <el-col :span="9" style="vertical-align:center">
-                     positive option 
+                     positive option
                      </el-col>
                   <el-col :span="9">
                      negative option
@@ -514,13 +514,13 @@ changeDisplayCombination:function(optionName1,optionName2){
         this.option.series.push(this.combinations[index][1].IVSeries);
         this.option.xAxis[0].data=this.combinations[index][0].xAxis;
         this.option.xAxis[1].data=this.combinations[index][0].xAxis;
-        this.option.title[0].subtext=optionName1+"与"+optionName2
-        this.option.title[1].subtext=optionName1+"与"+optionName2
+        this.option.title[0].subtext=optionName1+" and "+optionName2
+        this.option.title[1].subtext=optionName1+" and "+optionName2
         this.myChart.setOption(this.option);
     }
 },
 removeCombination:function(){
-    var optionNames=this.option.title[0].subtext.split("与")
+    var optionNames=this.option.title[0].subtext.split(" and ")
     this.popSeries(optionNames[0]);
     this.popSeries(optionNames[1]);
     this.myChart.setOption(this.option,true);
@@ -712,7 +712,7 @@ showIVDifference:function(selected){
   var calcDataSet=[];
   var IVDSeries=this.deepClone(this.
     template.IVD);
-  this.option.title[3].subtext=selectName[0]+"与"+selectName[1];
+  this.option.title[3].subtext=selectName[0]+" and "+selectName[1];
   for(var i=0;i<this.option.series.length;i++){
     var series=this.option.series[i];
     for(var name in selectName){

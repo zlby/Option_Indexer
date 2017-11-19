@@ -163,10 +163,10 @@
 				this.index2 = news
 			},
 			buttongroup:function(){
-				this.$router.push({ path: '/login' })
+				this.$router.push({ path: '/zh-cn/login' })
 			},
       home:function () {
-        this.$router.push({ path: '/homepageIndividual/list' })
+        this.$router.push({ path: '/zh-cn/homepageIndividual/list' })
       }
 		}
 	}

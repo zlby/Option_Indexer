@@ -354,7 +354,7 @@ def get_hedging(request):
             user = request.user
             if user.is_authenticated:
                 client = Client.objects.get(user=user)
-                MailSender.send_hedging_result(client.email, client.username, future_r, option_r)
+                MailSender.send_hedging_result(client.email, client.user.username, future_r, option_r)
 
             return JsonResponse(result, status=200)
         else:
