@@ -24,7 +24,7 @@
 								<el-col :span="10">
 									<div style="">
 										<span style="vertical-align:center; margin-top:8px">
-											Physicals
+											Spot (tons)
 										</span>
 										<el-input placeholder="Please enter physicals(tons)" style="width:50%" v-model="currentHold"></el-input>
 									</div>
@@ -40,7 +40,7 @@
 									<div class="wrapper" v-for="comboFuture in comboFutures">
 										<div class="kind">
 											<span>Future</span>
-											<el-select v-model="comboFuture.code" class="sel" style="margin-left: 64px">
+											 <el-select v-model="comboFuture.code" class="sel" style="margin-left: 64px" placeholder="Please Select">
 												<el-option
 												v-for="item in filteredFutures"
 												:key="item"
@@ -60,7 +60,7 @@
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
 										<span>Option</span>
-											<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px">
+											<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px"  placeholder="Please Select">
 												<el-option
 												v-for="item in filteredOptions"
 												:key="item"

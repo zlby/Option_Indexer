@@ -15,17 +15,17 @@
 
        <el-menu-item index="/en" class="el-col el-col-xs-6 el-col-md-6 el-col-sm-6 el-col-lg-6 main-page-btn" v-if="loggedin==true">
         <el-dropdown menu-align="start">
-          <span class="el-dropdown-link1">Hedging
+          <span class="el-dropdown-link1">Hedge
           </span>
           <el-dropdown-menu slot="dropdown"  class="main-page-dropdown" style="background-color:#404040; border:0px;">
             <el-dropdown-item>
-            <el-button type="text" @click="toBeanGroup">Soybean meal portfolio profit loss chart</el-button>
+            <el-button type="text" @click="toBeanGroup">Portfolio Value Map</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toCrop">Soybean meal portfolio hedging</el-button>
+              <el-button type="text" @click="toCrop">Portfolio Hedge</el-button>
             </el-dropdown-item>
             <el-dropdown-item>
-              <el-button type="text" @click="toAccess">Crops across breeds hedging</el-button>
+              <el-button type="text" @click="toAccess">Cross Hedge</el-button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
