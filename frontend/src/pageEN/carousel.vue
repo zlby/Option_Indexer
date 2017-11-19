@@ -9,7 +9,7 @@
 						<p class="p2">Most advanced commodity futures and options information</p>
 						<br><br><br><br>
 						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
-            <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
+            <el-button class="button1" v-on:click="home" v-else>Homepage</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -20,7 +20,7 @@
 						<p class="p2">Most accurate forecast of commodity futures options</p>
 						<br><br>						<br><br>
 						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
-            <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
+            <el-button class="button1" v-on:click="home" v-else>Homepage</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -31,7 +31,7 @@
 						<p class="p2">Most authoritative commodity options trading strategy</p>
 						<br><br>						<br><br>
 						<el-button class="button1" v-on:click="buttongroup" v-if="loggedin==false">Start</el-button>
-            <el-button class="button1" v-on:click="home" v-else>个人中心</el-button>
+            <el-button class="button1" v-on:click="home" v-else>Homepage</el-button>
 					</div>
 					<!-- 					<img src= "../assets/background1.png"> -->
 				</el-carousel-item>
@@ -82,7 +82,7 @@
 					</el-carousel-item>
 				</el-carousel>
 
-				<el-dialog class="tanchu" title="新闻" size="large" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
+				<el-dialog class="tanchu" title="News" size="large" :visible.sync="dialogFormVisible" :modal-append-to-body="true" style="z-index:999;">
 						<p class="H1">{{title[index1-1][index2-1]}}</p>
 						<p class="H1">{{time[index1-1][index2-1]}}</p>
 						<div>{{content[index1-1][index2-1]}}</div>
@@ -163,10 +163,10 @@
 				this.index2 = news
 			},
 			buttongroup:function(){
-				this.$router.push({ path: '/login' })
+				this.$router.push({ path: '/en/login' })
 			},
       home:function () {
-        this.$router.push({ path: '/homepageIndividual/list' })
+        this.$router.push({ path: '/en/homepageIndividual/list' })
       }
 		}
 	}

@@ -19,7 +19,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="11" :offset="2" style="margin-top:10px">
-						<span>Spot goods&nbsp&nbsp&nbsp</span>
+						<span>Spot goods</span>
 						<el-select v-model="choose_agri" style="width:73%">
 							<el-option
 							v-for="item in filteredAgris"
@@ -52,7 +52,7 @@
 										Buy/Sell Ratio
 									</el-col>
 									<el-col :span="6" :offset="1" style="vertical-align:center">
-										Correlation Coefficient
+										Correlation
 									</el-col>
 									<el-col :span="3">
 										Operation

@@ -69,7 +69,7 @@
 
   			this.$refs[formname].validate((valid) => {
   				if (valid) {
-  					this.$store.dispatch('UserLogin', this.form)
+  					this.$store.dispatch('UserLogin_en', this.form)
   					.then(function success(){
 			        	notifi('Successfully login', 'Welcome,'+context.$store.state.login.username, 'success', context)
 			        	context.$store.dispatch('UpdateUserInfo')

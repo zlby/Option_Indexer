@@ -150,24 +150,19 @@
 						</el-col>
 					</el-row>
 					<el-row>
-						<el-col :span="24">
+						<el-col :span="10">
 							<div class="partThree">
 							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraph">
 								<div style="color: #656565;font-size: 18px">使用所选分布预测</div>
 							</el-button>
 							</div>
 						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
+						<el-col :span="10" :offset="4">
 							<div class="partThree">
 							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraphDL">
-								<div style="color: #656565;font-size: 18px">查看深度学习预测结果</div>
+								<div style="color: #656565;font-size: 18px">使用深度学习预测</div>
 							</el-button>
 							</div>
-						</el-col>
-						<el-col :span="12">
-							<el-checkbox v-model="usePredict">使用深度学习预测结果</el-checkbox>
 						</el-col>
 					</el-row>
 				</el-col>

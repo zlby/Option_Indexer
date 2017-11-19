@@ -27,7 +27,7 @@
 									<span style="vertical-align:center; margin-top:8px">
 										Physicals
 									</span>
-									<el-input placeholder="Please Enter Physicals(ton)" style="width:70%" v-model="currentHold"></el-input>
+									<el-input placeholder="Please Enter Physicals(ton)" style="width:60%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
 						</el-row>
@@ -41,7 +41,7 @@
 								<div class="wrapper" v-for="comboFuture in comboFutures">
 									<div class="kind">
 										<span>Future</span>
-										<el-select v-model="comboFuture.code" class="sel">
+										<el-select v-model="comboFuture.code" class="sel" style="margin-left: 60px">
 											<el-option
 											v-for="item in filteredFutures"
 											:key="item"
@@ -50,7 +50,7 @@
 										</el-select>
 									</div>
 									<span>Future Positions</span>
-									<el-input-number class="inp" v-model="comboFuture.amount" size="small"></el-input-number>
+									<el-input-number class="inp" v-model="comboFuture.amount" size="small"  style="width:42%"></el-input-number>
 								</div>
 								<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 							</div>
@@ -61,7 +61,7 @@
 								<div class="wrapper" v-for="comboOption in comboOptions">
 									<div class="kind">
 										<span>Option</span>
-										<el-select v-model="comboOption.code" class="sel">
+										<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px">
 											<el-option
 											v-for="item in filteredOptions"
 											:key="item"
@@ -70,10 +70,10 @@
 										</el-select>
 									</div>
 									<span>Option positions</span>
-									<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
+									<el-input-number class="inp" v-model="comboOption.amount"  size="small"  style="width:45%"></el-input-number>
 									<div class="kind">
-										<span style="margin-left:15px">Implied Volatility</span>
-										<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
+										<span>Implied Volatility</span>
+										<el-input-number v-model="comboOption.volatility" class="sel" size="small" style="width:45%" :step="0.05">
 										</el-input-number>
 									</div>
 								</div>
@@ -151,24 +151,19 @@
 						</el-col>
 					</el-row>
 					<el-row>
-						<el-col :span="24">
-							<div class="partThree">
+						<el-col :span="10">
+							 <div class="partThree">
 							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraph">
 								<div style="color: #656565;font-size: 18px">Predict with Distribution</div>
 							</el-button>
 							</div>
 						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="12">
+						<el-col :span="10" :offset="4">
 							<div class="partThree">
 							<el-button style="background-color: #FEE090;color: #314057;border: 4px solid #F9D481; margin-top：10px" @click="updateGraphDL">
-								<div style="color: #656565;font-size: 18px">Check DL Predict Result</div>
+								<div style="color: #656565;font-size: 18px">Predict with DL</div>
 							</el-button>
 							</div>
-						</el-col>
-						<el-col :span="12">
-							<el-checkbox v-model="usePredict">Use DL Predict Result</el-checkbox>
 						</el-col>
 					</el-row>
 				</el-col>
