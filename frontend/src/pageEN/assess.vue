@@ -19,8 +19,8 @@
 				</el-row>
 				<el-row>
 					<el-col :span="11" :offset="2" style="margin-top:10px">
-						<span>Spot goods</span>
-						<el-select v-model="choose_agri" style="width:73%">
+						<span>Spots</span>
+						<el-select v-model="choose_agri" style="width:73%"  placeholder="Please Select">
 							<el-option
 							v-for="item in filteredAgris"
 							:key="item"
@@ -46,13 +46,13 @@
 								<div name="staggered-fade" tag="ul" v-bind:css="false" class="list">
 								<el-row style="margin-top:10px">
 									<el-col :span="6" :offset="1" style="vertical-align:center">
-										Future Name
+										Futures
 									</el-col>
 									<el-col :span="6" :offset="1" style="vertical-align:center">
-										Buy/Sell Ratio
+										Hedge Ratio
 									</el-col>
 									<el-col :span="6" :offset="1" style="vertical-align:center">
-										Correlation
+										Correlation Coefficient
 									</el-col>
 									<el-col :span="3">
 										Operation
