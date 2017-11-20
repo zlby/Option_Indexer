@@ -2,7 +2,7 @@
   <div class="infoborder">
     <el-alert title="" type="success" :closable="false" class="infotitle" >
     <div class="notification">
-    <span style="position:relative;top:0px;">system notification<el-tag color="#ff4949">{{no_readCount}}</el-tag></span>  
+    <span style="position:relative;top:0px;">system notification<el-tag color="#ff4949">{{no_readCount}}</el-tag></span>
     <el-button size="small" @click="unread" class="button_group " type="danger" >unread</el-button>
     <el-button size="small" @click="read" class="button_group" type="success" >read</el-button>
     <el-button size="small" @click="all" class="button_group" type="info" >all</el-button>
@@ -10,16 +10,16 @@
     </el-alert>
 
     <div v-for="(value,key,index) in notifs" >
-    <el-alert title="买进卖出提醒" type="info" :closable="false" class="info" v-if="if_read[key]==currentStatus||currentStatus=='all'">
+    <el-alert title="Reminder" type="info" :closable="false" class="info" v-if="if_read[key]==currentStatus||currentStatus=='all'">
       <el-button color="#ff4949" size="mini" type="danger" v-if="if_read[key]=='no_read'" class="read-notice" @click="change2Read($event)" :msgid="notifs[key].id">unread</el-button>
       <el-tag color="#13ce66" v-if="if_read[key]=='read'" class="read-notice" @click="change2Read($event)" :msgid="notifs[key].id">read</el-tag>
       <div>Time:{{notifs[key].time}}</div>
       <div>
         <div class="buyin">
-        Buy:{{notifs[key].buy_option}} 
+        Buy:{{notifs[key].buy_option}}
         </div>
         <div class="soldout">
-        Sell:{{notifs[key].sell_option}} 
+        Sell:{{notifs[key].sell_option}}
         </div>
         <div class="rate">
           Buy/Sell
@@ -156,6 +156,6 @@
 }
 
 .notification{
-  
+
 }
 </style>

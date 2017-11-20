@@ -4,9 +4,9 @@
       <el-col :span="5"  style="min-height: 100%; background-color: #324057;min-width:200px">
         <el-menu theme="dark" style="height: 100%;" default-active="defaultActive" class="el-menu-vertical-demo" router>
 
-          <el-menu-item index="/homepageIndividual"><i class="el-icon-menu"></i>个人资料</el-menu-item>
-          <el-menu-item index="/en/homepageIndividual/list"><i class="el-icon-menu"></i>订阅列表</el-menu-item>
-          <el-menu-item index="/homepageIndividual/infoReminder"><i class="el-icon-menu"></i>消息提醒</el-menu-item>
+          <el-menu-item index="/zh-cn/homepageIndividual"><i class="el-icon-menu"></i>个人资料</el-menu-item>
+          <el-menu-item index="/zh-cn/homepageIndividual/list"><i class="el-icon-menu"></i>订阅列表</el-menu-item>
+          <el-menu-item index="/zh-cn/homepageIndividual/infoReminder"><i class="el-icon-menu"></i>消息提醒</el-menu-item>
 
         </el-menu>
       </el-col>

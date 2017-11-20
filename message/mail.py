@@ -26,11 +26,11 @@ class MailSender(object):
                 '希望我们的建议为您带来收益。INDEXER智能金融咨询公司竭诚为您服务。 \n'
 
     text_hedging_base_title = '尊敬的客户%s您好！\n' \
-                '基于您的已有资产和市场行情的变动，给您套期保值建议如下：\n'
-    text_hedging_base_content = '\t期货/期权代码：%s \n' \
-                '\t操作：%s \n'  \
-                '\t手数：%s \n\n'
-    text_hedging_base_end = '希望我们的建议为您带来收益。INDEXER智能金融咨询公司竭诚为您服务。 \n'
+                '基于您的需求，给您对冲建议如下：\n'
+    text_hedging_base_content = '\t期货/期权code：%s \n' \
+                '\t方向：%s \n'  \
+                '\t数量：%s \n\n'
+    text_hedging_base_end = '希望我们的建议为您带来收益。INDEXER咨询公司竭诚为您服务。 \n'
 
     @staticmethod
     def send_message(email, name, buy_option, sell_option, rate, interval):
