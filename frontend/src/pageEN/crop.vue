@@ -525,6 +525,7 @@
 			    		this.popSeries("DL Distribution")
 			    	},
 			    	updateGraphDL:function(){
+              this.usePredict = true;
 			    		var params={
 			    			type:"predict",
 			    			time_future:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),

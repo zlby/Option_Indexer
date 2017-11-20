@@ -187,14 +187,15 @@ class LstmModel:
             except FileNotFoundError:
                 pass
             self.train_till_series_end()
-        with tf.Session(config=self.config) as sess:
-            self.__saver.restore(sess, self.__save_path)
-            for i in range(day_length):
-                self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
-                    self.__input_placeholder: self.__last_out[1],
-                    self.__cell_state: self.__last_out[0]
-                }))
-                print(self.__last_out[1])
-                self.__predication = np.append(self.__predication,
+        # with tf.Session(config=self.config) as sess:
+        sess = tf.Session(config=self.config)
+        self.__saver.restore(sess, self.__save_path)
+        for i in range(day_length):
+            self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
+                self.__input_placeholder: self.__last_out[1],
+                self.__cell_state: self.__last_out[0]
+            }))
+            print(self.__last_out[1])
+            self.__predication = np.append(self.__predication,
                                                np.reshape(self.__last_out[1][:, -1, 0], [-1]), 0)
         return self.__predication[-day_length:]
