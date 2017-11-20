@@ -413,13 +413,13 @@
 			    		axios.get('/market/cross_breed_hedge/',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
-			    				saveThis.popSeries("期货曲线");
-			    				saveThis.popSeries("现货曲线");
-			    				saveThis.popSeries("error序列曲线");
-			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"期货曲线",data:res.crop_list}))
-			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"现货曲线",data:res.future_list}))
-			    				saveThis.addChartOption(saveThis.createErrorSeries({name:"error序列曲线",data:res.error_list}))
-                  saveThis.myChart.setOption(saveThis.option,true)
+			    				saveThis.popSeries("Future Price Curve");
+			    				saveThis.popSeries("Spot Price Curve");
+			    				saveThis.popSeries("Error Sequence Curve");
+			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"Future Price Curve",data:res.crop_list}))
+			    				saveThis.addChartOption(saveThis.createPriceSeries({name:"Spot Price Curve",data:res.future_list}))
+			    				saveThis.addChartOption(saveThis.createErrorSeries({name:"Error Sequence Curve",data:res.error_list}))
+                  			saveThis.myChart.setOption(saveThis.option,true)
                   console.log(saveThis.option.xAxis);
 			    			}else{
 			    				saveThis.$notify({
@@ -462,7 +462,7 @@
 			    		});
 			    		series.data=processed
 			    		series.xAxisIndex=0;
-			    		if(data.name=="期货曲线"){
+			    		if(data.name=="Future Price Curve"){
 			    			series.yAxisIndex=0;
 			    		}else{
 			    			series.yAxisIndex=1;
@@ -506,6 +506,14 @@
 			    	createErrorSeries:function(data){
 			    		var series = this.deepClone(this.template.optionError);
 			    		series.name = data.name;
+			    		if(data.data===null){
+			    			this.$notify({
+			    				type:"danger",
+			    				title:"Error",
+			    				message:"This Cross Hedge has no Error Sequence"
+			    			})
+			    			data.data=[];
+			    		}
 			    		var processed=data.data.map(function(o){
 			    			return [o[0].slice(0,10)+" "+o[0].slice(11,19),o[1].toFixed(4)];
 			    		});
@@ -515,7 +523,7 @@
 			    		series.itemStyle.normal.color=this.randomGenWebSafeColor();
 			    		this.option.xAxis[1].data=processed.map(function(o){
 			    		    return o[0]
-              })
+              			})
 			    		console.log(series)
 			    		return {
 			    			name:data.name,
