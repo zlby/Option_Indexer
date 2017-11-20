@@ -23,8 +23,8 @@
         </div>
         <div class="rate">
           Buy/Sell
-          <el-tag color="#13ce66">{{notifs[key].buy_lot}}hands</el-tag>/
-          <el-tag color="#ff4949">{{notifs[key].sell_lot}}hands</el-tag>
+          <el-tag color="#13ce66">{{notifs[key].buy_lot}}Contracts</el-tag>/
+          <el-tag color="#ff4949">{{notifs[key].sell_lot}}Contracts</el-tag>
         </div>
       </div>
     </el-alert>
