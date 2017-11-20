@@ -506,6 +506,14 @@
 			    	createErrorSeries:function(data){
 			    		var series = this.deepClone(this.template.optionError);
 			    		series.name = data.name;
+			    		if(data.data===null){
+			    			this.$notify({
+			    				type:"danger",
+			    				title:"错误",
+			    				message:"该跨品种套期保值无错误序列"
+			    			})
+			    			data.data=[];
+			    		}
 			    		var processed=data.data.map(function(o){
 			    			return [o[0].slice(0,10)+" "+o[0].slice(11,19),o[1].toFixed(4)];
 			    		});

@@ -4,13 +4,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card style="height:60px;padding-top:15px">
+						<el-card>
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center;margin-top:8px;">
+										<div style="vertical-align:center;margin-top:8px;">
 											Time
-										</span>
+										</div>
 										<el-date-picker v-model="daypicker"
 											type="date"
 											placeholder="Select Time"
@@ -23,9 +23,9 @@
 								</el-col>
 								<el-col :span="10">
 									<div style="">
-										<span style="vertical-align:center; margin-top:8px">
+										<div style="vertical-align:center; margin-top:8px">
 											Spot (tons)
-										</span>
+										</div>
 										<el-input placeholder="Please enter physicals(tons)" style="width:50%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
@@ -39,8 +39,8 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboFuture in comboFutures">
 										<div class="kind">
-											<span>Future</span>
-											 <el-select v-model="comboFuture.code" class="sel" style="margin-left: 64px" placeholder="Please Select">
+											<div>Future</div>
+											 <el-select v-model="comboFuture.code" class="sel" placeholder="Please Select">
 												<el-option
 												v-for="item in filteredFutures"
 												:key="item"
@@ -48,8 +48,10 @@
 												:value="item"/>
 											</el-select>
 										</div>
-										<span>Future Positions</span>
-										<el-input-number class="inp" v-model="comboFuture.amount" size="small" style="width:40%"></el-input-number>
+										<div class="kind">
+											<div>Future Positions</div>
+											<el-input-number class="inp" controls="false" v-model="comboFuture.amount" size="small" style="width:40%"></el-input-number>
+										</div>
 									</div>
 									<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 								</div>
@@ -59,8 +61,8 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
-										<span>Option</span>
-											<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px"  placeholder="Please Select">
+										<div>Option</div>
+											<el-select v-model="comboOption.code"  class="sel" placeholder="Please Select">
 												<el-option
 												v-for="item in filteredOptions"
 												:key="item"
@@ -68,11 +70,13 @@
 												:value="item"/>
 											</el-select>
 										</div>
-										<span>Option Positions</span>
-										<el-input-number class="inp" v-model="comboOption.amount" size="small" style="width:40%"></el-input-number>
 										<div class="kind">
-										<span>Implied Volatility</span>
-											<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05" style="width:41%">
+											<span>Option Positions</span>
+											<el-input-number class="inp" v-model="comboOption.amount" size="small" controls="false"></el-input-number>
+										</div>
+										<div class="kind">
+										<div>Implied Volatility</div>
+											<el-input-number v-model="comboOption.volatility" controls="false" class="sel" size="small" :step="0.05">
 											</el-input-number>
 										</div>
 									</div>
@@ -197,7 +201,7 @@
 			                type: "cross",
 			                label: {
 			                	formatter: function (params) {
-			                		return params.value.toFixed(4);
+			                		return params.value.toFixed(2);
 			                	}
 			                }
 			            },
@@ -502,31 +506,28 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			padding-left: 12px;
+			padding-right:10px
 		  width: 95%;
 		height: 380px;
 		border-radius: 5px;
 		border: 2px solid #2C2E3B;
 		overflow: auto;
-		background-color: #e4e4e4;
 	}
 	.wrapper {
 		 width: 90%;
 		padding: 5px;
 		border-radius: 5px;
 		border: 1px solid #bababd;
-		background-color: white;
+		background-color: #e4e4e4;
 		margin-bottom: 10px;
 	}
 	.kind {
-		margin-top: 5px;
+		margin-top: 7px;
 	}
-	.sel {
-		margin-left: 18px;
-		 width: 50%;
-	}
-	.inp {
-		margin-left: 18px;
-		 width: 50%;
+	.inp ,.sel{
+		 width: 90%;
 		 margin-top: 5px;
+		 max-width:250px;
+		 min-width:130px;
 	}
 </style>

@@ -4,13 +4,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card style="height:60px;padding-top:15px">
+						<el-card>
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center; margin-top:8px;">
+										<div style="vertical-align:center; margin-top:8px;">
 											时间
-										</span>
+										</div>
 										<el-date-picker v-model="daypicker"
 										type="date"
 										placeholder="选择日期时间"
@@ -23,9 +23,9 @@
 							</el-col>
 							<el-col :span="10">
 								<div style="">
-									<span style="vertical-align:center; margin-top:8px">
+									<div style="vertical-align:center; margin-top:8px">
 										现货
-									</span>
+									</div>
 									<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
@@ -39,7 +39,7 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboFuture in comboFutures">
 									<div class="kind">
-										<span>期货品种</span>
+										<div>期货品种</div>
 										<el-select v-model="comboFuture.code" class="sel">
 											<el-option
 											v-for="item in filteredFutures"
@@ -48,8 +48,10 @@
 											:value="item"/>
 										</el-select>
 									</div>
-									<span>期货持仓</span>
-									<el-input-number class="inp" v-model="comboFuture.amount" size="small"></el-input-number>
+									<div class="kind">
+										<div>期货持仓</div>
+										<el-input-number controls="false" class="inp" v-model="comboFuture.amount" size="small"></el-input-number>
+									</div>
 								</div>
 								<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 							</div>
@@ -59,7 +61,7 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboOption in comboOptions">
 									<div class="kind">
-										<span>期权品种</span>
+										<div>期权品种</div>
 										<el-select v-model="comboOption.code" class="sel">
 											<el-option
 											v-for="item in filteredOptions"
@@ -68,11 +70,13 @@
 											:value="item"/>
 										</el-select>
 									</div>
-									<span>期权持仓</span>
-									<el-input-number class="inp" v-model="comboOption.amount" size="small"></el-input-number>
+									<div>
+										<div>期权持仓</div>
+										<el-input-number class="inp" v-model="comboOption.amount" controls="false" size="small"></el-input-number>
+									</div>
 									<div class="kind">
-										<span style="margin-left:15px">波动率</span>
-										<el-input-number v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
+										<div style="margin-left:15px">波动率</div>
+										<el-input-number v-model="comboOption.volatility" controls="false" class="sel" size="small" :step="0.05">
 										</el-input-number>
 									</div>
 								</div>
@@ -232,7 +236,7 @@
 								<span>套期保值成本上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="max_cost" style="width:30%;"></el-input-number>
+								<el-input-number controls="false" v-model="max_cost" style="width:30%;"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -241,7 +245,7 @@
 								<span>豆粕期货单边持仓上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="fmax" style="width:30%"></el-input-number>
+								<el-input-number controls="false" v-model="fmax" style="width:30%"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -250,7 +254,7 @@
 								<span>豆粕期权单边持仓上限</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="omax" style="width:30%"></el-input-number>
+								<el-input-number controls="false" v-model="omax" style="width:30%"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -486,7 +490,13 @@
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
+			    				this.usePredict=false;
 			    				saveThis.addChartOption(saveThis.createSeries({name:dis_name,data:res.distribution}))
+			    				saveThis.$notify({
+			    					type:"success",
+			    					title:"成功",
+			    					message:"将使用"+dis_name+"为您预测"
+			    				})
 			    			}
 			    			else{
 			    				saveThis.$notify({
@@ -534,11 +544,17 @@
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
+			    				this.usePredict=true;
 			    				saveThis.popSeries("三角分布")
 			    				saveThis.popSeries("正态分布")
 			    				saveThis.popSeries("均匀分布")
 			    				saveThis.popSeries("深度学习分布")
 			    				saveThis.addChartOption(saveThis.createSeries({name:"深度学习分布",data:res.distribution}))
+			    				saveThis.$notify({
+			    					type:"success",
+			    					title:"成功",
+			    					message:"将使用深度学习为您预测"
+			    				})
 			    			}
 			    			else{
 			    				saveThis.$notify({
@@ -830,12 +846,13 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			padding-left: 12px;
+			padding-right:10px;
 			width: 95%;
 			height: 415px;
 			border-radius: 5px;
 			border: 2px solid #2C2E3B;
 			overflow: auto;
-			background-color: #e4e4e4;
+			
 		}
 		.wrapper {
 			width: 90%;
@@ -844,17 +861,15 @@
 			border: 1px solid #bababd;
 			background-color: white;
 			margin-bottom: 10px;
+			background-color: #e4e4e4;
 		}
 		.kind {
-			margin-top: 5px;
+			margin-top: 7px;
 		}
-		.sel {
-			margin-left: 18px;
-			width: 50%;
-		}
-		.inp {
-			margin-left: 18px;
-			width: 50%;
+		.inp ,.sel{
+			width: 90%;
 			margin-top: 5px;
+			max-width:250px;
+			min-width:130px;
 		}
 	</style>

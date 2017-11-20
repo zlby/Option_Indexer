@@ -5,13 +5,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card style="height:60px;padding-top:15px">
+						<el-card>
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<span style="vertical-align:center; margin-top:8px;">
+										<div style="vertical-align:center; margin-top:8px;">
 											Time
-										</span>
+										</div>
 										<el-date-picker v-model="daypicker"
 										type="date"
 										placeholder="Select Date Time"
@@ -24,9 +24,9 @@
 							</el-col>
 							<el-col :span="10">
 								<div style="">
-									<span style="vertical-align:center; margin-top:8px">
+									<div style="vertical-align:center; margin-top:8px">
 										Spot (tons)
-									</span>
+									</div>
 									<el-input placeholder="Please Enter Physicals(ton)" style="width:60%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
@@ -40,7 +40,7 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboFuture in comboFutures">
 									<div class="kind">
-										<span>Future</span>
+										<div>Future</div>
 										<el-select v-model="comboFuture.code" class="sel" style="margin-left: 60px"  placeholder="Please Select">
 											<el-option
 											v-for="item in filteredFutures"
@@ -49,8 +49,8 @@
 											:value="item"/>
 										</el-select>
 									</div>
-									<span>Future Positions</span>
-									<el-input-number class="inp" v-model="comboFuture.amount" size="small"  style="width:42%"></el-input-number>
+									<div>Future Positions</div>
+									<el-input-number controls="false" class="inp" v-model="comboFuture.amount" size="small"  style="width:90%"></el-input-number>
 								</div>
 								<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 							</div>
@@ -60,8 +60,8 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboOption in comboOptions">
 									<div class="kind">
-										<span>Option</span>
-										<el-select v-model="comboOption.code" class="sel" style="margin-left: 64px"  placeholder="Please Select">
+										<div>Option</div>
+										<el-select v-model="comboOption.code" class="sel" placeholder="Please Select">
 											<el-option
 											v-for="item in filteredOptions"
 											:key="item"
@@ -69,11 +69,13 @@
 											:value="item"/>
 										</el-select>
 									</div>
-									<span>Option positions</span>
-									<el-input-number class="inp" v-model="comboOption.amount"  size="small"  style="width:45%"></el-input-number>
+									<div class="kind">
+										<div>Option positions</div>
+										<el-input-number controls="false" class="inp" v-model="comboOption.amount"  size="small" ></el-input-number>
+									</div>
 									<div class="kind">
 										<span>Implied Volatility</span>
-										<el-input-number v-model="comboOption.volatility" class="sel" size="small" style="width:45%" :step="0.05">
+										<el-input-number controls="false" v-model="comboOption.volatility" class="sel" size="small" style="width:45%" :step="0.05">
 										</el-input-number>
 									</div>
 								</div>
@@ -184,19 +186,19 @@
 							</el-col>
 							<el-col :span="18">
 								<el-radio-group v-model="radio2">
-								<el-col :span="4" :offset="0">
+								<el-col :span="8" :offset="0">
 									<el-radio :label="1">Very Unimportant</el-radio>
 								</el-col>
-									<el-col :span="1" :offset="4">
+									<el-col :span="4" :offset="2">
 									<el-radio :label="2">Unimportant</el-radio>
 									</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="4" :offset="6">
 									<el-radio :label="3">Normal</el-radio>
 								</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="8" :offset="0">
 									<el-radio :label="4">Important</el-radio>
 								</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="4" :offset="2">
 									<el-radio :label="5">Very Important</el-radio>
 								</el-col>
 								</el-radio-group>
@@ -209,19 +211,19 @@
 							</el-col>
 							<el-col :span="18">
 								<el-radio-group v-model="radio1">
-								<el-col :span="4" :offset="0">
+								<el-col :span="8">
 									<el-radio :label="1">Very Unimportant</el-radio>
 								</el-col>
-									<el-col :span="1" :offset="4">
+									<el-col :span="4" :offset="2">
 									<el-radio :label="2">Unimportant</el-radio>
 									</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="4" :offset="6">
 									<el-radio :label="3">Normal</el-radio>
 								</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="8">
 									<el-radio :label="4">Important</el-radio>
 								</el-col>
-								<el-col :span="1" :offset="4">
+								<el-col :span="4" :offset="2">
 									<el-radio :label="5">Very Important</el-radio>
 								</el-col>
 								</el-radio-group>
@@ -233,7 +235,7 @@
 								<span>Hedging Costs Cap</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="max_cost" style="width:30%;"></el-input-number>
+								<el-input-number controls="false" v-model="max_cost" style="width:30%;"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -242,7 +244,7 @@
 								<span>Soybean Meal Future Unilateral Positions Cap</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="fmax" style="width:30%"></el-input-number>
+								<el-input-number controls="false" v-model="fmax" style="width:30%"></el-input-number>
 							</el-col>
 						</el-row>
 
@@ -251,8 +253,8 @@
 								<span>Soybean Meal Option Unilateral Positions Cap</span>
 							</el-col>
 							<el-col :span="18">
-								<el-input-number v-model="omax" style="width:30%"></el-input-number>
-							</el-col>
+								<el-input-number controls="false" v-model="omax" style="width:30%"></el-input-number>
+							</el-col> 
 						</el-row>
 
 					</div>
@@ -487,7 +489,13 @@
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
-			    				saveThis.addChartOption(saveThis.createSeries({name:dis_name,data:res.distribution}))
+			    				this.usePredict=false;
+			    				saveThis.addChartOption(saveThis.createSeries({name:dis_name,data:res.distribution}));
+			    				saveThis.$notify({
+			    					type:"success",
+			    					title:"success",
+			    					message:"Using "+dis_name+" to predict"
+			    				})
 			    			}
 			    			else{
 			    				saveThis.$notify({
@@ -525,7 +533,6 @@
 			    		this.popSeries("DL Distribution")
 			    	},
 			    	updateGraphDL:function(){
-              this.usePredict = true;
 			    		var params={
 			    			type:"predict",
 			    			time_future:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
@@ -536,11 +543,17 @@
 			    		axios.get('market/distributions',{params:params}).then(function(res){
 			    			res=res.data;
 			    			if(res.status.code===0){
+			    				this.usePredict = true;
 			    				saveThis.popSeries("Triangular Distribution")
 			    				saveThis.popSeries("Normal Distribution")
 			    				saveThis.popSeries("Uniform Distribution")
 			    				saveThis.popSeries("DL Distribution")
 			    				saveThis.addChartOption(saveThis.createSeries({name:"DL Distribution",data:res.distribution}))
+			    				saveThis.$notify({
+			    					type:"success",
+			    					title:"success",
+			    					message:"Using DeepLearning distribution to predict"
+			    				})
 			    			}
 			    			else{
 			    				saveThis.$notify({
@@ -832,31 +845,28 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			padding-left: 12px;
+			padding-right:10px;
 			width: 95%;
 			height: 415px;
 			border-radius: 5px;
 			border: 2px solid #2C2E3B;
 			overflow: auto;
-			background-color: #e4e4e4;
 		}
 		.wrapper {
 			width: 90%;
 			padding: 5px;
 			border-radius: 5px;
 			border: 1px solid #bababd;
-			background-color: white;
+			background-color: #e4e4e4;
 			margin-bottom: 10px;
 		}
 		.kind {
-			margin-top: 5px;
+			margin-top: 7px;
 		}
-		.sel {
-			margin-left: 18px;
-			width: 50%;
-		}
-		.inp {
-			margin-left: 18px;
-			width: 50%;
+		.inp,.sel {
+			width: 90%;
 			margin-top: 5px;
+			max-width:250px;
+			min-width:130px;
 		}
 	</style>

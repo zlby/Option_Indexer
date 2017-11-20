@@ -68,7 +68,7 @@
       </el-badge>
       </el-menu-item>
 
-      <el-menu-item  index="/en" class="el-col main-page-btn" style="width:30%">
+      <el-menu-item  index="/en" class="el-col main-page-btn avatar" style="width:30%">
       <img style="width: 50px; height: 50px;margin-top:0px" src="../assets/bigtouxiang.png">
       </el-menu-item>
       <el-menu-item  index="/en" class="el-col main-page-btn" style="width:30%">
@@ -197,6 +197,7 @@
   }
   .el-menu-item{
     color:#fff;
+    vertical-align:baseline;
   }
   .el-dropdown-link1{
     color:white;
@@ -219,6 +220,10 @@
 
   .main-page-group{
     //min-width:400px;
+  }
+
+  .avatar{
+    vertical-align:middle;
   }
 
   .touxiang{
