@@ -179,6 +179,8 @@ class LstmModel:
 
     def predict(self, day_length):
         # with self.__session_holder as sess:
+        if self.__session_holder is None:
+            self.train_till_series_end()
         sess = self.__session_holder
         for i in range(day_length):
             self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
