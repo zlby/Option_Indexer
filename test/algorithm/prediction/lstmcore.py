@@ -35,6 +35,8 @@ def longPredTest():
     plt.plot(test_object.get_prediction_list())
     plt.plot(series, 'r')
     plt.show()
+    _ = test_object.predict(40)
+    print("second prediction")
     csr.close()
     database.close()
 

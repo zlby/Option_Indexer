@@ -151,7 +151,6 @@ class LstmModel:
 
     def train_till_series_end(self):
         self.__generate_train_step()
-        self.__saver = tf.train.Saver()
         if not self.__session_holder:
             self.__session_holder = tf.Session(config=self.config)
         sess = self.__session_holder
@@ -179,12 +178,20 @@ class LstmModel:
         return self.__predication
 
     def predict(self, day_length):
-        with self.__session_holder as sess:
-            for i in range(day_length):
-                self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
-                    self.__input_placeholder: self.__last_out[1],
-                    self.__cell_state: self.__last_out[0]
-                }))
-                self.__predication = np.append(self.__predication,
-                                               np.reshape(self.__last_out[1][:, -1, 0], [-1]), 0)
+        # with self.__session_holder as sess:
+        sess = self.__session_holder
+        for i in range(day_length):
+            self.__last_out = (sess.run([self.__out_state, self.pred], feed_dict={
+                self.__input_placeholder: self.__last_out[1],
+                self.__cell_state: self.__last_out[0]
+            }))
+            self.__predication = np.append(self.__predication,
+                                           np.reshape(self.__last_out[1][:, -1, 0], [-1]), 0)
         return self.__predication[-day_length:]
+
+    def close(self):
+        """
+        Must manually close!!!!!!!!
+        :return:
+        """
+        self.__session_holder.close()
