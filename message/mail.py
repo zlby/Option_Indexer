@@ -96,12 +96,12 @@ class MailSender(object):
         }
         params['Signature'] = MailSender.get_signature(params)
         print(params)
-        logger.info(params)
+        logger.log(params)
         response = requests.get(MailSender.url, params)
         print(response.status_code)
         print(response.text)
-        logger.info(response.status_code)
-        logger.info(response.text)
+        logger.log(response.status_code)
+        logger.log(response.text)
 
     @staticmethod
     def percent_encode(target_str):
