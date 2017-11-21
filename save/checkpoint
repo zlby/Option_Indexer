@@ -1,0 +1,2 @@
+model_checkpoint_path: "lstmVar.save"
+all_model_checkpoint_paths: "lstmVar.save"

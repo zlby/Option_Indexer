@@ -4,13 +4,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card >
+						<el-card style="height:60px;padding-top:15px">
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<div style="vertical-align:center;margin-top:8px;">
+										<span style="vertical-align:center;margin-top:8px;">
 											时间
-										</div>
+										</span>
 										<el-date-picker v-model="daypicker"
 											type="date"
 											placeholder="选择日期时间"
@@ -23,9 +23,9 @@
 								</el-col>
 								<el-col :span="10">
 									<div style="">
-										<div style="vertical-align:center; margin-top:8px">
+										<span style="vertical-align:center; margin-top:8px">
 											现货
-										</div>
+										</span>
 										<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
@@ -39,7 +39,7 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboFuture in comboFutures">
 										<div class="kind">
-											<div>期货品种</div>
+											<span>期货品种</span>
 											<el-select v-model="comboFuture.code" class="sel">
 												<el-option
 												v-for="item in filteredFutures"
@@ -49,7 +49,7 @@
 											</el-select>
 										</div>
 										<div class="kind">
-											<div>期货持仓</div>
+											<span>期货持仓</span>
 											<el-input-number class="inp" controls="false" v-model="comboFuture.amount" size="small"></el-input-number>
 										</div>
 									</div>
@@ -61,7 +61,7 @@
 								<div class="container">
 									<div class="wrapper" v-for="comboOption in comboOptions">
 										<div class="kind">
-											<div>期权品种</div>
+											<span>期权品种</span>
 											<el-select v-model="comboOption.code" class="sel">
 												<el-option
 												v-for="item in filteredOptions"
@@ -75,7 +75,7 @@
 											<el-input-number class="inp" controls="false" v-model="comboOption.amount" size="small"></el-input-number>
 										</div>
 										<div class="kind">
-										<span style="margin-left:15px">波动率</span>
+										<span>波动率</span>
 											<el-input-number v-model="comboOption.volatility" controls="false" class="sel" size="small" :step="0.05">
 											</el-input-number>
 										</div>
@@ -330,7 +330,7 @@
 						t1:echarts.format.formatTime("yyyy-MM-dd",this.daypicker),
 						time_now:"2017-07-12 15:00:00"
 					};
-					console.log(params)
+					console.log(params);
 					var saveThis=this
 					axios.get('/market/asset_evaluation/',{params:params}).then(function(res){
 						res=res.data;
@@ -476,7 +476,7 @@
 		.el-input{
 			border-radius: 6px;
 			border: 3px solid #F9D481;
-			background:rgba(0, 0, 0, 0)
+			background:rgba(0, 0, 0, 0);
 		}
 
 		.partOne{

@@ -4,13 +4,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card>
+						<el-card style="height:60px;padding-top:15px">
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<div style="vertical-align:center;margin-top:8px;">
+										<span style="vertical-align:center;margin-top:8px;">
 											Time
-										</div>
+										</span>
 										<el-date-picker v-model="daypicker"
 											type="date"
 											placeholder="Select Time"
@@ -23,9 +23,9 @@
 								</el-col>
 								<el-col :span="10">
 									<div style="">
-										<div style="vertical-align:center; margin-top:8px">
+										<span style="vertical-align:center; margin-top:8px">
 											Spot (tons)
-										</div>
+										</span>
 										<el-input placeholder="Please enter physicals(tons)" style="width:50%" v-model="currentHold"></el-input>
 									</div>
 								</el-col>
@@ -506,7 +506,7 @@
 			padding-top: 10px;
 			padding-bottom: 10px;
 			padding-left: 12px;
-			padding-right:10px
+			padding-right:10px;
 		  width: 95%;
 		height: 380px;
 		border-radius: 5px;

@@ -5,13 +5,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card>
+						<el-card style="height:60px;padding-top:15px">
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<div style="vertical-align:center; margin-top:8px;">
+										<span style="vertical-align:center; margin-top:8px;">
 											Time
-										</div>
+										</span>
 										<el-date-picker v-model="daypicker"
 										type="date"
 										placeholder="Select Date Time"
@@ -24,9 +24,9 @@
 							</el-col>
 							<el-col :span="10">
 								<div style="">
-									<div style="vertical-align:center; margin-top:8px">
+									<span style="vertical-align:center; margin-top:8px">
 										Spot (tons)
-									</div>
+									</span>
 									<el-input placeholder="Please Enter Physicals(ton)" style="width:60%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
@@ -40,8 +40,8 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboFuture in comboFutures">
 									<div class="kind">
-										<div>Future</div>
-										<el-select v-model="comboFuture.code" class="sel" style="margin-left: 60px"  placeholder="Please Select">
+										<span>Future</span>
+										<el-select v-model="comboFuture.code" class="sel" placeholder="Please Select">
 											<el-option
 											v-for="item in filteredFutures"
 											:key="item"
@@ -49,8 +49,10 @@
 											:value="item"/>
 										</el-select>
 									</div>
+                  <div class="kind">
 									<div>Future Positions</div>
-									<el-input-number controls="false" class="inp" v-model="comboFuture.amount" size="small"  style="width:90%"></el-input-number>
+									<el-input-number controls="false" class="inp" v-model="comboFuture.amount" size="small"  style="width:40%"></el-input-number>
+                  </div>
 								</div>
 								<el-button type="danger" @click="addFuture" style="float: right; margin-right: 20px; "><i class="el-icon-plus"></i></el-button>
 							</div>
@@ -60,7 +62,7 @@
 							<div class="container">
 								<div class="wrapper" v-for="comboOption in comboOptions">
 									<div class="kind">
-										<div>Option</div>
+										<span>Option</span>
 										<el-select v-model="comboOption.code" class="sel" placeholder="Please Select">
 											<el-option
 											v-for="item in filteredOptions"
@@ -70,12 +72,12 @@
 										</el-select>
 									</div>
 									<div class="kind">
-										<div>Option positions</div>
+										<span>Option positions</span>
 										<el-input-number controls="false" class="inp" v-model="comboOption.amount"  size="small" ></el-input-number>
 									</div>
 									<div class="kind">
 										<span>Implied Volatility</span>
-										<el-input-number controls="false" v-model="comboOption.volatility" class="sel" size="small" style="width:45%" :step="0.05">
+										<el-input-number controls="false" v-model="comboOption.volatility" class="sel" size="small" :step="0.05">
 										</el-input-number>
 									</div>
 								</div>
@@ -186,19 +188,19 @@
 							</el-col>
 							<el-col :span="18">
 								<el-radio-group v-model="radio2">
-								<el-col :span="8" :offset="0">
+								<el-col :span="4" :offset="0">
 									<el-radio :label="1">Very Unimportant</el-radio>
 								</el-col>
-									<el-col :span="4" :offset="2">
+									<el-col :span="1" :offset="4">
 									<el-radio :label="2">Unimportant</el-radio>
 									</el-col>
-								<el-col :span="4" :offset="6">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="3">Normal</el-radio>
 								</el-col>
-								<el-col :span="8" :offset="0">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="4">Important</el-radio>
 								</el-col>
-								<el-col :span="4" :offset="2">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="5">Very Important</el-radio>
 								</el-col>
 								</el-radio-group>
@@ -211,19 +213,19 @@
 							</el-col>
 							<el-col :span="18">
 								<el-radio-group v-model="radio1">
-								<el-col :span="8">
+								<el-col :span="4">
 									<el-radio :label="1">Very Unimportant</el-radio>
 								</el-col>
-									<el-col :span="4" :offset="2">
+									<el-col :span="1" :offset="4">
 									<el-radio :label="2">Unimportant</el-radio>
 									</el-col>
-								<el-col :span="4" :offset="6">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="3">Normal</el-radio>
 								</el-col>
-								<el-col :span="8">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="4">Important</el-radio>
 								</el-col>
-								<el-col :span="4" :offset="2">
+								<el-col :span="1" :offset="4">
 									<el-radio :label="5">Very Important</el-radio>
 								</el-col>
 								</el-radio-group>
@@ -254,7 +256,7 @@
 							</el-col>
 							<el-col :span="18">
 								<el-input-number controls="false" v-model="omax" style="width:30%"></el-input-number>
-							</el-col> 
+							</el-col>
 						</el-row>
 
 					</div>

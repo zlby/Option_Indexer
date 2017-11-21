@@ -4,13 +4,13 @@
 			<el-col :span="9" :offset="1" style="height: 100%;">
 				<div class="input">
 					<div class="partOne" style="margin-top:20px">
-						<el-card>
+						<el-card style="height:60px;padding-top:15px">
 							<el-row :gutter="20">
 								<el-col :span="14">
 									<div style="">
-										<div style="vertical-align:center; margin-top:8px;">
+										<span style="vertical-align:center; margin-top:8px;">
 											时间
-										</div>
+										</span>
 										<el-date-picker v-model="daypicker"
 										type="date"
 										placeholder="选择日期时间"
@@ -23,9 +23,9 @@
 							</el-col>
 							<el-col :span="10">
 								<div style="">
-									<div style="vertical-align:center; margin-top:8px">
+									<span style="vertical-align:center; margin-top:8px">
 										现货
-									</div>
+									</span>
 									<el-input placeholder="请输入现货量(吨)" style="width:70%" v-model="currentHold"></el-input>
 								</div>
 							</el-col>
@@ -75,7 +75,7 @@
 										<el-input-number class="inp" v-model="comboOption.amount" controls="false" size="small"></el-input-number>
 									</div>
 									<div class="kind">
-										<div style="margin-left:15px">波动率</div>
+										<div>波动率</div>
 										<el-input-number v-model="comboOption.volatility" controls="false" class="sel" size="small" :step="0.05">
 										</el-input-number>
 									</div>
@@ -852,7 +852,7 @@
 			border-radius: 5px;
 			border: 2px solid #2C2E3B;
 			overflow: auto;
-			
+
 		}
 		.wrapper {
 			width: 90%;
