@@ -19,8 +19,8 @@
 				</el-row>
 				<el-row>
 					<el-col :span="11" :offset="2" style="margin-top:10px">
-						<span>Spots</span>
-						<el-select v-model="choose_agri" style="width:73%"  placeholder="Please Select">
+						<span>Spots </span>
+						<el-select v-model="choose_agri" style="width:73%; margin-left: 7px"  placeholder="Please Select">
 							<el-option
 							v-for="item in filteredAgris"
 							:key="item"
