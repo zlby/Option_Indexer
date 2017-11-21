@@ -5,6 +5,9 @@ import hashlib
 from urllib.parse import quote
 import requests
 import uuid
+import logging
+
+logger = logging.getLogger('file')
 
 
 class MailSender(object):
@@ -93,9 +96,12 @@ class MailSender(object):
         }
         params['Signature'] = MailSender.get_signature(params)
         print(params)
+        logger.info(params)
         response = requests.get(MailSender.url, params)
         print(response.status_code)
         print(response.text)
+        logger.info(response.status_code)
+        logger.info(response.text)
 
     @staticmethod
     def percent_encode(target_str):
