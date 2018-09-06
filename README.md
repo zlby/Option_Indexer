@@ -1,4 +1,3 @@
 # Indexer
 ### Intelligent finance consulting platform
-> Around agriculture information
-> Around risk management.
+> Around agriculture information; Around risk management.
